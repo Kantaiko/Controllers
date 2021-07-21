@@ -1,0 +1,38 @@
+﻿{
+  Type: IntrospectionTest.IntrospectionTestController,
+  Endpoints: [
+    {
+      MethodInfo: IntrospectionTest.IntrospectionTestController.IntrospectionTest(Int32 a),
+      Parameters: [
+        {
+          AttributeProvider: a of IntrospectionTest.IntrospectionTestController.IntrospectionTest.IntrospectionTestController.IntrospectionTest(Int32 a),
+          OriginalName: a,
+          Name: a,
+          ParameterType: Int32,
+          Properties: {
+            TestParameterProperty: TestParameterPropertyValue
+          }
+        }
+      ],
+      ParameterTree: {
+        Children: [
+          {
+            AttributeProvider: a of IntrospectionTest.IntrospectionTestController.IntrospectionTest.IntrospectionTestController.IntrospectionTest(Int32 a),
+            OriginalName: a,
+            Name: a,
+            ParameterType: Int32,
+            Properties: {
+              TestParameterProperty: TestParameterPropertyValue
+            }
+          }
+        ]
+      },
+      Properties: {
+        TestEndpointProperty: TestEndpointPropertyValue
+      }
+    }
+  ],
+  Properties: {
+    TestControllerProperty: TestControllerPropertyValue
+  }
+}
