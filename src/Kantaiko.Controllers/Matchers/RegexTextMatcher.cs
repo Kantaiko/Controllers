@@ -7,9 +7,9 @@ namespace Kantaiko.Controllers.Matchers
     {
         private readonly Regex _pattern;
 
-        public RegexTextMatcher(string pattern)
+        public RegexTextMatcher(string pattern, RegexOptions regexOptions = RegexOptions.None)
         {
-            _pattern = new Regex(pattern);
+            _pattern = new Regex(pattern, regexOptions);
         }
 
         public EndpointMatchResult Match(string text)
