@@ -10,7 +10,8 @@ namespace Kantaiko.Controllers.Matchers
 
         public PatternTextMatcher(string pattern)
         {
-            var patternRegex = PatternGroupRegex.Replace(pattern, @"(?<$1>\S+)");
+            var escapedPattern = Regex.Escape(pattern).Replace(@"\{", "{");
+            var patternRegex = PatternGroupRegex.Replace(escapedPattern, @"(?<$1>\S+)");
 
             _regexTextMatcher = new RegexTextMatcher(patternRegex);
         }
