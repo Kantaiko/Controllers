@@ -6,7 +6,7 @@ using Kantaiko.Controllers.Utils;
 
 namespace Kantaiko.Controllers.Middleware
 {
-    internal class MiddlewareCollection : IMiddlewareCollection
+    public class MiddlewareCollection : IMiddlewareCollection
     {
         public IReadOnlyList<Type> MiddlewareTypes { get; }
 
