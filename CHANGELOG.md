@@ -1,4 +1,11 @@
 # Change Log\n\nAll notable changes to this project will be documented in this file. See [versionize](https://github.com/saintedlama/versionize) for commit guidelines.\n
+<a name="0.1.2"></a>
+## [0.1.2](https://www.github.com/Kantaiko/Controllers/releases/tag/v0.1.2) (2021-7-28)
+
+### Bug Fixes
+
+* Update PatternTextMatcher pattern ([4033aaa](https://www.github.com/Kantaiko/Controllers/commit/4033aaaa855754917db63e027ed0da0de09e8aab))
+
 <a name="0.1.1"></a>
 ## [0.1.1](https://www.github.com/Kantaiko/Controllers/releases/tag/v0.1.1) (2021-7-28)
 
