@@ -39,7 +39,7 @@ namespace Kantaiko.Controllers
                 controllerCollection, serviceProvider);
 
             _controllerHandler = new ControllerHandler<TRequest>(controllerManagerCollection,
-                converterCollection, instanceFactory, middlewareCollection);
+                converterCollection, instanceFactory, middlewareCollection, serviceProvider);
 
             var controllerInfos = controllerManagerCollection.ControllerManagers.Select(x => x.Info).ToArray();
             Info = new RequestHandlerInfo(controllerInfos);
@@ -51,7 +51,6 @@ namespace Kantaiko.Controllers
         {
             if (request is null) throw new ArgumentNullException(nameof(request));
 
-            serviceProvider ??= DefaultServiceProvider.Instance;
             return _controllerHandler.HandleAsync(request, serviceProvider, cancellationToken);
         }
     }

@@ -18,21 +18,25 @@ namespace Kantaiko.Controllers.Internal
         private readonly IConverterCollection _converterCollection;
         private readonly IInstanceFactory _instanceFactory;
         private readonly IMiddlewareCollection _middlewareCollection;
+        private readonly IServiceProvider _serviceProvider;
 
         public ControllerHandler(ControllerManagerCollection<TRequest> controllerManagerCollection,
             IConverterCollection converterCollection, IInstanceFactory instanceFactory,
-            IMiddlewareCollection middlewareCollection)
+            IMiddlewareCollection middlewareCollection, IServiceProvider serviceProvider)
         {
             _controllerManagerCollection = controllerManagerCollection;
             _converterCollection = converterCollection;
             _instanceFactory = instanceFactory;
             _middlewareCollection = middlewareCollection;
+            _serviceProvider = serviceProvider;
         }
 
         public async Task<RequestProcessingResult> HandleAsync(TRequest request,
-            IServiceProvider serviceProvider,
+            IServiceProvider? serviceProvider,
             CancellationToken cancellationToken)
         {
+            serviceProvider ??= _serviceProvider;
+
             // 1. Resolve controller
             var controllerMatchResult = _controllerManagerCollection.MatchController(request, serviceProvider);
             if (!controllerMatchResult.IsMatched) return RequestProcessingResult.NotMatched;
@@ -269,7 +273,8 @@ namespace Kantaiko.Controllers.Internal
         {
             foreach (var parameterManager in context.EndpointManager.Parameters)
             {
-                var parameterValidationContext = new ParameterPostValidationContext(parameterManager.Info, serviceProvider);
+                var parameterValidationContext =
+                    new ParameterPostValidationContext(parameterManager.Info, serviceProvider);
 
                 var parameterContext = context.Parameters[parameterManager.Info.Name];
                 if (parameterContext.Value is null) continue;
