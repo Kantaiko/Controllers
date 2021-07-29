@@ -119,7 +119,7 @@ namespace Kantaiko.Controllers.Tests
         }
 
         [Fact]
-        public async Task ShouldReportExceptionThrowByEndpoint()
+        public async Task ShouldReportExceptionThrownByEndpoint()
         {
             var request = new TestRequest("test-exception");
 
