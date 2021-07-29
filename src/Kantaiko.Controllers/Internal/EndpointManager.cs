@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Kantaiko.Controllers.Introspection;
@@ -72,9 +74,10 @@ namespace Kantaiko.Controllers.Internal
 
                 return new InvocationResult(result);
             }
-            catch (Exception e)
+            catch (TargetInvocationException e)
             {
-                return new InvocationResult(exception: e);
+                Debug.Assert(e.InnerException is not null);
+                return new InvocationResult(exception: e.InnerException);
             }
         }
 

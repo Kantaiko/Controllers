@@ -1,3 +1,4 @@
+using System;
 using System.Reflection;
 using System.Threading.Tasks;
 using Kantaiko.Controllers.Exceptions;
@@ -33,6 +34,10 @@ namespace Kantaiko.Controllers.Tests
 
             [RegexPattern("test-1")]
             public void TestFailed(ICustomTypeProvider customTypeProvider) { }
+
+
+            [RegexPattern("test-exception")]
+            public void TestException() => throw new InvalidOperationException("hi");
         }
 
         [Fact]
@@ -111,6 +116,18 @@ namespace Kantaiko.Controllers.Tests
             }
 
             await Assert.ThrowsAsync<ConverterNotFoundException>(Action);
+        }
+
+        [Fact]
+        public async Task ShouldReportExceptionThrowByEndpoint()
+        {
+            var request = new TestRequest("test-exception");
+
+            var result = await _requestHandlerProvider.RequestHandler.HandleAsync(request);
+
+            var exceptionExitReason = Assert.IsType<ExceptionExitReason>(result.ExitReason);
+            var invalidOperationException = Assert.IsType<InvalidOperationException>(exceptionExitReason.Exception);
+            Assert.Equal("hi", invalidOperationException.Message);
         }
     }
 }
