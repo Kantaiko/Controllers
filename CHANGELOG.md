@@ -1,4 +1,11 @@
 # Change Log\n\nAll notable changes to this project will be documented in this file. See [versionize](https://github.com/saintedlama/versionize) for commit guidelines.\n
+<a name="0.1.4"></a>
+## [0.1.4](https://www.github.com/Kantaiko/Controllers/releases/tag/v0.1.4) (2021-7-31)
+
+### Bug Fixes
+
+* Prevent deconstruction of types with custom converter ([7090b81](https://www.github.com/Kantaiko/Controllers/commit/7090b81efc1fc49f9086ff9ce055473afb2cd6e2))
+
 <a name="0.1.3"></a>
 ## [0.1.3](https://www.github.com/Kantaiko/Controllers/releases/tag/v0.1.3) (2021-7-29)
 
