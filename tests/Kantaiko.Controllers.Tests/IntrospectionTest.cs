@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Kantaiko.Controllers.Design.Controllers;
 using Kantaiko.Controllers.Design.Endpoints;
 using Kantaiko.Controllers.Design.Parameters;
+using Kantaiko.Controllers.Introspection;
 using Kantaiko.Controllers.Tests.Shared;
 using VerifyXunit;
 using Xunit;
@@ -46,6 +47,9 @@ namespace Kantaiko.Controllers.Tests
             [Test]
             [RegexPattern("introspection-test")]
             public void IntrospectionTest([Test] int a) { }
+
+            [RegexPattern("introspection-test-prevent-deconstruction")]
+            public void IntrospectionTestPreventDeconstruction([FromServices] ControllerInfo controllerInfo) { }
         }
 
         [Fact]

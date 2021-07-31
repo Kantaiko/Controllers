@@ -134,10 +134,13 @@ namespace Kantaiko.Controllers.Internal
                     propertyInfo,
                     x => x.GetParameterDesignProperties());
 
+                var hasCustomConverter = propertyInfo.GetCustomAttributes().Any(x =>
+                    x is IParameterConverterTypeProvider or IParameterConverterFactoryProvider);
+
                 var name = GetParameterName(designProperties) ?? NamingUtils.ToCamelCase(propertyInfo.Name);
                 var (realType, isOptional) = ExtractPropertyTypeAndNullability(designProperties, propertyInfo);
 
-                var canDeconstruct = _deconstructionValidator.CanDeconstruct(propertyType);
+                var canDeconstruct = !hasCustomConverter && _deconstructionValidator.CanDeconstruct(propertyType);
                 if (propertyType.IsPrimitive || !propertyType.IsClass || !canDeconstruct)
                 {
                     return new EndpointParameterInfo(endpointInfo, designProperties, propertyInfo.Name, name, realType,
@@ -174,11 +177,13 @@ namespace Kantaiko.Controllers.Internal
 
                 Debug.Assert(parameterInfo.Name is not null);
 
+                var hasCustomConverter = parameterInfo.GetCustomAttributes().Any(x =>
+                    x is IParameterConverterTypeProvider or IParameterConverterFactoryProvider);
+
                 var name = GetParameterName(designProperties) ?? parameterInfo.Name;
                 var (realType, isOptional) = ExtractParameterTypeAndNullability(parameterInfo);
 
-                var canDeconstruct = _deconstructionValidator.CanDeconstruct(parameterType);
-
+                var canDeconstruct = !hasCustomConverter && _deconstructionValidator.CanDeconstruct(parameterType);
                 if (parameterType.IsPrimitive || !parameterType.IsClass || !canDeconstruct)
                 {
                     return new EndpointParameterInfo(endpointInfo, designProperties, parameterInfo.Name, name, realType,

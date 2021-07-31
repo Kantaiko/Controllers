@@ -30,6 +30,27 @@
       Properties: {
         TestEndpointProperty: TestEndpointPropertyValue
       }
+    },
+    {
+      MethodInfo: IntrospectionTest.IntrospectionTestController.IntrospectionTestPreventDeconstruction(ControllerInfo controllerInfo),
+      Parameters: [
+        {
+          AttributeProvider: controllerInfo of IntrospectionTest.IntrospectionTestController.IntrospectionTest.IntrospectionTestController.IntrospectionTestPreventDeconstruction(ControllerInfo controllerInfo),
+          OriginalName: controllerInfo,
+          Name: controllerInfo,
+          ParameterType: ControllerInfo
+        }
+      ],
+      ParameterTree: {
+        Children: [
+          {
+            AttributeProvider: controllerInfo of IntrospectionTest.IntrospectionTestController.IntrospectionTest.IntrospectionTestController.IntrospectionTestPreventDeconstruction(ControllerInfo controllerInfo),
+            OriginalName: controllerInfo,
+            Name: controllerInfo,
+            ParameterType: ControllerInfo
+          }
+        ]
+      }
     }
   ],
   Properties: {

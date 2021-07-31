@@ -2,7 +2,9 @@
 {
     public static class KantaikoParameterProperties
     {
-        public const string Name = nameof(KantaikoParameterProperties) + ":" + nameof(Name);
-        public const string IsOptional = nameof(KantaikoParameterProperties) + ":" + nameof(IsOptional);
+        private const string Prefix = nameof(KantaikoParameterProperties) + ":";
+
+        public const string Name = Prefix + nameof(Name);
+        public const string IsOptional = Prefix + nameof(IsOptional);
     }
 }
