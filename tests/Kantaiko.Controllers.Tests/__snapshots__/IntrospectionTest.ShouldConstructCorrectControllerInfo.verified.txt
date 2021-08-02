@@ -51,6 +51,29 @@
           }
         ]
       }
+    },
+    {
+      MethodInfo: IntrospectionTest.IntrospectionTestController.IntrospectionTestDefault(Int32 a),
+      Parameters: [
+        {
+          AttributeProvider: a of IntrospectionTest.IntrospectionTestController.IntrospectionTest.IntrospectionTestController.IntrospectionTestDefault(Int32 a),
+          OriginalName: a,
+          Name: a,
+          IsOptional: true,
+          ParameterType: Int32
+        }
+      ],
+      ParameterTree: {
+        Children: [
+          {
+            AttributeProvider: a of IntrospectionTest.IntrospectionTestController.IntrospectionTest.IntrospectionTestController.IntrospectionTestDefault(Int32 a),
+            OriginalName: a,
+            Name: a,
+            IsOptional: true,
+            ParameterType: Int32
+          }
+        ]
+      }
     }
   ],
   Properties: {

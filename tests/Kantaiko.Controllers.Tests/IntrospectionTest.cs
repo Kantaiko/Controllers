@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Kantaiko.Controllers.Converters;
 using Kantaiko.Controllers.Design.Controllers;
 using Kantaiko.Controllers.Design.Endpoints;
 using Kantaiko.Controllers.Design.Parameters;
@@ -20,6 +21,23 @@ namespace Kantaiko.Controllers.Tests
         public IntrospectionTest(RequestHandlerProvider requestHandlerProvider)
         {
             _requestHandlerProvider = requestHandlerProvider;
+        }
+
+        private class TestDefaultValueResolver : IParameterDefaultValueResolver
+        {
+            public object ResolveDefaultValue(ParameterConversionContext context)
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        private class DefaultAttribute : Attribute, IParameterDefaultValueResolverFactory
+        {
+            public IParameterDefaultValueResolver CreateParameterDefaultValueResolver(
+                EndpointParameterDesignContext context)
+            {
+                return new TestDefaultValueResolver();
+            }
         }
 
         private class TestAttribute : Attribute, IControllerDesignPropertyProvider,
@@ -50,6 +68,9 @@ namespace Kantaiko.Controllers.Tests
 
             [RegexPattern("introspection-test-prevent-deconstruction")]
             public void IntrospectionTestPreventDeconstruction([FromServices] ControllerInfo controllerInfo) { }
+
+            [RegexPattern("introspection-test-default")]
+            public void IntrospectionTestDefault([Default] int a) { }
         }
 
         [Fact]

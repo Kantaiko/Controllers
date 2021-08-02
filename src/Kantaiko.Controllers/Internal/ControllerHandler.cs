@@ -61,7 +61,7 @@ namespace Kantaiko.Controllers.Internal
 
                 Debug.Assert(converter is IParameterConverter);
 
-                return new ExecutionParameterContext(context, (IParameterConverter) converter);
+                return new ExecutionParameterContext(context, (IParameterConverter) converter, x.DefaultValueResolver);
             }).ToDictionary(k => k.Context.Info.Name, v => v);
 
             var executionContext = new RequestExecutionContext<TRequest>(parameterContexts, endpointManager);
@@ -199,8 +199,6 @@ namespace Kantaiko.Controllers.Internal
         {
             foreach (var parameterContext in context.Parameters.Values)
             {
-                if (parameterContext.Context.Info.IsOptional) continue;
-
                 var exists = parameterContext.Converter.CheckValueExistence(parameterContext.Context);
 
                 if (exists)
@@ -208,6 +206,8 @@ namespace Kantaiko.Controllers.Internal
                     parameterContext.ValueExists = true;
                     continue;
                 }
+
+                if (parameterContext.Context.Info.IsOptional) continue;
 
                 var errorMessage = string.Format(Locale.MissingRequiredParameter, parameterContext.Context.Info.Name);
                 return OperationResult.Failure(errorMessage, parameterContext.Context.Info);
@@ -251,7 +251,9 @@ namespace Kantaiko.Controllers.Internal
             {
                 if (!parameterContext.ValueExists)
                 {
-                    var value = GetDefault(parameterContext.Context.Info.ParameterType);
+                    var value = parameterContext.DefaultValueResolver is not null
+                        ? parameterContext.DefaultValueResolver.ResolveDefaultValue(parameterContext.Context)
+                        : GetDefault(parameterContext.Context.Info.ParameterType);
                     parameterContext.Value = value;
                     continue;
                 }

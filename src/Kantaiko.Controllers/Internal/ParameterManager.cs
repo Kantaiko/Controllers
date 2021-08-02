@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using Kantaiko.Controllers.Design.Parameters;
 using Kantaiko.Controllers.Introspection;
 using Kantaiko.Controllers.Middleware;
 using Kantaiko.Controllers.Validation;
@@ -17,6 +18,7 @@ namespace Kantaiko.Controllers.Internal
             IReadOnlyList<IEndpointMiddleware<TRequest>> middlewares,
             IReadOnlyList<IParameterPostValidator> validators,
             Type? converterType,
+            IParameterDefaultValueResolver? defaultValueResolver = null,
             PropertyInfo? propertyInfo = null,
             IReadOnlyList<ParameterManager<TRequest>>? children = null)
         {
@@ -24,6 +26,7 @@ namespace Kantaiko.Controllers.Internal
             Middlewares = middlewares;
             Validators = validators;
             ConverterType = converterType;
+            DefaultValueResolver = defaultValueResolver;
             PropertyInfo = propertyInfo;
             Children = children;
         }
@@ -31,6 +34,7 @@ namespace Kantaiko.Controllers.Internal
         public IReadOnlyList<IEndpointMiddleware<TRequest>> Middlewares { get; }
         public IReadOnlyList<IParameterPostValidator> Validators { get; }
         public Type? ConverterType { get; }
+        public IParameterDefaultValueResolver? DefaultValueResolver { get; }
         public PropertyInfo? PropertyInfo { get; }
         public IReadOnlyList<ParameterManager<TRequest>>? Children { get; }
 

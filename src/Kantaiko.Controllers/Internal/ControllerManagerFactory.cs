@@ -63,6 +63,7 @@ namespace Kantaiko.Controllers.Internal
             var parameters = parameterInfos.Select(info =>
             {
                 Type? converterType = null;
+                IParameterDefaultValueResolver? defaultValueResolver = null;
 
                 var validators = new List<IParameterPostValidator>();
                 var middlewares = new List<IEndpointMiddleware<TRequest>>();
@@ -76,6 +77,11 @@ namespace Kantaiko.Controllers.Internal
                         case IParameterConverterTypeProvider converterFactory:
                         {
                             converterType = converterFactory.GetConverterType(designContext);
+                            break;
+                        }
+                        case IParameterDefaultValueResolverFactory resolverFactory:
+                        {
+                            defaultValueResolver = resolverFactory.CreateParameterDefaultValueResolver(designContext);
                             break;
                         }
                         case IParameterMiddlewareFactory<TRequest> middlewareFactory:
@@ -98,13 +104,14 @@ namespace Kantaiko.Controllers.Internal
 
                 if (info is not EndpointParameterNode node)
                 {
-                    return new ParameterManager<TRequest>(info, middlewares, validators, converterType, propertyInfo);
+                    return new ParameterManager<TRequest>(info, middlewares, validators, converterType,
+                        defaultValueResolver, propertyInfo);
                 }
 
                 var children = CreateParameterManagers(node.Children, provider, node.ParameterType);
 
                 return new ParameterManager<TRequest>(info, middlewares, validators,
-                    converterType, propertyInfo, children);
+                    converterType, defaultValueResolver, propertyInfo, children);
             });
 
             return parameters.ToArray();
@@ -137,8 +144,16 @@ namespace Kantaiko.Controllers.Internal
                 var hasCustomConverter = propertyInfo.GetCustomAttributes().Any(x =>
                     x is IParameterConverterTypeProvider or IParameterConverterFactoryProvider);
 
+                var hasDefaultValueResolver = propertyInfo.GetCustomAttributes()
+                    .Any(x => x is IParameterDefaultValueResolverFactory);
+
                 var name = GetParameterName(designProperties) ?? NamingUtils.ToCamelCase(propertyInfo.Name);
                 var (realType, isOptional) = ExtractPropertyTypeAndNullability(designProperties, propertyInfo);
+
+                if (hasDefaultValueResolver)
+                {
+                    isOptional = true;
+                }
 
                 var canDeconstruct = !hasCustomConverter && _deconstructionValidator.CanDeconstruct(propertyType);
                 if (propertyType.IsPrimitive || !propertyType.IsClass || !canDeconstruct)
@@ -180,8 +195,16 @@ namespace Kantaiko.Controllers.Internal
                 var hasCustomConverter = parameterInfo.GetCustomAttributes().Any(x =>
                     x is IParameterConverterTypeProvider or IParameterConverterFactoryProvider);
 
+                var hasDefaultValueResolver = parameterInfo.GetCustomAttributes()
+                    .Any(x => x is IParameterDefaultValueResolverFactory);
+
                 var name = GetParameterName(designProperties) ?? parameterInfo.Name;
                 var (realType, isOptional) = ExtractParameterTypeAndNullability(parameterInfo);
+
+                if (hasDefaultValueResolver)
+                {
+                    isOptional = true;
+                }
 
                 var canDeconstruct = !hasCustomConverter && _deconstructionValidator.CanDeconstruct(parameterType);
                 if (parameterType.IsPrimitive || !parameterType.IsClass || !canDeconstruct)
