@@ -1,4 +1,11 @@
 # Change Log\n\nAll notable changes to this project will be documented in this file. See [versionize](https://github.com/saintedlama/versionize) for commit guidelines.\n
+<a name="0.2.0"></a>
+## [0.2.0](https://www.github.com/Kantaiko/Controllers/releases/tag/v0.2.0) (2021-8-2)
+
+### Features
+
+* Add parameter default value resolvers ([47d535e](https://www.github.com/Kantaiko/Controllers/commit/47d535e62f13e78f556d8a930ffbcb674e71b8c8))
+
 <a name="0.1.4"></a>
 ## [0.1.4](https://www.github.com/Kantaiko/Controllers/releases/tag/v0.1.4) (2021-7-31)
 
