@@ -3,7 +3,8 @@ using System.Threading.Tasks;
 
 namespace Kantaiko.Controllers.Middleware
 {
-    public abstract class EndpointMiddleware<TRequest> : IEndpointMiddleware<TRequest>, IAutoRegistrableMiddleware
+    public abstract class EndpointMiddleware<TRequest> : IEndpointMiddleware<TRequest>,
+        IAutoRegistrableMiddleware<TRequest>
     {
         public abstract EndpointMiddlewareStage Stage { get; }
 

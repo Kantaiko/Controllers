@@ -25,6 +25,7 @@ namespace Kantaiko.Controllers.Internal
             }
 
             _middleware = middlewareCollection.MiddlewareTypes
+                .Where(x => x.IsAssignableTo(typeof(IAutoRegistrableMiddleware<TRequest>)))
                 .Select(CreateMiddlewareInstance)
                 .GroupBy(x => x.Stage)
                 .ToDictionary(k => k.Key, v => v.ToArray());

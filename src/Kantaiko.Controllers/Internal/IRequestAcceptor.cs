@@ -1,7 +1,7 @@
 ﻿namespace Kantaiko.Controllers.Internal
 {
-    internal interface IRequestAcceptor
+    internal interface IRequestAcceptor<TRequest>
     {
-        void SetRequest(object request);
+        void SetRequest(TRequest request);
     }
 }

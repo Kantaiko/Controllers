@@ -136,7 +136,7 @@ namespace Kantaiko.Controllers.Internal
             }
 
             // 8. Instantiate controller and invoke endpoint method
-            var controller = (IRequestAcceptor) _instanceFactory.CreateInstance(controllerManager.Info.Type,
+            var controller = (IRequestAcceptor<TRequest>) _instanceFactory.CreateInstance(controllerManager.Info.Type,
                 serviceProvider);
 
             controller.SetRequest(request);

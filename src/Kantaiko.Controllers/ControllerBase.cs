@@ -2,13 +2,13 @@
 
 namespace Kantaiko.Controllers
 {
-    public abstract class ControllerBase<TRequest> : IRequestAcceptor
+    public abstract class ControllerBase<TRequest> : IRequestAcceptor<TRequest>, IAutoRegistrableController
     {
         protected TRequest Request { get; private set; } = default!;
 
-        void IRequestAcceptor.SetRequest(object request)
+        void IRequestAcceptor<TRequest>.SetRequest(TRequest request)
         {
-            Request = (TRequest) request;
+            Request = request;
         }
     }
 }

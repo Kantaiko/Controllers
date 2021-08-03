@@ -14,13 +14,13 @@ namespace Kantaiko.Controllers
         public ControllerCollection(IEnumerable<Type> controllerTypes)
         {
             ControllerTypes = controllerTypes.Distinct()
-                .Where(ReflectionUtils.IsAutoRegistrable<IRequestAcceptor>)
+                .Where(ReflectionUtils.IsAutoRegistrable<IAutoRegistrableController>)
                 .ToArray();
         }
 
         public static ControllerCollection FromAssemblies(params Assembly[] assemblies)
         {
-            var controllerTypes = ReflectionUtils.GetDerivedTypesFromAssemblies<IRequestAcceptor>(assemblies);
+            var controllerTypes = ReflectionUtils.GetDerivedTypesFromAssemblies<IAutoRegistrableController>(assemblies);
             return new ControllerCollection(controllerTypes);
         }
     }

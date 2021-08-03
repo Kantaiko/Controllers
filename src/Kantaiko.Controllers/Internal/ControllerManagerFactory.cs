@@ -299,6 +299,7 @@ namespace Kantaiko.Controllers.Internal
             IControllerCollection controllerCollection, IServiceProvider serviceProvider)
         {
             var controllerManagers = controllerCollection.ControllerTypes
+                .Where(type => type.IsAssignableTo(typeof(IRequestAcceptor<TRequest>)))
                 .Select(type => CreateControllerManager(type, serviceProvider))
                 .ToArray();
 
