@@ -1,4 +1,11 @@
 # Change Log\n\nAll notable changes to this project will be documented in this file. See [versionize](https://github.com/saintedlama/versionize) for commit guidelines.\n
+<a name="0.2.1"></a>
+## [0.2.1](https://www.github.com/Kantaiko/Controllers/releases/tag/v0.2.1) (2021-8-3)
+
+### Bug Fixes
+
+* Allow multiple request handlers with different request types ([f2c91af](https://www.github.com/Kantaiko/Controllers/commit/f2c91af94664b398fd795d821aee838d7c2e1e08))
+
 <a name="0.2.0"></a>
 ## [0.2.0](https://www.github.com/Kantaiko/Controllers/releases/tag/v0.2.0) (2021-8-2)
 
