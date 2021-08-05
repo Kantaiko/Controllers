@@ -28,7 +28,9 @@ internal class TestEndpointMiddleware : EndpointMiddleware<TestRequest>
 ```
 
 Middleware context provides two main possibilities: accessing `ExecutionContext` to get or override resolved parameters
-and `ShouldProcess` property that can be set to `false` to interrupt the execution.
+and `ShouldProcess` property that can be set to `false` to interrupt the execution. You can also access the
+`ControllerInstance` and `ProcessingResult` properties in the `ExecutionContext`, starting with the `BeforeExecution`
+and `BeforeCompletion` stages, respectively.
 
 If middleware interrupts execution, `ExitReason` of `RequestProcessingResult` will be of type `InterruptionExitReason`
 and will contain the middleware stage where execution was interrupted.
