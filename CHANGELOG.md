@@ -1,4 +1,11 @@
 # Change Log\n\nAll notable changes to this project will be documented in this file. See [versionize](https://github.com/saintedlama/versionize) for commit guidelines.\n
+<a name="0.3.0"></a>
+## [0.3.0](https://www.github.com/Kantaiko/Controllers/releases/tag/v0.3.0) (2021-8-5)
+
+### Features
+
+* Expose ControllerInstance and ProcessingResult in middleware execution context ([309b3bc](https://www.github.com/Kantaiko/Controllers/commit/309b3bcfd7295173631cbc88003f0b39f479c133))
+
 <a name="0.2.1"></a>
 ## [0.2.1](https://www.github.com/Kantaiko/Controllers/releases/tag/v0.2.1) (2021-8-3)
 
