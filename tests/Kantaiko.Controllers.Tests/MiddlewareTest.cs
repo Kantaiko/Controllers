@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Kantaiko.Controllers.Design.Endpoints;
@@ -21,7 +22,7 @@ namespace Kantaiko.Controllers.Tests
 
         private class TestMiddleware : EndpointMiddleware<TestRequest>
         {
-            public override EndpointMiddlewareStage Stage => EndpointMiddlewareStage.BeforeExecution;
+            public override EndpointMiddlewareStage Stage => EndpointMiddlewareStage.BeforeInstanceCreation;
 
             public override Task HandleAsync(EndpointMiddlewareContext<TestRequest> context,
                 CancellationToken cancellationToken)
@@ -34,6 +35,38 @@ namespace Kantaiko.Controllers.Tests
                 if (context.Request.ShouldInterruptViaMiddleware)
                 {
                     context.ShouldProcess = false;
+                }
+
+                return Task.CompletedTask;
+            }
+        }
+
+        private class BeforeExecutionTestMiddleware : EndpointMiddleware<TestRequest>
+        {
+            public override EndpointMiddlewareStage Stage => EndpointMiddlewareStage.BeforeExecution;
+
+            public override Task HandleAsync(EndpointMiddlewareContext<TestRequest> context,
+                CancellationToken cancellationToken)
+            {
+                if (context.Request.Result is not null)
+                {
+                    context.Request.Result["instance"] = context.ExecutionContext.ControllerInstance!;
+                }
+
+                return Task.CompletedTask;
+            }
+        }
+
+        private class BeforeCompletionTestMiddleware : EndpointMiddleware<TestRequest>
+        {
+            public override EndpointMiddlewareStage Stage => EndpointMiddlewareStage.BeforeCompletion;
+
+            public override Task HandleAsync(EndpointMiddlewareContext<TestRequest> context,
+                CancellationToken cancellationToken)
+            {
+                if (context.Request.Result is not null)
+                {
+                    context.Request.Result["result"] = context.ExecutionContext.ProcessingResult!;
                 }
 
                 return Task.CompletedTask;
@@ -67,6 +100,9 @@ namespace Kantaiko.Controllers.Tests
 
         private class MiddlewareTestController : TestController
         {
+            [RegexPattern("empty")]
+            public void Empty() { }
+
             [RegexPattern(@"global-middleware (?<a>\w+)")]
             public int Middleware(int a) => a;
 
@@ -97,7 +133,7 @@ namespace Kantaiko.Controllers.Tests
             Assert.True(result.IsExited);
 
             var interruptionExitReason = Assert.IsType<InterruptionExitReason>(result.ExitReason);
-            Assert.Equal(EndpointMiddlewareStage.BeforeExecution, interruptionExitReason.MiddlewareStage);
+            Assert.Equal(EndpointMiddlewareStage.BeforeInstanceCreation, interruptionExitReason.MiddlewareStage);
         }
 
         [Fact]
@@ -118,6 +154,24 @@ namespace Kantaiko.Controllers.Tests
 
             Assert.True(result.HasReturnValue);
             Assert.Equal(42, result.ReturnValue);
+        }
+
+        [Fact]
+        public async Task ShouldExposeControllerInstanceSinceBeforeExecutionStage()
+        {
+            var request = new TestRequest("empty", Result: new Dictionary<string, object>());
+            var result = await _requestHandlerProvider.RequestHandler.HandleAsync(request);
+
+            Assert.IsType<MiddlewareTestController>(request.Result!["instance"]);
+        }
+
+        [Fact]
+        public async Task ShouldExposeProcessingResultSinceBeforeCompletionStage()
+        {
+            var request = new TestRequest("empty", Result: new Dictionary<string, object>());
+            var result = await _requestHandlerProvider.RequestHandler.HandleAsync(request);
+
+            Assert.Same(result, request.Result!["result"]);
         }
     }
 }

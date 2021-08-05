@@ -135,12 +135,20 @@ namespace Kantaiko.Controllers.Internal
                     postValidationResult.ErrorMessage, postValidationResult.Parameter);
             }
 
-            // 8. Instantiate controller and invoke endpoint method
+            // 8. Instantiate controller
+            if (await MoveNextStage(EndpointMiddlewareStage.BeforeInstanceCreation))
+            {
+                return RequestProcessingResult.Interrupted(EndpointMiddlewareStage.BeforeInstanceCreation);
+            }
+
             var controller = (IRequestAcceptor<TRequest>) _instanceFactory.CreateInstance(controllerManager.Info.Type,
                 serviceProvider);
 
             controller.SetRequest(request);
 
+            executionContext.ControllerInstance = controller;
+
+            // 9. Invoke endpoint method
             if (await MoveNextStage(EndpointMiddlewareStage.BeforeExecution))
             {
                 return RequestProcessingResult.Interrupted(EndpointMiddlewareStage.BeforeExecution);
@@ -149,9 +157,19 @@ namespace Kantaiko.Controllers.Internal
             var parameters = CreateParameters(executionContext);
             var result = await endpointManager.Invoke(controller, parameters);
 
-            return result.Exception is not null
+            var processingResult = result.Exception is not null
                 ? RequestProcessingResult.Exception(result.Exception)
                 : RequestProcessingResult.Success(result.Result);
+
+            executionContext.ProcessingResult = processingResult;
+
+            // 10. Execute before completion stage and return processing result
+            if (await MoveNextStage(EndpointMiddlewareStage.BeforeCompletion))
+            {
+                return RequestProcessingResult.Interrupted(EndpointMiddlewareStage.BeforeCompletion);
+            }
+
+            return processingResult;
         }
 
         private static object CreateDeconstructedParameter(Type type,

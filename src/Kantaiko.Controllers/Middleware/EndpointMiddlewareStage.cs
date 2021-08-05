@@ -6,6 +6,8 @@
         BeforeValidation,
         BeforeResolution,
         BeforePostValidation,
-        BeforeExecution
+        BeforeInstanceCreation,
+        BeforeExecution,
+        BeforeCompletion
     }
 }
