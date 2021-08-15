@@ -1,4 +1,12 @@
 # Change Log\n\nAll notable changes to this project will be documented in this file. See [versionize](https://github.com/saintedlama/versionize) for commit guidelines.\n
+<a name="0.4.0"></a>
+## [0.4.0](https://www.github.com/Kantaiko/Controllers/releases/tag/v0.4.0) (2021-8-15)
+
+### Features
+
+* Add IsHidden parameter design property ([7ca4b86](https://www.github.com/Kantaiko/Controllers/commit/7ca4b86bf920dfa6a81c7e5de6acf31d64fb20de))
+* Improve design property system ([db6fb9d](https://www.github.com/Kantaiko/Controllers/commit/db6fb9d3865e955a8178d03fe18241616562a6db))
+
 <a name="0.3.0"></a>
 ## [0.3.0](https://www.github.com/Kantaiko/Controllers/releases/tag/v0.3.0) (2021-8-5)
 
