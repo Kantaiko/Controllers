@@ -38,7 +38,10 @@
           AttributeProvider: controllerInfo of IntrospectionTest.IntrospectionTestController.IntrospectionTest.IntrospectionTestController.IntrospectionTestPreventDeconstruction(ControllerInfo controllerInfo),
           OriginalName: controllerInfo,
           Name: controllerInfo,
-          ParameterType: ControllerInfo
+          ParameterType: ControllerInfo,
+          Properties: {
+            KantaikoParameterProperties:IsHidden: true
+          }
         }
       ],
       ParameterTree: {
@@ -47,7 +50,10 @@
             AttributeProvider: controllerInfo of IntrospectionTest.IntrospectionTestController.IntrospectionTest.IntrospectionTestController.IntrospectionTestPreventDeconstruction(ControllerInfo controllerInfo),
             OriginalName: controllerInfo,
             Name: controllerInfo,
-            ParameterType: ControllerInfo
+            ParameterType: ControllerInfo,
+            Properties: {
+              KantaikoParameterProperties:IsHidden: true
+            }
           }
         ]
       }
