@@ -2,7 +2,7 @@
 
 namespace Kantaiko.Controllers.Tests.Shared
 {
-    internal class PatternMatcher : IEndpointMatcher<TestRequest>
+    internal class PatternMatcher : IEndpointMatcher<TestContext>
     {
         private readonly RegexTextMatcher _matcher;
 
@@ -11,9 +11,9 @@ namespace Kantaiko.Controllers.Tests.Shared
             _matcher = new RegexTextMatcher(pattern);
         }
 
-        public EndpointMatchResult Match(EndpointMatchContext<TestRequest> context)
+        public EndpointMatchResult Match(EndpointMatchContext<TestContext> context)
         {
-            return _matcher.Match(context.Request.Text);
+            return _matcher.Match(context.RequestContext.Text);
         }
     }
 }

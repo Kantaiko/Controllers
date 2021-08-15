@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
@@ -12,14 +11,14 @@ using Kantaiko.Controllers.Utils;
 
 namespace Kantaiko.Controllers.Internal
 {
-    internal class EndpointManager<TRequest>
+    internal class EndpointManager<TContext>
     {
         private readonly bool _isAsync;
 
         public EndpointManager(EndpointInfo info,
-            IReadOnlyList<IEndpointMatcher<TRequest>> matchers,
-            ParameterManagerTree<TRequest> parameterTree,
-            IReadOnlyList<IEndpointMiddleware<TRequest>> middlewares)
+            IReadOnlyList<IEndpointMatcher<TContext>> matchers,
+            ParameterManagerTree<TContext> parameterTree,
+            IReadOnlyList<IEndpointMiddleware<TContext>> middlewares)
         {
             Info = info;
             Matchers = matchers;
@@ -37,14 +36,14 @@ namespace Kantaiko.Controllers.Internal
         }
 
         public EndpointInfo Info { get; }
-        public IReadOnlyList<IEndpointMatcher<TRequest>> Matchers { get; }
-        public IReadOnlyList<IEndpointMiddleware<TRequest>> Middlewares { get; }
+        public IReadOnlyList<IEndpointMatcher<TContext>> Matchers { get; }
+        public IReadOnlyList<IEndpointMiddleware<TContext>> Middlewares { get; }
 
-        public IReadOnlyList<ParameterManager<TRequest>> Parameters { get; }
-        public ParameterManagerTree<TRequest> ParameterTree { get; }
+        public IReadOnlyList<ParameterManager<TContext>> Parameters { get; }
+        public ParameterManagerTree<TContext> ParameterTree { get; }
 
-        private static IEnumerable<ParameterManager<TRequest>> Flatten(
-            IEnumerable<ParameterManager<TRequest>> parameters)
+        private static IEnumerable<ParameterManager<TContext>> Flatten(
+            IEnumerable<ParameterManager<TContext>> parameters)
         {
             return parameters.SelectMany(parameterInfo =>
             {
@@ -67,7 +66,7 @@ namespace Kantaiko.Controllers.Internal
                 // TODO wtf
                 if (_isAsync)
                 {
-                    var resultTask = (Task) result;
+                    var resultTask = (Task)result;
                     await resultTask.ConfigureAwait(false);
                     result = resultTask.GetType().GetProperty("Result")!.GetValue(resultTask);
                 }
@@ -81,7 +80,7 @@ namespace Kantaiko.Controllers.Internal
             }
         }
 
-        public EndpointMatchResult Match(EndpointMatchContext<TRequest> context)
+        public EndpointMatchResult Match(EndpointMatchContext<TContext> context)
         {
             foreach (var endpointMatcher in Matchers)
             {
@@ -92,7 +91,7 @@ namespace Kantaiko.Controllers.Internal
             return EndpointMatchResult.NotMatched;
         }
 
-        public async Task InvokeMiddleware(EndpointMiddlewareContext<TRequest> endpointMiddlewareContext,
+        public async Task InvokeMiddleware(EndpointMiddlewareContext<TContext> endpointMiddlewareContext,
             CancellationToken cancellationToken)
         {
             foreach (var middleware in Middlewares)

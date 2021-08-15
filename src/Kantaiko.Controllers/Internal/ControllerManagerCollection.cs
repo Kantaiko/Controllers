@@ -3,24 +3,24 @@ using System.Collections.Generic;
 
 namespace Kantaiko.Controllers.Internal
 {
-    internal class ControllerManagerCollection<TRequest>
+    internal class ControllerManagerCollection<TContext>
     {
-        public IReadOnlyList<ControllerManager<TRequest>> ControllerManagers { get; }
+        public IReadOnlyList<ControllerManager<TContext>> ControllerManagers { get; }
 
-        public ControllerManagerCollection(IReadOnlyList<ControllerManager<TRequest>> controllerManagers)
+        public ControllerManagerCollection(IReadOnlyList<ControllerManager<TContext>> controllerManagers)
         {
             ControllerManagers = controllerManagers;
         }
 
-        public ControllerMatchResult<TRequest> MatchController(TRequest request, IServiceProvider serviceProvider)
+        public ControllerMatchResult<TContext> MatchController(TContext context, IServiceProvider serviceProvider)
         {
             foreach (var controllerManager in ControllerManagers)
             {
-                var result = controllerManager.MatchEndpoint(request, serviceProvider);
+                var result = controllerManager.MatchEndpoint(context, serviceProvider);
                 if (result.IsMatched) return result;
             }
 
-            return ControllerMatchResult<TRequest>.NotMatched;
+            return ControllerMatchResult<TContext>.NotMatched;
         }
     }
 }

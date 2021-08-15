@@ -10,17 +10,17 @@ using Kantaiko.Controllers.Validation;
 
 namespace Kantaiko.Controllers.Internal
 {
-    internal class ParameterManager<TRequest>
+    internal class ParameterManager<TContext>
     {
         public EndpointParameterInfo Info { get; }
 
         public ParameterManager(EndpointParameterInfo info,
-            IReadOnlyList<IEndpointMiddleware<TRequest>> middlewares,
+            IReadOnlyList<IEndpointMiddleware<TContext>> middlewares,
             IReadOnlyList<IParameterPostValidator> validators,
             Type? converterType,
             IParameterDefaultValueResolver? defaultValueResolver = null,
             PropertyInfo? propertyInfo = null,
-            IReadOnlyList<ParameterManager<TRequest>>? children = null)
+            IReadOnlyList<ParameterManager<TContext>>? children = null)
         {
             Info = info;
             Middlewares = middlewares;
@@ -31,12 +31,12 @@ namespace Kantaiko.Controllers.Internal
             Children = children;
         }
 
-        public IReadOnlyList<IEndpointMiddleware<TRequest>> Middlewares { get; }
+        public IReadOnlyList<IEndpointMiddleware<TContext>> Middlewares { get; }
         public IReadOnlyList<IParameterPostValidator> Validators { get; }
         public Type? ConverterType { get; }
         public IParameterDefaultValueResolver? DefaultValueResolver { get; }
         public PropertyInfo? PropertyInfo { get; }
-        public IReadOnlyList<ParameterManager<TRequest>>? Children { get; }
+        public IReadOnlyList<ParameterManager<TContext>>? Children { get; }
 
         public ValidationResult Validate(ParameterPostValidationContext context, object value)
         {
@@ -49,7 +49,7 @@ namespace Kantaiko.Controllers.Internal
             return ValidationResult.Success;
         }
 
-        public async Task InvokeMiddleware(EndpointMiddlewareContext<TRequest> endpointMiddlewareContext,
+        public async Task InvokeMiddleware(EndpointMiddlewareContext<TContext> endpointMiddlewareContext,
             CancellationToken cancellationToken)
         {
             foreach (var middleware in Middlewares)

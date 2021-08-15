@@ -2,13 +2,13 @@
 
 namespace Kantaiko.Controllers
 {
-    public abstract class ControllerBase<TRequest> : IRequestAcceptor<TRequest>, IAutoRegistrableController
+    public abstract class ControllerBase<TContext> : IContextAcceptor<TContext>, IAutoRegistrableController
     {
-        protected TRequest Request { get; private set; } = default!;
+        protected TContext Context { get; private set; } = default!;
 
-        void IRequestAcceptor<TRequest>.SetRequest(TRequest request)
+        void IContextAcceptor<TContext>.SetContext(TContext context)
         {
-            Request = request;
+            Context = context;
         }
     }
 }

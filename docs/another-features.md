@@ -31,7 +31,7 @@ host language, but you can set a specific culture for the current thread before 
 ```c#
 Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo("en");
 
-var result = await requestHandler.HandleAsync(request);
+var result = await requestHandler.HandleAsync(context);
 ```
 
 ## Design properties

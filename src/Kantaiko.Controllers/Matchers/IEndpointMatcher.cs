@@ -1,7 +1,7 @@
 ﻿namespace Kantaiko.Controllers.Matchers
 {
-    public interface IEndpointMatcher<TRequest>
+    public interface IEndpointMatcher<TContext>
     {
-        EndpointMatchResult Match(EndpointMatchContext<TRequest> context);
+        EndpointMatchResult Match(EndpointMatchContext<TContext> context);
     }
 }

@@ -95,8 +95,8 @@ namespace Kantaiko.Controllers.Tests
         [Fact]
         public async Task ShouldUseSyncParameterConverter()
         {
-            var request = new TestRequest("parse test@2.0.0");
-            var result = await _requestHandlerProvider.RequestHandler.HandleAsync(request);
+            var context = new TestContext("parse test@2.0.0");
+            var result = await _requestHandlerProvider.RequestHandler.HandleAsync(context);
 
             Assert.True(result.HasReturnValue);
             Assert.Equal(TestPackageReference, result.ReturnValue);
@@ -105,8 +105,8 @@ namespace Kantaiko.Controllers.Tests
         [Fact]
         public async Task ShouldReportSyncConversionError()
         {
-            var request = new TestRequest("parse test");
-            var result = await _requestHandlerProvider.RequestHandler.HandleAsync(request);
+            var context = new TestContext("parse test");
+            var result = await _requestHandlerProvider.RequestHandler.HandleAsync(context);
 
             Assert.True(result.IsExited);
 
@@ -118,8 +118,8 @@ namespace Kantaiko.Controllers.Tests
         [Fact]
         public async Task ShouldUseAsyncParameterConverter()
         {
-            var request = new TestRequest("find test@2.0.0");
-            var result = await _requestHandlerProvider.RequestHandler.HandleAsync(request);
+            var context = new TestContext("find test@2.0.0");
+            var result = await _requestHandlerProvider.RequestHandler.HandleAsync(context);
 
             Assert.True(result.HasReturnValue);
             Assert.Equal(TestPackageInfo, result.ReturnValue);
@@ -128,8 +128,8 @@ namespace Kantaiko.Controllers.Tests
         [Fact]
         public async Task ShouldReportAsyncValidationError()
         {
-            var request = new TestRequest("find test");
-            var result = await _requestHandlerProvider.RequestHandler.HandleAsync(request);
+            var context = new TestContext("find test");
+            var result = await _requestHandlerProvider.RequestHandler.HandleAsync(context);
 
             Assert.True(result.IsExited);
 
@@ -141,8 +141,8 @@ namespace Kantaiko.Controllers.Tests
         [Fact]
         public async Task ShouldReportAsyncResolutionError()
         {
-            var request = new TestRequest("find test@1.0.0");
-            var result = await _requestHandlerProvider.RequestHandler.HandleAsync(request);
+            var context = new TestContext("find test@1.0.0");
+            var result = await _requestHandlerProvider.RequestHandler.HandleAsync(context);
 
             Assert.True(result.IsExited);
 

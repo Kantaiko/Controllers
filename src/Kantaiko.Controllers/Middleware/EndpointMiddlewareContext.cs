@@ -2,20 +2,21 @@
 
 namespace Kantaiko.Controllers.Middleware
 {
-    public class EndpointMiddlewareContext<TRequest>
+    public class EndpointMiddlewareContext<TContext>
     {
-        public EndpointMiddlewareContext(TRequest request, RequestExecutionContext<TRequest> executionContext,
+        public EndpointMiddlewareContext(TContext requestContext, RequestExecutionContext<TContext> executionContext,
             IServiceProvider serviceProvider)
         {
-            Request = request;
+            RequestContext = requestContext;
             ExecutionContext = executionContext;
             ServiceProvider = serviceProvider;
         }
 
         public EndpointMiddlewareStage Stage { get; internal set; } = EndpointMiddlewareStage.BeforeValidation;
 
-        public TRequest Request { get; }
-        public RequestExecutionContext<TRequest> ExecutionContext { get; }
+        public TContext RequestContext { get; }
+        public RequestExecutionContext<TContext> ExecutionContext { get; }
+
         public IServiceProvider ServiceProvider { get; }
         public bool ShouldProcess { get; set; } = true;
     }

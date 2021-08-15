@@ -25,8 +25,8 @@ namespace Kantaiko.Controllers.Tests
         [Fact]
         public async Task ShouldPostValidateParameters()
         {
-            var request = new TestRequest("sum 40 2");
-            var result = await _requestHandlerProvider.RequestHandler.HandleAsync(request);
+            var context = new TestContext("sum 40 2");
+            var result = await _requestHandlerProvider.RequestHandler.HandleAsync(context);
 
             Assert.True(result.HasReturnValue);
             Assert.Equal(42, result.ReturnValue);
@@ -35,8 +35,8 @@ namespace Kantaiko.Controllers.Tests
         [Fact]
         public async Task ShouldReportPostValidationError()
         {
-            var request = new TestRequest("sum 40 3");
-            var result = await _requestHandlerProvider.RequestHandler.HandleAsync(request);
+            var context = new TestContext("sum 40 3");
+            var result = await _requestHandlerProvider.RequestHandler.HandleAsync(context);
 
             Assert.True(result.IsExited);
 

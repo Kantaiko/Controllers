@@ -24,26 +24,26 @@ public class HelloController : TestController
 Such attributes implement `IEndpointMatcherFactory` interface to create the instance of `IEndpointMatcher`:
 
 ```c#
-internal class PatternMatcher : IEndpointMatcher<TextRequest>
+internal class PatternMatcher : IEndpointMatcher<TexTContext>
 {
     private readonly Regex _pattern;
     public PatternMatcher(string pattern) => _pattern = new Regex(pattern);
 
-    public EndpointMatchResult Match(EndpointMatchContext<TextRequest> context)
+    public EndpointMatchResult Match(EndpointMatchContext<TexTContext> context)
     {
-        return _pattern.IsMatch(context.Request.Text)
+        return _pattern.IsMatch(context.RequestContext.Text)
             ? EndpointMatchResult.Success(new Dictionary<string, object>())
             : EndpointMatchResult.NotMatched;
     }
 }
 
 [AttributeUsage(AttributeTargets.Method)]
-internal class PatternAttribute : Attribute, IEndpointMatcherFactory<TextRequest>
+internal class PatternAttribute : Attribute, IEndpointMatcherFactory<TexTContext>
 {
     private readonly string _pattern;
     public PatternAttribute(string pattern) => _pattern = pattern;
 
-    public IEndpointMatcher<TextRequest> CreateEndpointMatcher(EndpointDesignContext context)
+    public IEndpointMatcher<TexTContext> CreateEndpointMatcher(EndpointDesignContext context)
     {
         return new PatternMatcher(_pattern);
     }

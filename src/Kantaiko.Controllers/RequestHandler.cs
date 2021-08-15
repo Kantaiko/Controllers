@@ -11,9 +11,9 @@ using Kantaiko.Controllers.Result;
 
 namespace Kantaiko.Controllers
 {
-    public class RequestHandler<TRequest> where TRequest : notnull
+    public class RequestHandler<TContext> where TContext : notnull
     {
-        private readonly ControllerHandler<TRequest> _controllerHandler;
+        private readonly ControllerHandler<TContext> _controllerHandler;
 
         public RequestHandlerInfo Info { get; }
 
@@ -33,25 +33,25 @@ namespace Kantaiko.Controllers
             instanceFactory ??= DefaultInstanceFactory.Instance;
             serviceProvider ??= DefaultServiceProvider.Instance;
 
-            var controllerManagerFactory = new ControllerManagerFactory<TRequest>(deconstructionValidator);
+            var controllerManagerFactory = new ControllerManagerFactory<TContext>(deconstructionValidator);
 
             var controllerManagerCollection = controllerManagerFactory.CreateControllerManagerCollection(
                 controllerCollection, serviceProvider);
 
-            _controllerHandler = new ControllerHandler<TRequest>(controllerManagerCollection,
+            _controllerHandler = new ControllerHandler<TContext>(controllerManagerCollection,
                 converterCollection, instanceFactory, middlewareCollection, serviceProvider);
 
             var controllerInfos = controllerManagerCollection.ControllerManagers.Select(x => x.Info).ToArray();
             Info = new RequestHandlerInfo(controllerInfos);
         }
 
-        public Task<RequestProcessingResult> HandleAsync(TRequest request,
+        public Task<RequestProcessingResult> HandleAsync(TContext context,
             IServiceProvider? serviceProvider = null,
             CancellationToken cancellationToken = default)
         {
-            if (request is null) throw new ArgumentNullException(nameof(request));
+            if (context is null) throw new ArgumentNullException(nameof(context));
 
-            return _controllerHandler.HandleAsync(request, serviceProvider, cancellationToken);
+            return _controllerHandler.HandleAsync(context, serviceProvider, cancellationToken);
         }
     }
 }

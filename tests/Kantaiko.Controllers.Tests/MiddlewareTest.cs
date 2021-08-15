@@ -20,19 +20,19 @@ namespace Kantaiko.Controllers.Tests
             _requestHandlerProvider = requestHandlerProvider;
         }
 
-        private class TestMiddleware : EndpointMiddleware<TestRequest>
+        private class TestMiddleware : EndpointMiddleware<TestContext>
         {
             public override EndpointMiddlewareStage Stage => EndpointMiddlewareStage.BeforeInstanceCreation;
 
-            public override Task HandleAsync(EndpointMiddlewareContext<TestRequest> context,
+            public override Task HandleAsync(EndpointMiddlewareContext<TestContext> context,
                 CancellationToken cancellationToken)
             {
-                if (context.Request.ShouldOverrideValueViaMiddleware)
+                if (context.RequestContext.ShouldOverrideValueViaMiddleware)
                 {
                     context.ExecutionContext.Parameters["a"].Value = 42;
                 }
 
-                if (context.Request.ShouldInterruptViaMiddleware)
+                if (context.RequestContext.ShouldInterruptViaMiddleware)
                 {
                     context.ShouldProcess = false;
                 }
@@ -41,58 +41,58 @@ namespace Kantaiko.Controllers.Tests
             }
         }
 
-        private class BeforeExecutionTestMiddleware : EndpointMiddleware<TestRequest>
+        private class BeforeExecutionTestMiddleware : EndpointMiddleware<TestContext>
         {
             public override EndpointMiddlewareStage Stage => EndpointMiddlewareStage.BeforeExecution;
 
-            public override Task HandleAsync(EndpointMiddlewareContext<TestRequest> context,
+            public override Task HandleAsync(EndpointMiddlewareContext<TestContext> context,
                 CancellationToken cancellationToken)
             {
-                if (context.Request.Result is not null)
+                if (context.RequestContext.Result is not null)
                 {
-                    context.Request.Result["instance"] = context.ExecutionContext.ControllerInstance!;
+                    context.RequestContext.Result["instance"] = context.ExecutionContext.ControllerInstance!;
                 }
 
                 return Task.CompletedTask;
             }
         }
 
-        private class BeforeCompletionTestMiddleware : EndpointMiddleware<TestRequest>
+        private class BeforeCompletionTestMiddleware : EndpointMiddleware<TestContext>
         {
             public override EndpointMiddlewareStage Stage => EndpointMiddlewareStage.BeforeCompletion;
 
-            public override Task HandleAsync(EndpointMiddlewareContext<TestRequest> context,
+            public override Task HandleAsync(EndpointMiddlewareContext<TestContext> context,
                 CancellationToken cancellationToken)
             {
-                if (context.Request.Result is not null)
+                if (context.RequestContext.Result is not null)
                 {
-                    context.Request.Result["result"] = context.ExecutionContext.ProcessingResult!;
+                    context.RequestContext.Result["result"] = context.ExecutionContext.ProcessingResult!;
                 }
 
                 return Task.CompletedTask;
             }
         }
 
-        private class TestEndpointMiddleware : IEndpointMiddleware<TestRequest>
+        private class TestEndpointMiddleware : IEndpointMiddleware<TestContext>
         {
             public EndpointMiddlewareStage Stage => EndpointMiddlewareStage.BeforeExecution;
 
-            public Task HandleAsync(EndpointMiddlewareContext<TestRequest> context, CancellationToken cancellationToken)
+            public Task HandleAsync(EndpointMiddlewareContext<TestContext> context, CancellationToken cancellationToken)
             {
                 context.ExecutionContext.Parameters["a"].Value = 42;
                 return Task.CompletedTask;
             }
         }
 
-        private class TestMiddlewareAttribute : Attribute, IEndpointMiddlewareFactory<TestRequest>,
-            IParameterMiddlewareFactory<TestRequest>
+        private class TestMiddlewareAttribute : Attribute, IEndpointMiddlewareFactory<TestContext>,
+            IParameterMiddlewareFactory<TestContext>
         {
-            public IEndpointMiddleware<TestRequest> CreateEndpointMiddleware(EndpointDesignContext context)
+            public IEndpointMiddleware<TestContext> CreateEndpointMiddleware(EndpointDesignContext context)
             {
                 return new TestEndpointMiddleware();
             }
 
-            public IEndpointMiddleware<TestRequest> CreateParameterMiddleware(EndpointParameterDesignContext context)
+            public IEndpointMiddleware<TestContext> CreateParameterMiddleware(EndpointParameterDesignContext context)
             {
                 return new TestEndpointMiddleware();
             }
@@ -117,8 +117,8 @@ namespace Kantaiko.Controllers.Tests
         [Fact]
         public async Task ShouldOverrideParameterValueViaGlobalMiddleware()
         {
-            var request = new TestRequest("global-middleware 25", true);
-            var result = await _requestHandlerProvider.RequestHandler.HandleAsync(request);
+            var context = new TestContext("global-middleware 25", true);
+            var result = await _requestHandlerProvider.RequestHandler.HandleAsync(context);
 
             Assert.True(result.HasReturnValue);
             Assert.Equal(42, result.ReturnValue);
@@ -127,8 +127,8 @@ namespace Kantaiko.Controllers.Tests
         [Fact]
         public async Task ShouldInterruptExecutionViaGlobalMiddleware()
         {
-            var request = new TestRequest("global-middleware 25", ShouldInterruptViaMiddleware: true);
-            var result = await _requestHandlerProvider.RequestHandler.HandleAsync(request);
+            var context = new TestContext("global-middleware 25", ShouldInterruptViaMiddleware: true);
+            var result = await _requestHandlerProvider.RequestHandler.HandleAsync(context);
 
             Assert.True(result.IsExited);
 
@@ -139,8 +139,8 @@ namespace Kantaiko.Controllers.Tests
         [Fact]
         public async Task ShouldOverrideParameterValueViaEndpointMiddleware()
         {
-            var request = new TestRequest("endpoint-middleware 25");
-            var result = await _requestHandlerProvider.RequestHandler.HandleAsync(request);
+            var context = new TestContext("endpoint-middleware 25");
+            var result = await _requestHandlerProvider.RequestHandler.HandleAsync(context);
 
             Assert.True(result.HasReturnValue);
             Assert.Equal(42, result.ReturnValue);
@@ -149,8 +149,8 @@ namespace Kantaiko.Controllers.Tests
         [Fact]
         public async Task ShouldOverrideParameterValueViaParameterMiddleware()
         {
-            var request = new TestRequest("parameter-middleware 25");
-            var result = await _requestHandlerProvider.RequestHandler.HandleAsync(request);
+            var context = new TestContext("parameter-middleware 25");
+            var result = await _requestHandlerProvider.RequestHandler.HandleAsync(context);
 
             Assert.True(result.HasReturnValue);
             Assert.Equal(42, result.ReturnValue);
@@ -159,19 +159,19 @@ namespace Kantaiko.Controllers.Tests
         [Fact]
         public async Task ShouldExposeControllerInstanceSinceBeforeExecutionStage()
         {
-            var request = new TestRequest("empty", Result: new Dictionary<string, object>());
-            var result = await _requestHandlerProvider.RequestHandler.HandleAsync(request);
+            var context = new TestContext("empty", Result: new Dictionary<string, object>());
+            var result = await _requestHandlerProvider.RequestHandler.HandleAsync(context);
 
-            Assert.IsType<MiddlewareTestController>(request.Result!["instance"]);
+            Assert.IsType<MiddlewareTestController>(context.Result!["instance"]);
         }
 
         [Fact]
         public async Task ShouldExposeProcessingResultSinceBeforeCompletionStage()
         {
-            var request = new TestRequest("empty", Result: new Dictionary<string, object>());
-            var result = await _requestHandlerProvider.RequestHandler.HandleAsync(request);
+            var context = new TestContext("empty", Result: new Dictionary<string, object>());
+            var result = await _requestHandlerProvider.RequestHandler.HandleAsync(context);
 
-            Assert.Same(result, request.Result!["result"]);
+            Assert.Same(result, context.Result!["result"]);
         }
     }
 }

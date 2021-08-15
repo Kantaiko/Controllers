@@ -45,8 +45,8 @@ namespace Kantaiko.Controllers.Tests
         [InlineData("greet Alex", "Hello, Alex!")]
         public async Task ShouldHandleParameterWithDefaultValue(string req, string res)
         {
-            var request = new TestRequest(req);
-            var result = await _requestHandlerProvider.RequestHandler.HandleAsync(request);
+            var context = new TestContext(req);
+            var result = await _requestHandlerProvider.RequestHandler.HandleAsync(context);
 
             Assert.Equal(res, result.ReturnValue);
         }

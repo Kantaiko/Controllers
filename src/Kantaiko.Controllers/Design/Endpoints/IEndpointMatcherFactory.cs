@@ -2,8 +2,8 @@
 
 namespace Kantaiko.Controllers.Design.Endpoints
 {
-    public interface IEndpointMatcherFactory<TRequest>
+    public interface IEndpointMatcherFactory<TContext>
     {
-        IEndpointMatcher<TRequest> CreateEndpointMatcher(EndpointDesignContext context);
+        IEndpointMatcher<TContext> CreateEndpointMatcher(EndpointDesignContext context);
     }
 }

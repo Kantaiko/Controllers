@@ -20,10 +20,10 @@ var controllerCollection = ControllerCollection.FromAssemblies(Assembly.GetExecu
 var requestHandler = new RequestHandler<Request>(controllerCollection);
 ```
 
-You should also define the base type for your controllers, inherited from `ControllerBase<TRequest>`:
+You should also define the base type for your controllers, inherited from `ControllerBase<TContext>`:
 
 ```c#
-public class TestController : ControllerBase<TestRequest> { }
+public class TestController : ControllerBase<TestContext> { }
 ```
 
 Now you can define controllers. All controllers can access protected `Request` property to get a processing request:
@@ -41,7 +41,7 @@ the `HandleAsync`
 method:
 
 ```c#
-var request = new Request("Hello, wolld!");
+var context = new Request("Hello, wolld!");
 var result = await requestHandler.HandleAsync(request);
 ```
 

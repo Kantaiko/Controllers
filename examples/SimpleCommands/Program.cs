@@ -10,11 +10,11 @@ using Kantaiko.Controllers.Result;
 // ReSharper disable LocalizableElement
 
 var controllerCollection = ControllerCollection.FromAssemblies(Assembly.GetExecutingAssembly());
-var requestHandler = new RequestHandler<TestRequest>(controllerCollection);
+var requestHandler = new RequestHandler<TestContext>(controllerCollection);
 
 // Invoke request handler
 Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo("en");
-var result = await requestHandler.HandleAsync(new TestRequest("Hello, world!"));
+var result = await requestHandler.HandleAsync(new TestContext("Hello, world!"));
 
 // Handle result
 if (result.IsMatched)
@@ -47,28 +47,28 @@ internal class HelloController : TestController
     public string Test(string name) => $"Hi, {name}!";
 }
 
-internal class TestController : ControllerBase<TestRequest> { }
+internal class TestController : ControllerBase<TestContext> { }
 
-internal record TestRequest(string Text);
+internal record TestContext(string Text);
 
-internal class PatternMatcher : IEndpointMatcher<TestRequest>
+internal class PatternMatcher : IEndpointMatcher<TestContext>
 {
     private readonly PatternTextMatcher _patternTextMatcher;
     public PatternMatcher(string pattern) => _patternTextMatcher = new PatternTextMatcher(pattern);
 
-    public EndpointMatchResult Match(EndpointMatchContext<TestRequest> context)
+    public EndpointMatchResult Match(EndpointMatchContext<TestContext> context)
     {
-        return _patternTextMatcher.Match(context.Request.Text);
+        return _patternTextMatcher.Match(context.RequestContext.Text);
     }
 }
 
 [AttributeUsage(AttributeTargets.Method)]
-internal class PatternAttribute : Attribute, IEndpointMatcherFactory<TestRequest>
+internal class PatternAttribute : Attribute, IEndpointMatcherFactory<TestContext>
 {
     private readonly string _pattern;
     public PatternAttribute(string pattern) => _pattern = pattern;
 
-    public IEndpointMatcher<TestRequest> CreateEndpointMatcher(EndpointDesignContext context)
+    public IEndpointMatcher<TestContext> CreateEndpointMatcher(EndpointDesignContext context)
     {
         return new PatternMatcher(_pattern);
     }

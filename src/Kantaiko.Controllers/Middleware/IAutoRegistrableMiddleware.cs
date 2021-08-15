@@ -2,5 +2,5 @@
 {
     internal interface IAutoRegistrableMiddleware { }
 
-    internal interface IAutoRegistrableMiddleware<TRequest> : IAutoRegistrableMiddleware { }
+    internal interface IAutoRegistrableMiddleware<TContext> : IAutoRegistrableMiddleware { }
 }

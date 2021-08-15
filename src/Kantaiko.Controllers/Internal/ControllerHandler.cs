@@ -12,15 +12,15 @@ using Kantaiko.Controllers.Validation;
 
 namespace Kantaiko.Controllers.Internal
 {
-    internal class ControllerHandler<TRequest> where TRequest : notnull
+    internal class ControllerHandler<TContext> where TContext : notnull
     {
-        private readonly ControllerManagerCollection<TRequest> _controllerManagerCollection;
+        private readonly ControllerManagerCollection<TContext> _controllerManagerCollection;
         private readonly IConverterCollection _converterCollection;
         private readonly IInstanceFactory _instanceFactory;
         private readonly IMiddlewareCollection _middlewareCollection;
         private readonly IServiceProvider _serviceProvider;
 
-        public ControllerHandler(ControllerManagerCollection<TRequest> controllerManagerCollection,
+        public ControllerHandler(ControllerManagerCollection<TContext> controllerManagerCollection,
             IConverterCollection converterCollection, IInstanceFactory instanceFactory,
             IMiddlewareCollection middlewareCollection, IServiceProvider serviceProvider)
         {
@@ -31,14 +31,14 @@ namespace Kantaiko.Controllers.Internal
             _serviceProvider = serviceProvider;
         }
 
-        public async Task<RequestProcessingResult> HandleAsync(TRequest request,
+        public async Task<RequestProcessingResult> HandleAsync(TContext context,
             IServiceProvider? serviceProvider,
             CancellationToken cancellationToken)
         {
             serviceProvider ??= _serviceProvider;
 
             // 1. Resolve controller
-            var controllerMatchResult = _controllerManagerCollection.MatchController(request, serviceProvider);
+            var controllerMatchResult = _controllerManagerCollection.MatchController(context, serviceProvider);
             if (!controllerMatchResult.IsMatched) return RequestProcessingResult.NotMatched;
 
             var (controllerManager, endpointManager, matchResult) = controllerMatchResult;
@@ -55,21 +55,22 @@ namespace Kantaiko.Controllers.Internal
 
             var parameterContexts = endpointManager.Parameters.Select(x =>
             {
-                var context = new ParameterConversionContext(x.Info, matchResult.Parameters, serviceProvider);
+                var conversionContext = new ParameterConversionContext(x.Info, matchResult.Parameters, serviceProvider);
                 var converterType = x.ConverterType ?? _converterCollection.ResolveConverterType(x.Info.ParameterType);
                 var converter = _instanceFactory.CreateInstance(converterType, serviceProvider);
 
                 Debug.Assert(converter is IParameterConverter);
 
-                return new ExecutionParameterContext(context, (IParameterConverter) converter, x.DefaultValueResolver);
-            }).ToDictionary(k => k.Context.Info.Name, v => v);
+                return new ExecutionParameterContext(conversionContext,
+                    (IParameterConverter)converter, x.DefaultValueResolver);
+            }).ToDictionary(k => k.ConversionContext.Info.Name, v => v);
 
-            var executionContext = new RequestExecutionContext<TRequest>(parameterContexts, endpointManager);
+            var executionContext = new RequestExecutionContext<TContext>(parameterContexts, endpointManager);
 
             // Creating middleware context and dispatcher
-            var middlewareContext = new EndpointMiddlewareContext<TRequest>(request, executionContext, serviceProvider);
+            var middlewareContext = new EndpointMiddlewareContext<TContext>(context, executionContext, serviceProvider);
 
-            var middlewareDispatcher = new MiddlewareDispatcher<TRequest>(_middlewareCollection, _instanceFactory,
+            var middlewareDispatcher = new MiddlewareDispatcher<TContext>(_middlewareCollection, _instanceFactory,
                 serviceProvider);
 
             // Invokes middleware stage and returns true if handler should stop the execution
@@ -141,10 +142,10 @@ namespace Kantaiko.Controllers.Internal
                 return RequestProcessingResult.Interrupted(EndpointMiddlewareStage.BeforeInstanceCreation);
             }
 
-            var controller = (IRequestAcceptor<TRequest>) _instanceFactory.CreateInstance(controllerManager.Info.Type,
+            var controller = (IContextAcceptor<TContext>)_instanceFactory.CreateInstance(controllerManager.Info.Type,
                 serviceProvider);
 
-            controller.SetRequest(request);
+            controller.SetContext(context);
 
             executionContext.ControllerInstance = controller;
 
@@ -173,8 +174,8 @@ namespace Kantaiko.Controllers.Internal
         }
 
         private static object CreateDeconstructedParameter(Type type,
-            IEnumerable<ParameterManager<TRequest>> parameterManagers,
-            RequestExecutionContext<TRequest> context)
+            IEnumerable<ParameterManager<TContext>> parameterManagers,
+            RequestExecutionContext<TContext> context)
         {
             var instance = Activator.CreateInstance(type);
             Debug.Assert(instance is not null);
@@ -193,7 +194,7 @@ namespace Kantaiko.Controllers.Internal
             return instance;
         }
 
-        private static object[] CreateParameters(RequestExecutionContext<TRequest> context)
+        private static object[] CreateParameters(RequestExecutionContext<TContext> context)
         {
             var parameters = context.EndpointManager.ParameterTree.Children.Select(parameterManager =>
             {
@@ -213,11 +214,11 @@ namespace Kantaiko.Controllers.Internal
         /// Checks that all required parameters have their values.
         /// </summary>
         /// <returns>successful operation result if all requirements are met</returns>
-        private static OperationResult CheckParameterValuesExistence(RequestExecutionContext<TRequest> context)
+        private static OperationResult CheckParameterValuesExistence(RequestExecutionContext<TContext> context)
         {
             foreach (var parameterContext in context.Parameters.Values)
             {
-                var exists = parameterContext.Converter.CheckValueExistence(parameterContext.Context);
+                var exists = parameterContext.ResolvedConverter.CheckValueExistence(parameterContext.ConversionContext);
 
                 if (exists)
                 {
@@ -225,10 +226,10 @@ namespace Kantaiko.Controllers.Internal
                     continue;
                 }
 
-                if (parameterContext.Context.Info.IsOptional) continue;
+                if (parameterContext.ConversionContext.Info.IsOptional) continue;
 
-                var errorMessage = string.Format(Locale.MissingRequiredParameter, parameterContext.Context.Info.Name);
-                return OperationResult.Failure(errorMessage, parameterContext.Context.Info);
+                var errorMessage = string.Format(Locale.MissingRequiredParameter, parameterContext.ConversionContext.Info.Name);
+                return OperationResult.Failure(errorMessage, parameterContext.ConversionContext.Info);
             }
 
             return OperationResult.Success;
@@ -239,16 +240,16 @@ namespace Kantaiko.Controllers.Internal
         /// </summary>
         /// <param name="context"></param>
         /// <returns>successful operation result if all parameters are valid</returns>
-        private static OperationResult ValidateParameters(RequestExecutionContext<TRequest> context)
+        private static OperationResult ValidateParameters(RequestExecutionContext<TContext> context)
         {
             foreach (var parameterContext in context.Parameters.Values)
             {
                 if (!parameterContext.ValueExists) continue;
 
-                var validationResult = parameterContext.Converter.Validate(parameterContext.Context);
+                var validationResult = parameterContext.ResolvedConverter.Validate(parameterContext.ConversionContext);
                 if (validationResult.IsValid) continue;
 
-                return OperationResult.Failure(validationResult.ErrorMessage, parameterContext.Context.Info);
+                return OperationResult.Failure(validationResult.ErrorMessage, parameterContext.ConversionContext.Info);
             }
 
             return OperationResult.Success;
@@ -262,7 +263,7 @@ namespace Kantaiko.Controllers.Internal
         /// <param name="context"></param>
         /// <param name="cancellationToken"></param>
         /// <returns>successful operation result if all parameters were successfully resolved</returns>
-        private static async Task<OperationResult> ResolveParameters(RequestExecutionContext<TRequest> context,
+        private static async Task<OperationResult> ResolveParameters(RequestExecutionContext<TContext> context,
             CancellationToken cancellationToken)
         {
             foreach (var parameterContext in context.Parameters.Values)
@@ -270,17 +271,17 @@ namespace Kantaiko.Controllers.Internal
                 if (!parameterContext.ValueExists)
                 {
                     var value = parameterContext.DefaultValueResolver is not null
-                        ? parameterContext.DefaultValueResolver.ResolveDefaultValue(parameterContext.Context)
-                        : GetDefault(parameterContext.Context.Info.ParameterType);
+                        ? parameterContext.DefaultValueResolver.ResolveDefaultValue(parameterContext.ConversionContext)
+                        : GetDefault(parameterContext.ConversionContext.Info.ParameterType);
                     parameterContext.Value = value;
                     continue;
                 }
 
-                var resolutionResult = await parameterContext.Converter.Resolve(parameterContext.Context,
+                var resolutionResult = await parameterContext.ResolvedConverter.Resolve(parameterContext.ConversionContext,
                     cancellationToken);
 
                 if (!resolutionResult.Success)
-                    return OperationResult.Failure(resolutionResult.ErrorMessage, parameterContext.Context.Info);
+                    return OperationResult.Failure(resolutionResult.ErrorMessage, parameterContext.ConversionContext.Info);
 
                 parameterContext.Value = resolutionResult.Value;
             }
@@ -288,7 +289,7 @@ namespace Kantaiko.Controllers.Internal
             return OperationResult.Success;
         }
 
-        private static OperationResult PostValidateParameters(RequestExecutionContext<TRequest> context,
+        private static OperationResult PostValidateParameters(RequestExecutionContext<TContext> context,
             IServiceProvider serviceProvider)
         {
             foreach (var parameterManager in context.EndpointManager.Parameters)

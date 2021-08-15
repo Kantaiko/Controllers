@@ -11,15 +11,15 @@
 There is the middleware system allowing you to implement various use cases like request/response filters, authentication
 and authorization.
 
-To define the global middleware you should inherit it from the `EndpointMiddleware<TRequest>` class and implement
+To define the global middleware you should inherit it from the `EndpointMiddleware<TContext>` class and implement
 abstract members.
 
 ```c#
-internal class TestEndpointMiddleware : EndpointMiddleware<TestRequest>
+internal class TestEndpointMiddleware : EndpointMiddleware<TestContext>
 {
     public EndpointMiddlewareStage Stage => EndpointMiddlewareStage.BeforeExecution;
 
-    public Task HandleAsync(EndpointMiddlewareContext<TestRequest> context, CancellationToken cancellationToken)
+    public Task HandleAsync(EndpointMiddlewareContext<TestContext> context, CancellationToken cancellationToken)
     {
         context.ExecutionContext.Parameters["a"].Value = 42;
         return Task.CompletedTask;
@@ -38,11 +38,11 @@ and will contain the middleware stage where execution was interrupted.
 You can also define middleware, which should be manually applied by attributes:
 
 ```c#
-internal class AuthenticationMiddleware : EndpointMiddleware<TestRequest>
+internal class AuthenticationMiddleware : EndpointMiddleware<TestContext>
 {
     public EndpointMiddlewareStage Stage => EndpointMiddlewareStage.BeforeExecution;
 
-    public Task HandleAsync(EndpointMiddlewareContext<TestRequest> context, CancellationToken cancellationToken)
+    public Task HandleAsync(EndpointMiddlewareContext<TestContext> context, CancellationToken cancellationToken)
     {
         if (some auth check logic) {
             // Auth failed
@@ -54,15 +54,15 @@ internal class AuthenticationMiddleware : EndpointMiddleware<TestRequest>
     }
 }
 
-private class AuthorizeAttribute : Attribute, IEndpointMiddlewareFactory<TestRequest>,
-    IParameterMiddlewareFactory<TestRequest>
+private class AuthorizeAttribute : Attribute, IEndpointMiddlewareFactory<TestContext>,
+    IParameterMiddlewareFactory<TestContext>
 {
-    public IEndpointMiddleware<TestRequest> CreateEndpointMiddleware(EndpointDesignContext context)
+    public IEndpointMiddleware<TestContext> CreateEndpointMiddleware(EndpointDesignContext context)
     {
         return new AuthenticationMiddleware();
     }
 
-    public IEndpointMiddleware<TestRequest> CreateParameterMiddleware(EndpointParameterDesignContext context)
+    public IEndpointMiddleware<TestContext> CreateParameterMiddleware(EndpointParameterDesignContext context)
     {
         return new AuthenticationMiddleware();
     }

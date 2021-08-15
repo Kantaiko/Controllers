@@ -2,13 +2,13 @@
 
 namespace Kantaiko.Controllers.Internal
 {
-    internal class ParameterManagerTree<TRequest>
+    internal class ParameterManagerTree<TContext>
     {
-        public ParameterManagerTree(IReadOnlyList<ParameterManager<TRequest>> children)
+        public ParameterManagerTree(IReadOnlyList<ParameterManager<TContext>> children)
         {
             Children = children;
         }
 
-        public IReadOnlyList<ParameterManager<TRequest>> Children { get; }
+        public IReadOnlyList<ParameterManager<TContext>> Children { get; }
     }
 }

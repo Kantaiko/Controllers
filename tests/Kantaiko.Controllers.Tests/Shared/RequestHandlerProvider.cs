@@ -6,7 +6,7 @@ namespace Kantaiko.Controllers.Tests.Shared
 {
     public class RequestHandlerProvider
     {
-        public RequestHandler<TestRequest> RequestHandler { get; }
+        public RequestHandler<TestContext> RequestHandler { get; }
 
         public RequestHandlerProvider()
         {
@@ -14,7 +14,7 @@ namespace Kantaiko.Controllers.Tests.Shared
             var converterCollection = ConverterCollection.FromAssemblies(Assembly.GetExecutingAssembly());
             var middlewareCollection = MiddlewareCollection.FromAssemblies(Assembly.GetExecutingAssembly());
 
-            RequestHandler = new RequestHandler<TestRequest>(controllerCollection,
+            RequestHandler = new RequestHandler<TestContext>(controllerCollection,
                 converterCollection, middlewareCollection);
         }
     }

@@ -13,7 +13,7 @@ namespace Kantaiko.Controllers.Tests
         {
             var requestHandler = CreateRequestHandler();
 
-            var result = await requestHandler.HandleAsync(new TestRequest("service 1"));
+            var result = await requestHandler.HandleAsync(new TestContext("service 1"));
 
             Assert.Equal(42, result.ReturnValue);
         }
@@ -25,7 +25,7 @@ namespace Kantaiko.Controllers.Tests
 
             async Task Action()
             {
-                await requestHandler.HandleAsync(new TestRequest("service 2"));
+                await requestHandler.HandleAsync(new TestContext("service 2"));
             }
 
             await Assert.ThrowsAsync<ServiceNotFoundException>(Action);
@@ -36,15 +36,15 @@ namespace Kantaiko.Controllers.Tests
         {
             var requestHandler = CreateRequestHandler();
 
-            var result = await requestHandler.HandleAsync(new TestRequest("service 3"));
+            var result = await requestHandler.HandleAsync(new TestContext("service 3"));
 
             Assert.True(result.IsMatched);
         }
 
-        private static RequestHandler<TestRequest> CreateRequestHandler()
+        private static RequestHandler<TestContext> CreateRequestHandler()
         {
             var controllerCollection = new ControllerCollection(new[] {typeof(ServiceTestController)});
-            return new RequestHandler<TestRequest>(controllerCollection, serviceProvider: new TestServiceProvider());
+            return new RequestHandler<TestContext>(controllerCollection, serviceProvider: new TestServiceProvider());
         }
 
         private class TestServiceProvider : IServiceProvider

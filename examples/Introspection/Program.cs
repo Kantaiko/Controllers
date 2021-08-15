@@ -8,7 +8,7 @@ using Kantaiko.Controllers.Design.Endpoints;
 using Kantaiko.Controllers.Matchers;
 
 var controllerCollection = ControllerCollection.FromAssemblies(Assembly.GetExecutingAssembly());
-var requestHandler = new RequestHandler<TestRequest>(controllerCollection);
+var requestHandler = new RequestHandler<TestContext>(controllerCollection);
 
 // Get all endpoints
 var endpoints = requestHandler.Info.Controllers.SelectMany(x => x.Endpoints).ToArray();
@@ -46,7 +46,7 @@ internal class InstallPackageInput
     public string? PackageVersion { get; set; }
 }
 
-internal class TestController : ControllerBase<TestRequest>
+internal class TestController : ControllerBase<TestContext>
 {
     [Command("sum")]
     public int Sum(int a, int b) => a + b;
@@ -64,7 +64,7 @@ internal static class IntrospectionTestProperties
 }
 
 [AttributeUsage(AttributeTargets.Method)]
-internal class CommandAttribute : Attribute, IEndpointMatcherFactory<TestRequest>, IEndpointDesignPropertyProvider
+internal class CommandAttribute : Attribute, IEndpointMatcherFactory<TestContext>, IEndpointDesignPropertyProvider
 {
     private readonly string _name;
 
@@ -73,7 +73,7 @@ internal class CommandAttribute : Attribute, IEndpointMatcherFactory<TestRequest
         _name = name;
     }
 
-    public IEndpointMatcher<TestRequest> CreateEndpointMatcher(EndpointDesignContext context)
+    public IEndpointMatcher<TestContext> CreateEndpointMatcher(EndpointDesignContext context)
     {
         return null!;
     }
@@ -84,4 +84,4 @@ internal class CommandAttribute : Attribute, IEndpointMatcherFactory<TestRequest
     };
 }
 
-internal record TestRequest(string Text);
+internal record TestContext(string Text);

@@ -37,8 +37,8 @@ namespace Kantaiko.Controllers.Tests
         [Fact]
         public async Task ShouldDeconstructClassParameter()
         {
-            var request = new TestRequest("sum pair 40 2");
-            var result = await _requestHandlerProvider.RequestHandler.HandleAsync(request);
+            var context = new TestContext("sum pair 40 2");
+            var result = await _requestHandlerProvider.RequestHandler.HandleAsync(context);
 
             Assert.True(result.HasReturnValue);
             Assert.Equal(42, result.ReturnValue);
@@ -47,8 +47,8 @@ namespace Kantaiko.Controllers.Tests
         [Fact]
         public async Task ShouldDeconstructClassParameterWithNestedParameters()
         {
-            var request = new TestRequest("sum group 20 20 2");
-            var result = await _requestHandlerProvider.RequestHandler.HandleAsync(request);
+            var context = new TestContext("sum group 20 20 2");
+            var result = await _requestHandlerProvider.RequestHandler.HandleAsync(context);
 
             Assert.True(result.HasReturnValue);
             Assert.Equal(42, result.ReturnValue);

@@ -3,10 +3,10 @@ using System.Threading.Tasks;
 
 namespace Kantaiko.Controllers.Middleware
 {
-    public interface IEndpointMiddleware<TRequest>
+    public interface IEndpointMiddleware<TContext>
     {
         EndpointMiddlewareStage Stage { get; }
 
-        Task HandleAsync(EndpointMiddlewareContext<TRequest> context, CancellationToken cancellationToken);
+        Task HandleAsync(EndpointMiddlewareContext<TContext> context, CancellationToken cancellationToken);
     }
 }

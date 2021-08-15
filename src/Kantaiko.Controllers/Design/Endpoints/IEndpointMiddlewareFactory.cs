@@ -2,8 +2,8 @@
 
 namespace Kantaiko.Controllers.Design.Endpoints
 {
-    public interface IEndpointMiddlewareFactory<TRequest>
+    public interface IEndpointMiddlewareFactory<TContext>
     {
-        IEndpointMiddleware<TRequest> CreateEndpointMiddleware(EndpointDesignContext context);
+        IEndpointMiddleware<TContext> CreateEndpointMiddleware(EndpointDesignContext context);
     }
 }

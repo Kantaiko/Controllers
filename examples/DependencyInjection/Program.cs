@@ -7,22 +7,22 @@ serviceCollection.AddSingleton(provider =>
 {
     var controllerCollection = ControllerCollection.FromAssemblies();
 
-    return new RequestHandler<TestRequest>(controllerCollection,
+    return new RequestHandler<TestContext>(controllerCollection,
         instanceFactory: new ServiceInstanceFactory(),
         serviceProvider: provider);
 });
 
 // Build service provider
 var serviceProvider = serviceCollection.BuildServiceProvider();
-var requestHandler = serviceProvider.GetRequiredService<RequestHandler<TestRequest>>();
+var requestHandler = serviceProvider.GetRequiredService<RequestHandler<TestContext>>();
 
 // Handle request
-var request = new TestRequest("Hello, world!");
+var context = new TestContext("Hello, world!");
 using var scope = serviceProvider.CreateScope();
 
-var result = await requestHandler.HandleAsync(request, scope.ServiceProvider);
+var result = await requestHandler.HandleAsync(context, scope.ServiceProvider);
 
-internal record TestRequest(string Text);
+internal record TestContext(string Text);
 
 internal class ServiceInstanceFactory : IInstanceFactory
 {

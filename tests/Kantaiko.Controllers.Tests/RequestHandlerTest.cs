@@ -43,8 +43,8 @@ namespace Kantaiko.Controllers.Tests
         [Fact]
         public async Task ShouldProcessSimpleRequest()
         {
-            var request = new TestRequest("hi");
-            var result = await _requestHandlerProvider.RequestHandler.HandleAsync(request);
+            var context = new TestContext("hi");
+            var result = await _requestHandlerProvider.RequestHandler.HandleAsync(context);
 
             Assert.True(result.HasReturnValue);
             Assert.Equal("Hello!", result.ReturnValue);
@@ -53,8 +53,8 @@ namespace Kantaiko.Controllers.Tests
         [Fact]
         public async Task ShouldProcessRequestWithParameters()
         {
-            var request = new TestRequest("40 + 2");
-            var result = await _requestHandlerProvider.RequestHandler.HandleAsync(request);
+            var context = new TestContext("40 + 2");
+            var result = await _requestHandlerProvider.RequestHandler.HandleAsync(context);
 
             Assert.True(result.HasReturnValue);
             Assert.Equal(42, result.ReturnValue);
@@ -63,8 +63,8 @@ namespace Kantaiko.Controllers.Tests
         [Fact]
         public async Task ShouldProcessRequestWithOptionalParameter()
         {
-            var request = new TestRequest("sum 42");
-            var result = await _requestHandlerProvider.RequestHandler.HandleAsync(request);
+            var context = new TestContext("sum 42");
+            var result = await _requestHandlerProvider.RequestHandler.HandleAsync(context);
 
             Assert.True(result.HasReturnValue);
             Assert.Equal(42, result.ReturnValue);
@@ -73,8 +73,8 @@ namespace Kantaiko.Controllers.Tests
         [Fact]
         public async Task ShouldReportParameterConversionError()
         {
-            var request = new TestRequest("40 + test");
-            var result = await _requestHandlerProvider.RequestHandler.HandleAsync(request);
+            var context = new TestContext("40 + test");
+            var result = await _requestHandlerProvider.RequestHandler.HandleAsync(context);
 
             Assert.True(result.IsExited);
             var errorExitReason = Assert.IsType<ErrorExitReason>(result.ExitReason);
@@ -86,8 +86,8 @@ namespace Kantaiko.Controllers.Tests
         [Fact]
         public async Task ShouldReportParameterExistenceCheckError()
         {
-            var request = new TestRequest("40 + ");
-            var result = await _requestHandlerProvider.RequestHandler.HandleAsync(request);
+            var context = new TestContext("40 + ");
+            var result = await _requestHandlerProvider.RequestHandler.HandleAsync(context);
 
             Assert.True(result.IsExited);
             var errorExitReason = Assert.IsType<ErrorExitReason>(result.ExitReason);
@@ -99,8 +99,8 @@ namespace Kantaiko.Controllers.Tests
         [Fact]
         public async Task ShouldIgnoreUnmatchedRequest()
         {
-            var request = new TestRequest("who am i");
-            var result = await _requestHandlerProvider.RequestHandler.HandleAsync(request);
+            var context = new TestContext("who am i");
+            var result = await _requestHandlerProvider.RequestHandler.HandleAsync(context);
 
             Assert.False(result.IsMatched);
         }
@@ -108,11 +108,11 @@ namespace Kantaiko.Controllers.Tests
         [Fact]
         public async Task ShouldThrowConverterNotFoundExceptionWhenCannotDeconstructParameterType()
         {
-            var request = new TestRequest("test-1");
+            var context = new TestContext("test-1");
 
             async Task Action()
             {
-                await _requestHandlerProvider.RequestHandler.HandleAsync(request);
+                await _requestHandlerProvider.RequestHandler.HandleAsync(context);
             }
 
             await Assert.ThrowsAsync<ConverterNotFoundException>(Action);
@@ -121,9 +121,9 @@ namespace Kantaiko.Controllers.Tests
         [Fact]
         public async Task ShouldReportExceptionThrownByEndpoint()
         {
-            var request = new TestRequest("test-exception");
+            var context = new TestContext("test-exception");
 
-            var result = await _requestHandlerProvider.RequestHandler.HandleAsync(request);
+            var result = await _requestHandlerProvider.RequestHandler.HandleAsync(context);
 
             var exceptionExitReason = Assert.IsType<ExceptionExitReason>(result.ExitReason);
             var invalidOperationException = Assert.IsType<InvalidOperationException>(exceptionExitReason.Exception);

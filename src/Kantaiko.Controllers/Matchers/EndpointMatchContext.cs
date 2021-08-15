@@ -3,16 +3,16 @@ using Kantaiko.Controllers.Introspection;
 
 namespace Kantaiko.Controllers.Matchers
 {
-    public class EndpointMatchContext<TRequest>
+    public class EndpointMatchContext<TContext>
     {
-        public EndpointMatchContext(TRequest request, EndpointInfo endpoint, IServiceProvider serviceProvider)
+        public EndpointMatchContext(TContext requestContext, EndpointInfo endpoint, IServiceProvider serviceProvider)
         {
-            Request = request;
+            RequestContext = requestContext;
             Endpoint = endpoint;
             ServiceProvider = serviceProvider;
         }
 
-        public TRequest Request { get; }
+        public TContext RequestContext { get; }
         public EndpointInfo Endpoint { get; }
         public IServiceProvider ServiceProvider { get; }
     }

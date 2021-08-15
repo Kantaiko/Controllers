@@ -5,16 +5,18 @@ namespace Kantaiko.Controllers.Middleware
 {
     public class ExecutionParameterContext
     {
-        public ExecutionParameterContext(ParameterConversionContext context, IParameterConverter converter,
+        public ExecutionParameterContext(ParameterConversionContext conversionContext,
+            IParameterConverter resolvedConverter,
             IParameterDefaultValueResolver? defaultValueResolver)
         {
-            Context = context;
-            Converter = converter;
+            ConversionContext = conversionContext;
+            ResolvedConverter = resolvedConverter;
             DefaultValueResolver = defaultValueResolver;
         }
 
-        public ParameterConversionContext Context { get; }
-        public IParameterConverter Converter { get; }
+        public ParameterConversionContext ConversionContext { get; }
+
+        public IParameterConverter ResolvedConverter { get; }
         public IParameterDefaultValueResolver? DefaultValueResolver { get; }
 
         public object? Value { get; set; }

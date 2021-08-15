@@ -2,8 +2,8 @@
 
 namespace Kantaiko.Controllers.Design.Parameters
 {
-    public interface IParameterMiddlewareFactory<TRequest>
+    public interface IParameterMiddlewareFactory<TContext>
     {
-        IEndpointMiddleware<TRequest> CreateParameterMiddleware(EndpointParameterDesignContext context);
+        IEndpointMiddleware<TContext> CreateParameterMiddleware(EndpointParameterDesignContext context);
     }
 }

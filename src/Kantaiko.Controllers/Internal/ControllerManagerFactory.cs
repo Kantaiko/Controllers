@@ -15,7 +15,7 @@ using Kantaiko.Controllers.Validation;
 
 namespace Kantaiko.Controllers.Internal
 {
-    internal class ControllerManagerFactory<TRequest>
+    internal class ControllerManagerFactory<TContext>
     {
         private readonly IDeconstructionValidator _deconstructionValidator;
 
@@ -24,13 +24,13 @@ namespace Kantaiko.Controllers.Internal
             _deconstructionValidator = deconstructionValidator;
         }
 
-        private static EndpointManager<TRequest> CreateEndpointManager(EndpointInfo endpointInfo,
+        private static EndpointManager<TContext> CreateEndpointManager(EndpointInfo endpointInfo,
             IServiceProvider provider)
         {
             var attributes = endpointInfo.MethodInfo.GetCustomAttributes();
 
-            var matchers = new List<IEndpointMatcher<TRequest>>();
-            var middlewares = new List<IEndpointMiddleware<TRequest>>();
+            var matchers = new List<IEndpointMatcher<TContext>>();
+            var middlewares = new List<IEndpointMiddleware<TContext>>();
 
             var designContext = new EndpointDesignContext(endpointInfo, provider);
 
@@ -38,11 +38,11 @@ namespace Kantaiko.Controllers.Internal
             {
                 switch (attribute)
                 {
-                    case IEndpointMatcherFactory<TRequest> matcherFactory:
+                    case IEndpointMatcherFactory<TContext> matcherFactory:
                         var matcher = matcherFactory.CreateEndpointMatcher(designContext);
                         matchers.Add(matcher);
                         break;
-                    case IEndpointMiddlewareFactory<TRequest> middlewareFactory:
+                    case IEndpointMiddlewareFactory<TContext> middlewareFactory:
                         var middleware = middlewareFactory.CreateEndpointMiddleware(designContext);
                         middlewares.Add(middleware);
                         break;
@@ -50,12 +50,12 @@ namespace Kantaiko.Controllers.Internal
             }
 
             var parameterManagers = CreateParameterManagers(endpointInfo.ParameterTree.Children, provider);
-            var parameterManagerTree = new ParameterManagerTree<TRequest>(parameterManagers);
+            var parameterManagerTree = new ParameterManagerTree<TContext>(parameterManagers);
 
-            return new EndpointManager<TRequest>(endpointInfo, matchers, parameterManagerTree, middlewares);
+            return new EndpointManager<TContext>(endpointInfo, matchers, parameterManagerTree, middlewares);
         }
 
-        private static IReadOnlyList<ParameterManager<TRequest>> CreateParameterManagers(
+        private static IReadOnlyList<ParameterManager<TContext>> CreateParameterManagers(
             IReadOnlyList<EndpointParameterInfo> parameterInfos,
             IServiceProvider provider,
             Type? parentType = null)
@@ -66,7 +66,7 @@ namespace Kantaiko.Controllers.Internal
                 IParameterDefaultValueResolver? defaultValueResolver = null;
 
                 var validators = new List<IParameterPostValidator>();
-                var middlewares = new List<IEndpointMiddleware<TRequest>>();
+                var middlewares = new List<IEndpointMiddleware<TContext>>();
 
                 var designContext = new EndpointParameterDesignContext(info, provider);
 
@@ -84,7 +84,7 @@ namespace Kantaiko.Controllers.Internal
                             defaultValueResolver = resolverFactory.CreateParameterDefaultValueResolver(designContext);
                             break;
                         }
-                        case IParameterMiddlewareFactory<TRequest> middlewareFactory:
+                        case IParameterMiddlewareFactory<TContext> middlewareFactory:
                         {
                             var middleware = middlewareFactory.CreateParameterMiddleware(designContext);
                             middlewares.Add(middleware);
@@ -104,13 +104,13 @@ namespace Kantaiko.Controllers.Internal
 
                 if (info is not EndpointParameterNode node)
                 {
-                    return new ParameterManager<TRequest>(info, middlewares, validators, converterType,
+                    return new ParameterManager<TContext>(info, middlewares, validators, converterType,
                         defaultValueResolver, propertyInfo);
                 }
 
                 var children = CreateParameterManagers(node.Children, provider, node.ParameterType);
 
-                return new ParameterManager<TRequest>(info, middlewares, validators,
+                return new ParameterManager<TContext>(info, middlewares, validators,
                     converterType, defaultValueResolver, propertyInfo, children);
             });
 
@@ -253,7 +253,7 @@ namespace Kantaiko.Controllers.Internal
 
         private EndpointInfo? CreateEndpointInfo(ControllerInfo controllerInfo, MethodInfo methodInfo)
         {
-            var hasEndpointMatcher = methodInfo.GetCustomAttributes().Any(x => x is IEndpointMatcherFactory<TRequest>);
+            var hasEndpointMatcher = methodInfo.GetCustomAttributes().Any(x => x is IEndpointMatcherFactory<TContext>);
             if (!hasEndpointMatcher) return null;
 
             var endpointInfo = new EndpointInfo(controllerInfo, methodInfo);
@@ -275,7 +275,7 @@ namespace Kantaiko.Controllers.Internal
         {
             var controllerInfo = new ControllerInfo(type);
 
-            var endpoints = type.GetMethods()
+            var endpoints = type.GetMethods(BindingFlags.Public | BindingFlags.Instance)
                 .Select(methodInfo => CreateEndpointInfo(controllerInfo, methodInfo))
                 .Where(endpoint => endpoint is not null)
                 .ToArray();
@@ -284,7 +284,7 @@ namespace Kantaiko.Controllers.Internal
             return controllerInfo;
         }
 
-        private ControllerManager<TRequest> CreateControllerManager(Type type, IServiceProvider provider)
+        private ControllerManager<TContext> CreateControllerManager(Type type, IServiceProvider provider)
         {
             var controllerInfo = CreateControllerInfo(type);
 
@@ -292,18 +292,18 @@ namespace Kantaiko.Controllers.Internal
                 .Select(endpointInfo => CreateEndpointManager(endpointInfo, provider))
                 .ToArray();
 
-            return new ControllerManager<TRequest>(controllerInfo, endpoints);
+            return new ControllerManager<TContext>(controllerInfo, endpoints);
         }
 
-        public ControllerManagerCollection<TRequest> CreateControllerManagerCollection(
+        public ControllerManagerCollection<TContext> CreateControllerManagerCollection(
             IControllerCollection controllerCollection, IServiceProvider serviceProvider)
         {
             var controllerManagers = controllerCollection.ControllerTypes
-                .Where(type => type.IsAssignableTo(typeof(IRequestAcceptor<TRequest>)))
+                .Where(type => type.IsAssignableTo(typeof(IContextAcceptor<TContext>)))
                 .Select(type => CreateControllerManager(type, serviceProvider))
                 .ToArray();
 
-            return new ControllerManagerCollection<TRequest>(controllerManagers);
+            return new ControllerManagerCollection<TContext>(controllerManagers);
         }
     }
 }
