@@ -38,12 +38,17 @@ var result = await requestHandler.HandleAsync(context);
 
 Each attribute can implement `IControllerDesignPropertyProvider`, `IEndpointDesignPropertyProvider`
 or `IParameterDesignPropertyProvider` interfaces to provide some metadata that will be available in the `Properties`
-dictionary at design stage (when endpoint matcher and middleware factories are called)
+dictionary-like object at design stage (when endpoint matcher and middleware factories are called)
 .
 
 There are also some auxiliary properties that can override the parameter name and nullability. Keys of these properties
 are defined in the `KantaikoParameterProperties` static class. There is the built-in `[Parameter]` attribute that uses
 these properties, but you can define your own implementation.
+
+There is also the `KantaikoParameterProperties.IsHidden` property, which does not have any special effect on the request
+pipeline, but is some kind of convention that the parameter should be hidden from user. For example,
+the `[FromServices]`
+attribute marks the parameters with this property.
 
 ## Introspection
 
@@ -52,4 +57,5 @@ can access its `Info` property. It allows you to traverse all controllers, endpo
 representations about them. For example, you can create the `/help` commands with list of all available commands and
 their parameters.
 
-You can find an example of using introspection in [`examples/Introspection`](/libraries/Kantaiko.Extensions.Controllers/examples/Introspection) project.
+You can find an example of using introspection
+in [`examples/Introspection`](/libraries/Kantaiko.Extensions.Controllers/examples/Introspection) project.
