@@ -37,7 +37,7 @@ can be automatically collected by `FromAssemblies` method of `ConverterCollectio
 
 ```c#
 var converterCollection = ConverterCollection.FromAssemblies(Assembly.GetExecutingAssembly());
-var requestHandler = new RequestHandler<Request>(controllerCollection, converterCollection: converterCollection);
+var requestHandler = new RequestHandler<TestContext>(controllerCollection, converterCollection: converterCollection);
 ```
 
 Each sync parameter converter must implement the `CheckValueExistence` and `Convert` methods. They both receive

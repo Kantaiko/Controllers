@@ -10,29 +10,30 @@
 
 The entry service of the request processing pipeline is called `RequestHandler`.
 
-To create request handler you should at least specify request type and provide to its constructor an instance
-of `ControllerCollection`. The request type can be any reference type, even string, but we highly recommend to use
+To create request handler you should at least specify the context type and provide to its constructor an instance
+of `ControllerCollection`. The context type can be any reference type, even string, but we highly recommend to use
 dedicated class. The controller collection contains controller types. You can construct it using `FromAssemblies`
 factory method. In this case all suitable types from these assemblies will be used:
 
 ```c#
 var controllerCollection = ControllerCollection.FromAssemblies(Assembly.GetExecutingAssembly());
-var requestHandler = new RequestHandler<Request>(controllerCollection);
+var requestHandler = new RequestHandler<TestContext>(controllerCollection);
 ```
 
 You should also define the base type for your controllers, inherited from `ControllerBase<TContext>`:
 
 ```c#
-public class TestController : ControllerBase<TestContext> { }
+public abstract class TestController : ControllerBase<TestContext> { }
 ```
 
-Now you can define controllers. All controllers can access protected `Request` property to get a processing request:
+Now you can define controllers. All controllers can access protected `Context` property to get a processing request
+context:
 
 ```c#
 internal class HelloController : TestController
 {
     [Pattern("echo")]
-    public string Echo() => Request.Text;
+    public string Echo() => Context.Text;
 }
 ```
 
@@ -41,8 +42,8 @@ the `HandleAsync`
 method:
 
 ```c#
-var context = new Request("Hello, wolld!");
-var result = await requestHandler.HandleAsync(request);
+var context = new TestContext("Hello, wolld!");
+var result = await requestHandler.HandleAsync(context);
 ```
 
 This library designed to support task cancellation, so you can provide a cancellation token as the last parameter. You
