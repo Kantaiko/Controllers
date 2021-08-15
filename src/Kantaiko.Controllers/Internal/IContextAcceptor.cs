@@ -2,6 +2,6 @@
 {
     internal interface IContextAcceptor<TContext>
     {
-        void SetContext(TContext request);
+        void SetContext(TContext context);
     }
 }
