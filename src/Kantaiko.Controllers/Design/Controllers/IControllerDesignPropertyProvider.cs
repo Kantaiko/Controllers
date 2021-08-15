@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using Kantaiko.Controllers.Design.Properties;
 
 namespace Kantaiko.Controllers.Design.Controllers
 {
     public interface IControllerDesignPropertyProvider
     {
-        IReadOnlyDictionary<string, object> GetControllerDesignProperties();
+        DesignPropertyCollection GetControllerDesignProperties();
     }
 }

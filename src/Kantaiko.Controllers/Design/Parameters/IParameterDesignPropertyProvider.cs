@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using Kantaiko.Controllers.Design.Properties;
 
 namespace Kantaiko.Controllers.Design.Parameters
 {
     public interface IParameterDesignPropertyProvider
     {
-        IReadOnlyDictionary<string, object> GetParameterDesignProperties();
+        DesignPropertyCollection GetParameterDesignProperties();
     }
 }

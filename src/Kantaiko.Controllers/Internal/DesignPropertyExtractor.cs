@@ -2,21 +2,30 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Kantaiko.Controllers.Design.Properties;
 
 namespace Kantaiko.Controllers.Internal
 {
     internal static class DesignPropertyExtractor
     {
-        public static IReadOnlyDictionary<string, object> GetProperties<TDesignPropertyProvider>(
+        public static IDesignPropertyCollection GetProperties<TDesignPropertyProvider>(
             ICustomAttributeProvider attributeProvider,
-            Func<TDesignPropertyProvider, IReadOnlyDictionary<string, object>> propertyExtractor)
+            Func<TDesignPropertyProvider, DesignPropertyCollection> propertyExtractor)
         {
-            return attributeProvider.GetCustomAttributes(true)
+            var groups = attributeProvider.GetCustomAttributes(true)
                 .Where(x => x is TDesignPropertyProvider)
                 .Cast<TDesignPropertyProvider>()
                 .SelectMany(propertyExtractor)
-                .GroupBy(x => x.Key)
-                .ToDictionary(k => k.Key, v => v.First().Value);
+                .GroupBy(x => x.Key);
+
+            var designPropertyCollection = new DesignPropertyCollection();
+
+            foreach (var group in groups)
+            {
+                designPropertyCollection[group.Key] = group.First().Value;
+            }
+
+            return designPropertyCollection;
         }
     }
 }

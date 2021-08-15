@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using Kantaiko.Controllers.Design.Endpoints;
+using Kantaiko.Controllers.Design.Properties;
 using Kantaiko.Controllers.Internal;
 using Kantaiko.Controllers.Utils;
 
@@ -23,7 +24,7 @@ namespace Kantaiko.Controllers.Introspection
         public IReadOnlyList<EndpointParameterInfo> Parameters { get; private set; } = null!;
         public EndpointParameterTree ParameterTree { get; private set; } = null!;
 
-        public IReadOnlyDictionary<string, object> Properties { get; }
+        public IDesignPropertyCollection Properties { get; }
 
         private static IEnumerable<EndpointParameterInfo> Flatten(IEnumerable<EndpointParameterInfo> parameters)
         {

@@ -6,6 +6,7 @@ using Kantaiko.Controllers.Converters;
 using Kantaiko.Controllers.Design.Controllers;
 using Kantaiko.Controllers.Design.Endpoints;
 using Kantaiko.Controllers.Design.Parameters;
+using Kantaiko.Controllers.Design.Properties;
 using Kantaiko.Controllers.Introspection;
 using Kantaiko.Controllers.Tests.Shared;
 using VerifyXunit;
@@ -43,17 +44,17 @@ namespace Kantaiko.Controllers.Tests
         private class TestAttribute : Attribute, IControllerDesignPropertyProvider,
             IEndpointDesignPropertyProvider, IParameterDesignPropertyProvider
         {
-            public IReadOnlyDictionary<string, object> GetControllerDesignProperties() => new Dictionary<string, object>
+            public DesignPropertyCollection GetControllerDesignProperties() => new()
             {
                 ["TestControllerProperty"] = "TestControllerPropertyValue"
             };
 
-            public IReadOnlyDictionary<string, object> GetEndpointDesignProperties() => new Dictionary<string, object>
+            public DesignPropertyCollection GetEndpointDesignProperties() => new()
             {
                 ["TestEndpointProperty"] = "TestEndpointPropertyValue"
             };
 
-            public IReadOnlyDictionary<string, object> GetParameterDesignProperties() => new Dictionary<string, object>
+            public DesignPropertyCollection GetParameterDesignProperties() => new()
             {
                 ["TestParameterProperty"] = "TestParameterPropertyValue"
             };

@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Text;
 using Kantaiko.Controllers;
 using Kantaiko.Controllers.Design.Endpoints;
+using Kantaiko.Controllers.Design.Properties;
 using Kantaiko.Controllers.Matchers;
 
 var controllerCollection = ControllerCollection.FromAssemblies(Assembly.GetExecutingAssembly());
@@ -21,7 +22,8 @@ helpMessage.AppendLine();
 // Iterate endpoints
 foreach (var endpointInfo in endpoints)
 {
-    if (!endpointInfo.Properties.TryGetValue(IntrospectionTestProperties.CommandName, out var commandName)) continue;
+    if (!endpointInfo.Properties.TryGetProperty<string>(IntrospectionTestProperties.CommandName, out var commandName))
+        continue;
 
     helpMessage.AppendFormat("/{0}", commandName);
 
@@ -78,7 +80,7 @@ internal class CommandAttribute : Attribute, IEndpointMatcherFactory<TestContext
         return null!;
     }
 
-    public IReadOnlyDictionary<string, object> GetEndpointDesignProperties() => new Dictionary<string, object>
+    public DesignPropertyCollection GetEndpointDesignProperties() => new()
     {
         [IntrospectionTestProperties.CommandName] = _name
     };

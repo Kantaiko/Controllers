@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Kantaiko.Controllers.Design.Properties;
 
 namespace Kantaiko.Controllers.Introspection
 {
     public class EndpointParameterInfo
     {
-        internal EndpointParameterInfo(EndpointInfo endpoint, IReadOnlyDictionary<string, object> properties,
+        internal EndpointParameterInfo(EndpointInfo endpoint, IDesignPropertyCollection properties,
             string originalName, string name, Type type, bool isOptional, ICustomAttributeProvider attributeProvider)
         {
             Endpoint = endpoint;
@@ -27,6 +28,6 @@ namespace Kantaiko.Controllers.Introspection
         public bool IsOptional { get; }
         public Type ParameterType { get; }
 
-        public IReadOnlyDictionary<string, object> Properties { get; }
+        public IDesignPropertyCollection Properties { get; }
     }
 }

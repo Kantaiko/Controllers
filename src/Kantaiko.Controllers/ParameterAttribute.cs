@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using Kantaiko.Controllers.Design.Parameters;
+using Kantaiko.Controllers.Design.Properties;
 
 namespace Kantaiko.Controllers
 {
@@ -15,9 +15,9 @@ namespace Kantaiko.Controllers
             Name = name;
         }
 
-        public IReadOnlyDictionary<string, object> GetParameterDesignProperties() => new Dictionary<string, object>
+        public DesignPropertyCollection GetParameterDesignProperties() => new()
         {
-            [KantaikoParameterProperties.Name] = Name!,
+            [KantaikoParameterProperties.Name] = Name,
             [KantaikoParameterProperties.IsOptional] = IsOptional
         };
     }

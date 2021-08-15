@@ -6,6 +6,7 @@ using System.Reflection;
 using Kantaiko.Controllers.Design;
 using Kantaiko.Controllers.Design.Endpoints;
 using Kantaiko.Controllers.Design.Parameters;
+using Kantaiko.Controllers.Design.Properties;
 using Kantaiko.Controllers.Exceptions;
 using Kantaiko.Controllers.Introspection;
 using Kantaiko.Controllers.Matchers;
@@ -117,16 +118,17 @@ namespace Kantaiko.Controllers.Internal
             return parameters.ToArray();
         }
 
-        private static string? GetParameterName(IReadOnlyDictionary<string, object> properties)
+        private static string? GetParameterName(IDesignPropertyCollection properties)
         {
-            return properties.TryGetValue(KantaikoParameterProperties.Name, out var property)
-                ? property as string
+            return properties.TryGetProperty<string>(KantaikoParameterProperties.Name, out var property)
+                ? property
                 : null;
         }
 
-        private static bool GetParameterNullability(IReadOnlyDictionary<string, object> properties)
+        private static bool GetParameterNullability(IDesignPropertyCollection properties)
         {
-            return properties.TryGetValue(KantaikoParameterProperties.IsOptional, out var property) && property is true;
+            return properties.TryGetProperty<bool>(KantaikoParameterProperties.IsOptional, out var property) &&
+                   property is true;
         }
 
         private IReadOnlyList<EndpointParameterInfo> GetClassParameters(EndpointInfo endpointInfo, Type type)
@@ -230,7 +232,7 @@ namespace Kantaiko.Controllers.Internal
             return new EndpointParameterTree(result.ToList());
         }
 
-        private static (Type, bool) ExtractPropertyTypeAndNullability(IReadOnlyDictionary<string, object> properties,
+        private static (Type, bool) ExtractPropertyTypeAndNullability(IDesignPropertyCollection properties,
             PropertyInfo propertyInfo)
         {
             return propertyInfo.PropertyType.IsValueType
