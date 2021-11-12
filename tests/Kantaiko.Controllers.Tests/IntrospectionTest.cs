@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Kantaiko.Controllers.Converters;
@@ -26,7 +25,7 @@ namespace Kantaiko.Controllers.Tests
 
         private class TestDefaultValueResolver : IParameterDefaultValueResolver
         {
-            public object ResolveDefaultValue(ParameterConversionContext context)
+            public object? ResolveDefaultValue(ParameterConversionContext context)
             {
                 throw new NotImplementedException();
             }
@@ -64,13 +63,13 @@ namespace Kantaiko.Controllers.Tests
         private class IntrospectionTestController : TestController
         {
             [Test]
-            [RegexPattern("introspection-test")]
+            [Pattern("introspection-test")]
             public void IntrospectionTest([Test] int a) { }
 
-            [RegexPattern("introspection-test-prevent-deconstruction")]
+            [Pattern("introspection-test-prevent-deconstruction")]
             public void IntrospectionTestPreventDeconstruction([FromServices] ControllerInfo controllerInfo) { }
 
-            [RegexPattern("introspection-test-default")]
+            [Pattern("introspection-test-default")]
             public void IntrospectionTestDefault([Default] int a) { }
         }
 

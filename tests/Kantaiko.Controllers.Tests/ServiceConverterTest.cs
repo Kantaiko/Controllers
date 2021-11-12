@@ -43,7 +43,7 @@ namespace Kantaiko.Controllers.Tests
 
         private static RequestHandler<TestContext> CreateRequestHandler()
         {
-            var controllerCollection = new ControllerCollection(new[] {typeof(ServiceTestController)});
+            var controllerCollection = new ControllerCollection(new[] { typeof(ServiceTestController) });
             return new RequestHandler<TestContext>(controllerCollection, serviceProvider: new TestServiceProvider());
         }
 
@@ -60,13 +60,13 @@ namespace Kantaiko.Controllers.Tests
 
         private class ServiceTestController : TestController
         {
-            [RegexPattern("service 1")]
+            [Pattern("service 1")]
             public int ResolveService1([FromServices] int a) => a;
 
-            [RegexPattern("service 2")]
+            [Pattern("service 2")]
             public void ResolveService2([FromServices] string a) { }
 
-            [RegexPattern("service 3")]
+            [Pattern("service 3")]
             public void ResolveService3([FromServices] string? a = null) { }
         }
     }

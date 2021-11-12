@@ -6,7 +6,6 @@
       Parameters: [
         {
           AttributeProvider: a of IntrospectionTest.IntrospectionTestController.IntrospectionTest.IntrospectionTestController.IntrospectionTest(Int32 a),
-          OriginalName: a,
           Name: a,
           ParameterType: Int32,
           Properties: {
@@ -18,7 +17,6 @@
         Children: [
           {
             AttributeProvider: a of IntrospectionTest.IntrospectionTestController.IntrospectionTest.IntrospectionTestController.IntrospectionTest(Int32 a),
-            OriginalName: a,
             Name: a,
             ParameterType: Int32,
             Properties: {
@@ -36,7 +34,6 @@
       Parameters: [
         {
           AttributeProvider: controllerInfo of IntrospectionTest.IntrospectionTestController.IntrospectionTest.IntrospectionTestController.IntrospectionTestPreventDeconstruction(ControllerInfo controllerInfo),
-          OriginalName: controllerInfo,
           Name: controllerInfo,
           ParameterType: ControllerInfo,
           Properties: {
@@ -48,7 +45,6 @@
         Children: [
           {
             AttributeProvider: controllerInfo of IntrospectionTest.IntrospectionTestController.IntrospectionTest.IntrospectionTestController.IntrospectionTestPreventDeconstruction(ControllerInfo controllerInfo),
-            OriginalName: controllerInfo,
             Name: controllerInfo,
             ParameterType: ControllerInfo,
             Properties: {
@@ -63,7 +59,6 @@
       Parameters: [
         {
           AttributeProvider: a of IntrospectionTest.IntrospectionTestController.IntrospectionTest.IntrospectionTestController.IntrospectionTestDefault(Int32 a),
-          OriginalName: a,
           Name: a,
           IsOptional: true,
           ParameterType: Int32
@@ -73,7 +68,6 @@
         Children: [
           {
             AttributeProvider: a of IntrospectionTest.IntrospectionTestController.IntrospectionTest.IntrospectionTestController.IntrospectionTestDefault(Int32 a),
-            OriginalName: a,
             Name: a,
             IsOptional: true,
             ParameterType: Int32

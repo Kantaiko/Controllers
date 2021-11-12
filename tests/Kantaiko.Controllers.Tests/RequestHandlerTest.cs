@@ -20,23 +20,19 @@ namespace Kantaiko.Controllers.Tests
 
         private class SimpleController : TestController
         {
-            [RegexPattern("hi")]
+            [Pattern("hi")]
             public string Greet() => "Hello!";
 
-            [RegexPattern(@"(?<a>\w+) \+ (?<b>\w+)")]
+            [Pattern(@"{a} + {b}")]
             public int Sum(int a, int b) => a + b;
 
-            [RegexPattern(@"sum (?<a>\w+)\s*(?<b>\w*)")]
-            public int SumOptional(int a, int? b) => a + b ?? a;
-
-            [RegexPattern(@"(?<a>\w*) \+ (?<b>\w*)")]
+            [Pattern(@"{a} + ")]
             public int SumFailed(int a, int b) => 0;
 
-            [RegexPattern("test-1")]
+            [Pattern("test-1")]
             public void TestFailed(ICustomTypeProvider customTypeProvider) { }
 
-
-            [RegexPattern("test-exception")]
+            [Pattern("test-exception")]
             public void TestException() => throw new InvalidOperationException("hi");
         }
 
@@ -54,16 +50,6 @@ namespace Kantaiko.Controllers.Tests
         public async Task ShouldProcessRequestWithParameters()
         {
             var context = new TestContext("40 + 2");
-            var result = await _requestHandlerProvider.RequestHandler.HandleAsync(context);
-
-            Assert.True(result.HasReturnValue);
-            Assert.Equal(42, result.ReturnValue);
-        }
-
-        [Fact]
-        public async Task ShouldProcessRequestWithOptionalParameter()
-        {
-            var context = new TestContext("sum 42");
             var result = await _requestHandlerProvider.RequestHandler.HandleAsync(context);
 
             Assert.True(result.HasReturnValue);

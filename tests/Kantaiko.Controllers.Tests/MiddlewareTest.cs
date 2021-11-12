@@ -100,17 +100,17 @@ namespace Kantaiko.Controllers.Tests
 
         private class MiddlewareTestController : TestController
         {
-            [RegexPattern("empty")]
+            [Pattern("empty")]
             public void Empty() { }
 
-            [RegexPattern(@"global-middleware (?<a>\w+)")]
+            [Pattern(@"global-middleware {a}")]
             public int Middleware(int a) => a;
 
-            [RegexPattern(@"endpoint-middleware (?<a>\w+)")]
+            [Pattern(@"endpoint-middleware {a}")]
             [TestMiddleware]
             public int EndpointMiddleware(int a) => a;
 
-            [RegexPattern(@"parameter-middleware (?<a>\w+)")]
+            [Pattern(@"parameter-middleware {a}")]
             public int ParameterMiddleware([TestMiddleware] int a) => a;
         }
 

@@ -1,14 +1,14 @@
-﻿using Kantaiko.Controllers.Matchers;
+using Kantaiko.Controllers.Matchers;
 
 namespace Kantaiko.Controllers.Tests.Shared
 {
-    internal class PatternMatcher : IEndpointMatcher<TestContext>
+    public class PatternMatcher : IEndpointMatcher<TestContext>
     {
-        private readonly RegexTextMatcher _matcher;
+        private readonly PatternTextMatcher _matcher;
 
         public PatternMatcher(string pattern)
         {
-            _matcher = new RegexTextMatcher(pattern);
+            _matcher = new PatternTextMatcher(pattern);
         }
 
         public EndpointMatchResult Match(EndpointMatchContext<TestContext> context)

@@ -27,17 +27,17 @@ namespace Kantaiko.Controllers.Tests
 
         private class DeconstructionTestController : TestController
         {
-            [RegexPattern(@"sum pair (?<a>\w+) (?<b>\w+)")]
+            [Pattern("sum-pair {a} {b}")]
             public int SumPair(NumberPair pair) => pair.A + pair.B;
 
-            [RegexPattern(@"sum group (?<a>\w+) (?<b>\w+) (?<c>\w+)")]
+            [Pattern("sum-group {a} {b} {c}")]
             public int SumGroup(NumberGroup numbers) => numbers.NumberPair.A + numbers.NumberPair.B + numbers.C;
         }
 
         [Fact]
         public async Task ShouldDeconstructClassParameter()
         {
-            var context = new TestContext("sum pair 40 2");
+            var context = new TestContext("sum-pair 40 2");
             var result = await _requestHandlerProvider.RequestHandler.HandleAsync(context);
 
             Assert.True(result.HasReturnValue);
@@ -47,7 +47,7 @@ namespace Kantaiko.Controllers.Tests
         [Fact]
         public async Task ShouldDeconstructClassParameterWithNestedParameters()
         {
-            var context = new TestContext("sum group 20 20 2");
+            var context = new TestContext("sum-group 20 20 2");
             var result = await _requestHandlerProvider.RequestHandler.HandleAsync(context);
 
             Assert.True(result.HasReturnValue);

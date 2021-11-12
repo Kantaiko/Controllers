@@ -18,14 +18,14 @@ namespace Kantaiko.Controllers.Tests
 
         private class ParameterPostValidationTestController : TestController
         {
-            [RegexPattern(@"sum (?<a>\w+) (?<b>\w+)")]
+            [Pattern(@"sum-validation {a} {b}")]
             public int Sum([MinValue(40)] int a, [MaxValue(2)] int b) => a + b;
         }
 
         [Fact]
         public async Task ShouldPostValidateParameters()
         {
-            var context = new TestContext("sum 40 2");
+            var context = new TestContext("sum-validation 40 2");
             var result = await _requestHandlerProvider.RequestHandler.HandleAsync(context);
 
             Assert.True(result.HasReturnValue);
@@ -35,7 +35,7 @@ namespace Kantaiko.Controllers.Tests
         [Fact]
         public async Task ShouldReportPostValidationError()
         {
-            var context = new TestContext("sum 40 3");
+            var context = new TestContext("sum-validation 40 3");
             var result = await _requestHandlerProvider.RequestHandler.HandleAsync(context);
 
             Assert.True(result.IsExited);

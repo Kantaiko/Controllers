@@ -85,10 +85,10 @@ namespace Kantaiko.Controllers.Tests
 
         private class PackageController : TestController
         {
-            [RegexPattern(@"parse (?<package>.+)")]
+            [Pattern(@"parse {package}")]
             public PackageReference ParsePackageReference(PackageReference package) => package;
 
-            [RegexPattern(@"find (?<package>.+)")]
+            [Pattern(@"find {package}")]
             public PackageInfo FindPackageInfo(PackageInfo package) => package;
         }
 

@@ -28,7 +28,7 @@ namespace Kantaiko.Controllers.Tests
 
         private class WorldDefaultValueResolver : IParameterDefaultValueResolver
         {
-            public object ResolveDefaultValue(ParameterConversionContext context)
+            public object? ResolveDefaultValue(ParameterConversionContext context)
             {
                 return "world";
             }
@@ -36,7 +36,7 @@ namespace Kantaiko.Controllers.Tests
 
         private class DefaultValueTestController : TestController
         {
-            [RegexPattern(@"greet\s?(?<name>\w*)")]
+            [Regex(@"greet\s?(?<name>\w*)")]
             public string Greet([DefaultWorld] string name) => $"Hello, {name}!";
         }
 
