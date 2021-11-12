@@ -7,7 +7,7 @@ namespace Kantaiko.Controllers.Middleware
     {
         public ExecutionParameterContext(ParameterConversionContext conversionContext,
             IParameterConverter resolvedConverter,
-            IParameterDefaultValueResolver? defaultValueResolver)
+            IParameterDefaultValueResolver defaultValueResolver)
         {
             ConversionContext = conversionContext;
             ResolvedConverter = resolvedConverter;
@@ -17,7 +17,8 @@ namespace Kantaiko.Controllers.Middleware
         public ParameterConversionContext ConversionContext { get; }
 
         public IParameterConverter ResolvedConverter { get; }
-        public IParameterDefaultValueResolver? DefaultValueResolver { get; }
+
+        public IParameterDefaultValueResolver DefaultValueResolver { get; }
 
         public object? Value { get; set; }
         public bool ValueExists { get; set; }

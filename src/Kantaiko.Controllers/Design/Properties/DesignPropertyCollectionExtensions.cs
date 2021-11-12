@@ -15,7 +15,8 @@ namespace Kantaiko.Controllers.Design.Properties
             [MaybeNullWhen(false)] out T value)
             where T : notnull
         {
-            if (!collection.TryGetValue(key, out var storedValue))
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
+            if (!collection.TryGetValue(key, out var storedValue) || storedValue is null)
             {
                 value = default;
                 return false;

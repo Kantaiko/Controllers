@@ -4,6 +4,6 @@ namespace Kantaiko.Controllers.Design.Parameters
 {
     public interface IParameterDefaultValueResolver
     {
-        object ResolveDefaultValue(ParameterConversionContext context);
+        object? ResolveDefaultValue(ParameterConversionContext context);
     }
 }

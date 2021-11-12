@@ -62,7 +62,7 @@ namespace Kantaiko.Controllers.Internal
                 Debug.Assert(converter is IParameterConverter);
 
                 return new ExecutionParameterContext(conversionContext,
-                    (IParameterConverter)converter, x.DefaultValueResolver);
+                    (IParameterConverter) converter, x.DefaultValueResolver);
             }).ToDictionary(k => k.ConversionContext.Info.Name, v => v);
 
             var executionContext = new RequestExecutionContext<TContext>(parameterContexts, endpointManager);
@@ -142,7 +142,7 @@ namespace Kantaiko.Controllers.Internal
                 return RequestProcessingResult.Interrupted(EndpointMiddlewareStage.BeforeInstanceCreation);
             }
 
-            var controller = (IContextAcceptor<TContext>)_instanceFactory.CreateInstance(controllerManager.Info.Type,
+            var controller = (IContextAcceptor<TContext>) _instanceFactory.CreateInstance(controllerManager.Info.Type,
                 serviceProvider);
 
             controller.SetContext(context);
@@ -228,7 +228,8 @@ namespace Kantaiko.Controllers.Internal
 
                 if (parameterContext.ConversionContext.Info.IsOptional) continue;
 
-                var errorMessage = string.Format(Locale.MissingRequiredParameter, parameterContext.ConversionContext.Info.Name);
+                var errorMessage = string.Format(Locale.MissingRequiredParameter,
+                    parameterContext.ConversionContext.Info.Name);
                 return OperationResult.Failure(errorMessage, parameterContext.ConversionContext.Info);
             }
 
@@ -255,8 +256,6 @@ namespace Kantaiko.Controllers.Internal
             return OperationResult.Success;
         }
 
-        private static object? GetDefault(Type type) => type.IsValueType ? Activator.CreateInstance(type) : null;
-
         /// <summary>
         /// Resolvers parameter values.
         /// </summary>
@@ -270,18 +269,19 @@ namespace Kantaiko.Controllers.Internal
             {
                 if (!parameterContext.ValueExists)
                 {
-                    var value = parameterContext.DefaultValueResolver is not null
-                        ? parameterContext.DefaultValueResolver.ResolveDefaultValue(parameterContext.ConversionContext)
-                        : GetDefault(parameterContext.ConversionContext.Info.ParameterType);
-                    parameterContext.Value = value;
+                    parameterContext.Value = parameterContext.DefaultValueResolver.ResolveDefaultValue(
+                        parameterContext.ConversionContext);
+
                     continue;
                 }
 
-                var resolutionResult = await parameterContext.ResolvedConverter.Resolve(parameterContext.ConversionContext,
+                var resolutionResult = await parameterContext.ResolvedConverter.Resolve(
+                    parameterContext.ConversionContext,
                     cancellationToken);
 
                 if (!resolutionResult.Success)
-                    return OperationResult.Failure(resolutionResult.ErrorMessage, parameterContext.ConversionContext.Info);
+                    return OperationResult.Failure(resolutionResult.ErrorMessage,
+                        parameterContext.ConversionContext.Info);
 
                 parameterContext.Value = resolutionResult.Value;
             }

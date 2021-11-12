@@ -18,7 +18,7 @@ namespace Kantaiko.Controllers.Internal
             IReadOnlyList<IEndpointMiddleware<TContext>> middlewares,
             IReadOnlyList<IParameterPostValidator> validators,
             Type? converterType,
-            IParameterDefaultValueResolver? defaultValueResolver = null,
+            IParameterDefaultValueResolver defaultValueResolver = null,
             PropertyInfo? propertyInfo = null,
             IReadOnlyList<ParameterManager<TContext>>? children = null)
         {
@@ -34,7 +34,7 @@ namespace Kantaiko.Controllers.Internal
         public IReadOnlyList<IEndpointMiddleware<TContext>> Middlewares { get; }
         public IReadOnlyList<IParameterPostValidator> Validators { get; }
         public Type? ConverterType { get; }
-        public IParameterDefaultValueResolver? DefaultValueResolver { get; }
+        public IParameterDefaultValueResolver DefaultValueResolver { get; }
         public PropertyInfo? PropertyInfo { get; }
         public IReadOnlyList<ParameterManager<TContext>>? Children { get; }
 

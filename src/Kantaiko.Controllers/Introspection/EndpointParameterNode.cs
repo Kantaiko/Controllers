@@ -8,9 +8,9 @@ namespace Kantaiko.Controllers.Introspection
     public class EndpointParameterNode : EndpointParameterInfo
     {
         internal EndpointParameterNode(EndpointInfo endpoint, IDesignPropertyCollection properties,
-            string originalName, string name, Type type,
-            bool isOptional, ICustomAttributeProvider attributeProvider, IReadOnlyList<EndpointParameterInfo> children)
-            : base(endpoint, properties, originalName, name, type, isOptional, attributeProvider)
+            string name, Type type, bool isOptional, ICustomAttributeProvider attributeProvider,
+            IReadOnlyList<EndpointParameterInfo> children)
+            : base(endpoint, properties, name, type, isOptional, attributeProvider)
         {
             Children = children;
         }

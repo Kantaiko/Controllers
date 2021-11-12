@@ -20,6 +20,8 @@ namespace Kantaiko.Controllers.Internal
     {
         private readonly IDeconstructionValidator _deconstructionValidator;
 
+        private readonly NullabilityInfoContext _nullabilityContext = new();
+
         public ControllerManagerFactory(IDeconstructionValidator deconstructionValidator)
         {
             _deconstructionValidator = deconstructionValidator;
@@ -58,8 +60,7 @@ namespace Kantaiko.Controllers.Internal
 
         private static IReadOnlyList<ParameterManager<TContext>> CreateParameterManagers(
             IReadOnlyList<EndpointParameterInfo> parameterInfos,
-            IServiceProvider provider,
-            Type? parentType = null)
+            IServiceProvider provider)
         {
             var parameters = parameterInfos.Select(info =>
             {
@@ -100,19 +101,47 @@ namespace Kantaiko.Controllers.Internal
                     }
                 }
 
-                var propertyInfo = parentType?.GetProperty(info.OriginalName);
-                Debug.Assert(parentType is null || propertyInfo is not null);
+                PropertyInfo? parameterPropertyInfo = null;
+
+                /*
+                 * TODO don't exploit AttributeProvider to access reflection member info
+                 * or expose it with better name and type
+                 */
+                if (defaultValueResolver is null)
+                {
+                    defaultValueResolver = ConstantDefaultValueResolver.NullResolver;
+
+                    if (info.AttributeProvider is ParameterInfo parameterInfo)
+                    {
+                        if (parameterInfo.ParameterType.IsValueType)
+                        {
+                            defaultValueResolver = parameterInfo.HasDefaultValue
+                                ? new ConstantDefaultValueResolver(parameterInfo.DefaultValue!)
+                                : new ValueTypeDefaultValueResolver(parameterInfo.ParameterType);
+                        }
+                    }
+
+                    if (info.AttributeProvider is PropertyInfo propertyInfo)
+                    {
+                        parameterPropertyInfo = propertyInfo;
+
+                        if (propertyInfo.PropertyType.IsValueType)
+                        {
+                            defaultValueResolver = new ValueTypeDefaultValueResolver(propertyInfo.PropertyType);
+                        }
+                    }
+                }
 
                 if (info is not EndpointParameterNode node)
                 {
                     return new ParameterManager<TContext>(info, middlewares, validators, converterType,
-                        defaultValueResolver, propertyInfo);
+                        defaultValueResolver, parameterPropertyInfo);
                 }
 
-                var children = CreateParameterManagers(node.Children, provider, node.ParameterType);
+                var children = CreateParameterManagers(node.Children, provider);
 
                 return new ParameterManager<TContext>(info, middlewares, validators,
-                    converterType, defaultValueResolver, propertyInfo, children);
+                    converterType, defaultValueResolver, parameterPropertyInfo, children);
             });
 
             return parameters.ToArray();
@@ -160,8 +189,8 @@ namespace Kantaiko.Controllers.Internal
                 var canDeconstruct = !hasCustomConverter && _deconstructionValidator.CanDeconstruct(propertyType);
                 if (propertyType.IsPrimitive || !propertyType.IsClass || !canDeconstruct)
                 {
-                    return new EndpointParameterInfo(endpointInfo, designProperties, propertyInfo.Name, name, realType,
-                        isOptional, propertyInfo);
+                    return new EndpointParameterInfo(endpointInfo, designProperties, name,
+                        realType, isOptional, propertyInfo);
                 }
 
                 var existingProperty = properties.FirstOrDefault(
@@ -173,7 +202,7 @@ namespace Kantaiko.Controllers.Internal
                 }
 
                 var children = GetClassParameters(endpointInfo, propertyType);
-                return new EndpointParameterNode(endpointInfo, designProperties, propertyInfo.Name, name, propertyType,
+                return new EndpointParameterNode(endpointInfo, designProperties, name, propertyType,
                     isOptional, propertyInfo, children);
             });
 
@@ -201,7 +230,7 @@ namespace Kantaiko.Controllers.Internal
                     .Any(x => x is IParameterDefaultValueResolverFactory);
 
                 var name = GetParameterName(designProperties) ?? parameterInfo.Name;
-                var (realType, isOptional) = ExtractParameterTypeAndNullability(parameterInfo);
+                var (realType, isOptional) = ExtractParameterTypeAndNullability(designProperties, parameterInfo);
 
                 if (hasDefaultValueResolver)
                 {
@@ -211,8 +240,8 @@ namespace Kantaiko.Controllers.Internal
                 var canDeconstruct = !hasCustomConverter && _deconstructionValidator.CanDeconstruct(parameterType);
                 if (parameterType.IsPrimitive || !parameterType.IsClass || !canDeconstruct)
                 {
-                    return new EndpointParameterInfo(endpointInfo, designProperties, parameterInfo.Name, name, realType,
-                        isOptional, parameterInfo);
+                    return new EndpointParameterInfo(endpointInfo, designProperties, name,
+                        realType, isOptional, parameterInfo);
                 }
 
                 var existingParameter = parameters.FirstOrDefault(
@@ -224,7 +253,7 @@ namespace Kantaiko.Controllers.Internal
                 }
 
                 var children = GetClassParameters(endpointInfo, parameterType);
-                return new EndpointParameterNode(endpointInfo, designProperties, parameterInfo.Name, name, realType,
+                return new EndpointParameterNode(endpointInfo, designProperties, name, realType,
                     isOptional,
                     parameterInfo, children);
             });
@@ -232,19 +261,54 @@ namespace Kantaiko.Controllers.Internal
             return new EndpointParameterTree(result.ToList());
         }
 
-        private static (Type, bool) ExtractPropertyTypeAndNullability(IDesignPropertyCollection properties,
+        private (Type, bool) ExtractPropertyTypeAndNullability(IDesignPropertyCollection properties,
             PropertyInfo propertyInfo)
         {
-            return propertyInfo.PropertyType.IsValueType
-                ? ExtractValueTypeInfo(propertyInfo.PropertyType)
-                : (propertyInfo.PropertyType, GetParameterNullability(properties));
+            if (propertyInfo.PropertyType.IsValueType)
+            {
+                var (underlyingType, isOptional) = ExtractValueTypeInfo(propertyInfo.PropertyType);
+
+                if (isOptional)
+                {
+                    return (underlyingType, true);
+                }
+            }
+            else
+            {
+                var nullabilityInfo = _nullabilityContext.Create(propertyInfo);
+
+                if (nullabilityInfo.ReadState == NullabilityState.Nullable)
+                {
+                    return (propertyInfo.PropertyType, true);
+                }
+            }
+
+            return (propertyInfo.PropertyType, GetParameterNullability(properties));
         }
 
-        private static (Type, bool) ExtractParameterTypeAndNullability(ParameterInfo parameterInfo)
+        private (Type, bool) ExtractParameterTypeAndNullability(IDesignPropertyCollection properties,
+            ParameterInfo parameterInfo)
         {
-            return parameterInfo.ParameterType.IsValueType
-                ? ExtractValueTypeInfo(parameterInfo.ParameterType)
-                : (parameterInfo.ParameterType, parameterInfo.IsOptional);
+            if (parameterInfo.ParameterType.IsValueType)
+            {
+                var (underlyingType, isOptional) = ExtractValueTypeInfo(parameterInfo.ParameterType);
+
+                if (isOptional)
+                {
+                    return (underlyingType, true);
+                }
+            }
+            else
+            {
+                var nullabilityInfo = _nullabilityContext.Create(parameterInfo);
+
+                if (nullabilityInfo.ReadState == NullabilityState.Nullable)
+                {
+                    return (parameterInfo.ParameterType, true);
+                }
+            }
+
+            return (parameterInfo.ParameterType, parameterInfo.IsOptional || GetParameterNullability(properties));
         }
 
         private static (Type, bool) ExtractValueTypeInfo(Type type)
