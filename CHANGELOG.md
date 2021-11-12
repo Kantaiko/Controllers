@@ -1,4 +1,11 @@
 # Change Log\n\nAll notable changes to this project will be documented in this file. See [versionize](https://github.com/saintedlama/versionize) for commit guidelines.\n
+<a name="0.5.0"></a>
+## [0.5.0](https://www.github.com/Kantaiko/Controllers/releases/tag/v0.5.0) (2021-11-12)
+
+### Features
+
+* Treat nullable reference types as optional parameter types ([79f83ca](https://www.github.com/Kantaiko/Controllers/commit/79f83ca7fa7c764cc1ff31b66fecd778e467903f))
+
 <a name="0.4.0"></a>
 ## [0.4.0](https://www.github.com/Kantaiko/Controllers/releases/tag/v0.4.0) (2021-8-15)
 
