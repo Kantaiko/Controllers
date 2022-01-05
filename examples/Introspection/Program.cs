@@ -3,15 +3,27 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using Kantaiko.Controllers;
-using Kantaiko.Controllers.Design.Endpoints;
-using Kantaiko.Controllers.Design.Properties;
-using Kantaiko.Controllers.Matchers;
+using Kantaiko.Controllers.Introspection.Factory;
+using Kantaiko.Controllers.Introspection.Factory.Attributes;
+using Kantaiko.Controllers.Introspection.Factory.Context;
+using Kantaiko.Controllers.Introspection.Factory.Deconstruction;
+using Kantaiko.Properties;
+using Kantaiko.Properties.Immutable;
+using Kantaiko.Routing.Context;
 
-var controllerCollection = ControllerCollection.FromAssemblies(Assembly.GetExecutingAssembly());
-var requestHandler = new RequestHandler<TestContext>(controllerCollection);
+var deconstructionValidator = new TestDeconstructionValidator();
+
+var introspectionBuilder = new IntrospectionBuilder<TestContext>();
+
+introspectionBuilder.SetDeconstructionValidator(deconstructionValidator);
+introspectionBuilder.AddEndpointMatching();
+introspectionBuilder.AddDefaultTransformation();
+
+var lookupTypes = Assembly.GetExecutingAssembly().GetTypes();
+var introspectionInfo = introspectionBuilder.CreateIntrospectionInfo(lookupTypes);
 
 // Get all endpoints
-var endpoints = requestHandler.Info.Controllers.SelectMany(x => x.Endpoints).ToArray();
+var endpoints = introspectionInfo.Controllers.SelectMany(x => x.Endpoints);
 
 // Build help message
 var helpMessage = new StringBuilder();
@@ -21,10 +33,12 @@ helpMessage.AppendLine();
 // Iterate endpoints
 foreach (var endpointInfo in endpoints)
 {
-    if (!endpointInfo.Properties.TryGetProperty<string>(IntrospectionTestProperties.CommandName, out var commandName))
+    if (CommandEndpointProperties.Of(endpointInfo)?.CommandName is not { } commandName)
+    {
         continue;
+    }
 
-    helpMessage.AppendFormat("/{0}", commandName);
+    helpMessage.Append($"/{commandName}");
 
     foreach (var parameterInfo in endpointInfo.Parameters)
     {
@@ -36,7 +50,6 @@ foreach (var endpointInfo in endpoints)
 }
 
 Console.WriteLine(helpMessage.ToString());
-
 
 internal class InstallPackageInput
 {
@@ -59,13 +72,13 @@ internal class TestController : ControllerBase<TestContext>
     public void InstallPackage(InstallPackageInput input) { }
 }
 
-internal static class IntrospectionTestProperties
+internal record CommandEndpointProperties : ReadOnlyPropertiesBase<CommandEndpointProperties>
 {
-    public const string CommandName = nameof(IntrospectionTestProperties) + ":" + nameof(CommandName);
+    public string? CommandName { get; init; }
 }
 
 [AttributeUsage(AttributeTargets.Method)]
-internal class CommandAttribute : Attribute, IEndpointMatcherFactory<TestContext>, IEndpointDesignPropertyProvider
+internal class CommandAttribute : Attribute, IEndpointPropertyProvider
 {
     private readonly string _name;
 
@@ -74,15 +87,19 @@ internal class CommandAttribute : Attribute, IEndpointMatcherFactory<TestContext
         _name = name;
     }
 
-    public IEndpointMatcher<TestContext> CreateEndpointMatcher(EndpointDesignContext context)
+    public IImmutablePropertyCollection UpdateEndpointProperties(EndpointFactoryContext context)
     {
-        return null!;
+        return context.Endpoint.Properties.Set(new CommandEndpointProperties { CommandName = _name });
     }
-
-    public DesignPropertyCollection GetEndpointDesignProperties() => new()
-    {
-        [IntrospectionTestProperties.CommandName] = _name
-    };
 }
 
-internal record TestContext(string Text);
+internal class TestDeconstructionValidator : IDeconstructionValidator
+{
+    public bool CanDeconstruct(Type type)
+    {
+        return type == typeof(InstallPackageInput);
+    }
+}
+
+
+internal class TestContext : ContextBase { }

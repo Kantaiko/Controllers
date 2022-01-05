@@ -8,17 +8,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kantaiko.Controllers.Tests"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "examples", "examples", "{DF1631A2-BBCD-4693-AA68-625EC5D639FB}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{7F54BAAA-924A-402F-AF1E-61266AA7DCFE}"
-ProjectSection(SolutionItems) = preProject
-	docs\another-features.md = docs\another-features.md
-	docs\endpoint-matching.md = docs\endpoint-matching.md
-	docs\getting-started.md = docs\getting-started.md
-	docs\middleware.md = docs\middleware.md
-	docs\parameter-conversion.md = docs\parameter-conversion.md
-	docs\parameter-deconstruction.md = docs\parameter-deconstruction.md
-	docs\parameter-post-validation.md = docs\parameter-post-validation.md
-EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DependencyInjection", "examples\DependencyInjection\DependencyInjection.csproj", "{A24A3421-19E7-4310-9514-E866E5326AEF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Introspection", "examples\Introspection\Introspection.csproj", "{93168DA8-73FF-4A5C-83D2-7C5436155ECA}"

@@ -1,18 +1,22 @@
 using System;
-using Kantaiko.Controllers.Design.Endpoints;
-using Kantaiko.Controllers.Matchers;
+using Kantaiko.Controllers.Introspection.Factory.Attributes;
+using Kantaiko.Controllers.Introspection.Factory.Context;
+using Kantaiko.Controllers.Matching;
 
-namespace Kantaiko.Controllers.Tests.Shared
+namespace Kantaiko.Controllers.Tests.Shared;
+
+[AttributeUsage(AttributeTargets.Method)]
+public class PatternAttribute : Attribute, IEndpointMatcherFactory<TestContext>
 {
-    [AttributeUsage(AttributeTargets.Method)]
-    public class PatternAttribute : Attribute, IEndpointMatcherFactory<TestContext>
-    {
-        private readonly string _pattern;
-        public PatternAttribute(string pattern) => _pattern = pattern;
+    private readonly string _pattern;
 
-        public IEndpointMatcher<TestContext> CreateEndpointMatcher(EndpointDesignContext context)
-        {
-            return new PatternMatcher(_pattern);
-        }
+    public PatternAttribute(string pattern)
+    {
+        _pattern = pattern;
+    }
+
+    public IEndpointMatcher<TestContext> CreateEndpointMatcher(EndpointFactoryContext context)
+    {
+        return new PatternMatcher(_pattern);
     }
 }

@@ -1,19 +1,19 @@
-using Kantaiko.Controllers.Matchers;
+using Kantaiko.Controllers.Matching;
+using Kantaiko.Controllers.Matching.Text;
 
-namespace Kantaiko.Controllers.Tests.Shared
+namespace Kantaiko.Controllers.Tests.Shared;
+
+public class PatternMatcher : IEndpointMatcher<TestContext>
 {
-    public class PatternMatcher : IEndpointMatcher<TestContext>
+    private readonly PatternTextMatcher _matcher;
+
+    public PatternMatcher(string pattern)
     {
-        private readonly PatternTextMatcher _matcher;
+        _matcher = new PatternTextMatcher(pattern);
+    }
 
-        public PatternMatcher(string pattern)
-        {
-            _matcher = new PatternTextMatcher(pattern);
-        }
-
-        public EndpointMatchResult Match(EndpointMatchContext<TestContext> context)
-        {
-            return _matcher.Match(context.RequestContext.Text);
-        }
+    public EndpointMatchResult Match(EndpointMatchContext<TestContext> context)
+    {
+        return _matcher.Match(context.RequestContext.Message);
     }
 }

@@ -1,18 +1,19 @@
 ﻿using System;
-using Kantaiko.Controllers.Converters;
-using Kantaiko.Controllers.Design.Parameters;
-using Kantaiko.Controllers.Design.Properties;
+using Kantaiko.Controllers.Introspection.Factory.Attributes;
+using Kantaiko.Controllers.Introspection.Factory.Context;
+using Kantaiko.Controllers.ParameterConversion.Properties;
+using Kantaiko.Properties.Immutable;
 
-namespace Kantaiko.Controllers
+namespace Kantaiko.Controllers;
+
+[AttributeUsage(AttributeTargets.Parameter)]
+public class FromServicesAttribute : Attribute, IParameterPropertyProvider
 {
-    [AttributeUsage(AttributeTargets.Parameter)]
-    public class FromServicesAttribute : Attribute, IParameterConverterTypeProvider, IParameterDesignPropertyProvider
+    public IImmutablePropertyCollection UpdateParameterProperties(ParameterFactoryContext context)
     {
-        public Type GetConverterType(EndpointParameterDesignContext context) => typeof(ServiceConverter);
-
-        public DesignPropertyCollection GetParameterDesignProperties() => new()
+        return context.Parameter.Properties.Set(new ParameterServiceProperties
         {
-            [KantaikoParameterProperties.IsHidden] = true
-        };
+            ServiceType = context.Parameter.ParameterType
+        });
     }
 }

@@ -1,4 +1,7 @@
-# Change Log\n\nAll notable changes to this project will be documented in this file. See [versionize](https://github.com/saintedlama/versionize) for commit guidelines.\n
+# Change Log
+
+All notable changes to this project will be documented in this file. See [versionize](https://github.com/saintedlama/versionize) for commit guidelines.
+
 <a name="0.5.0"></a>
 ## [0.5.0](https://www.github.com/Kantaiko/Controllers/releases/tag/v0.5.0) (2021-11-12)
 

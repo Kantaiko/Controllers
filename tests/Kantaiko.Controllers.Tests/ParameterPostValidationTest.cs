@@ -1,48 +1,65 @@
 ﻿using System.Threading.Tasks;
+using Kantaiko.Controllers.Execution;
+using Kantaiko.Controllers.Introspection.Factory;
+using Kantaiko.Controllers.ParameterConversion.Text;
+using Kantaiko.Controllers.ParameterConversion.Validation;
 using Kantaiko.Controllers.Resources;
 using Kantaiko.Controllers.Result;
 using Kantaiko.Controllers.Tests.Shared;
-using Kantaiko.Controllers.Validation;
+using Kantaiko.Routing;
 using Xunit;
 
-namespace Kantaiko.Controllers.Tests
+namespace Kantaiko.Controllers.Tests;
+
+public class ParameterPostValidationTest
 {
-    public class ParameterPostValidationTest : IClassFixture<RequestHandlerProvider>
+    [Fact]
+    public async Task ShouldPostValidateParameters()
     {
-        private readonly RequestHandlerProvider _requestHandlerProvider;
+        var controllerHandler = CreateControllerHandler();
 
-        public ParameterPostValidationTest(RequestHandlerProvider requestHandlerProvider)
-        {
-            _requestHandlerProvider = requestHandlerProvider;
-        }
+        var context = new TestContext("sum-validation 40 2");
+        var result = await controllerHandler.Handle(context);
 
-        private class ParameterPostValidationTestController : TestController
-        {
-            [Pattern(@"sum-validation {a} {b}")]
-            public int Sum([MinValue(40)] int a, [MaxValue(2)] int b) => a + b;
-        }
+        Assert.True(result.HasReturnValue);
+        Assert.Equal(42, result.ReturnValue);
+    }
 
-        [Fact]
-        public async Task ShouldPostValidateParameters()
-        {
-            var context = new TestContext("sum-validation 40 2");
-            var result = await _requestHandlerProvider.RequestHandler.HandleAsync(context);
+    [Fact]
+    public async Task ShouldReportPostValidationError()
+    {
+        var controllerHandler = CreateControllerHandler();
 
-            Assert.True(result.HasReturnValue);
-            Assert.Equal(42, result.ReturnValue);
-        }
+        var context = new TestContext("sum-validation 40 3");
+        var result = await controllerHandler.Handle(context);
 
-        [Fact]
-        public async Task ShouldReportPostValidationError()
-        {
-            var context = new TestContext("sum-validation 40 3");
-            var result = await _requestHandlerProvider.RequestHandler.HandleAsync(context);
+        Assert.True(result.IsExited);
 
-            Assert.True(result.IsExited);
+        var errorExitReason = Assert.IsType<ErrorExitReason>(result.ExitReason);
+        Assert.Equal(string.Format(Locale.ShouldBeNoMoreThan, 2), errorExitReason.ErrorMessage);
+    }
 
-            var errorExitReason = Assert.IsType<ErrorExitReason>(result.ExitReason);
-            Assert.Equal(RequestErrorStage.ParameterPostValidation, errorExitReason.Stage);
-            Assert.Equal(string.Format(Locale.ShouldBeNoMoreThan, 2), errorExitReason.ErrorMessage);
-        }
+    private class TestController : Controller
+    {
+        [Pattern(@"sum-validation {a} {b}")]
+        public int Sum([MinValue(40)] int a, [MaxValue(2)] int b) => a + b;
+    }
+
+    private static IHandler<TestContext, Task<ControllerExecutionResult>> CreateControllerHandler()
+    {
+        return TestUtils.CreateControllerHandler<ParameterPostValidationTest>(
+            introspectionBuilder =>
+            {
+                introspectionBuilder.AddEndpointMatching();
+                introspectionBuilder.AddTextParameterConversion();
+                introspectionBuilder.AddParameterPostValidation();
+            },
+            pipelineBuilder =>
+            {
+                pipelineBuilder.AddEndpointMatching();
+                pipelineBuilder.AddTextParameterConversion();
+                pipelineBuilder.AddDefaultControllerHandling();
+            }
+        );
     }
 }

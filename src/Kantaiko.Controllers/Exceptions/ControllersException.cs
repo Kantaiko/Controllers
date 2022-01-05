@@ -1,9 +1,8 @@
 ﻿using System;
 
-namespace Kantaiko.Controllers.Exceptions
+namespace Kantaiko.Controllers.Exceptions;
+
+public class ControllersException : Exception
 {
-    public class ControllersException : Exception
-    {
-        public ControllersException(string message) : base(message) { }
-    }
+    protected ControllersException(string message) : base(message) { }
 }

@@ -1,4 +1,3 @@
-﻿namespace Kantaiko.Controllers.Result
-{
-    public interface IExitReason { }
-}
+﻿namespace Kantaiko.Controllers.Result;
+
+public interface IExitReason { }

@@ -1,57 +1,66 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
+using Kantaiko.Controllers.Execution;
+using Kantaiko.Controllers.Introspection.Factory;
+using Kantaiko.Controllers.Introspection.Factory.Deconstruction;
+using Kantaiko.Controllers.ParameterConversion.Text;
 using Kantaiko.Controllers.Tests.Shared;
 using Xunit;
 
-namespace Kantaiko.Controllers.Tests
+namespace Kantaiko.Controllers.Tests;
+
+public class ParameterDeconstructionTest
 {
-    public class ParameterDeconstructionTest : IClassFixture<RequestHandlerProvider>
+    [Theory]
+    [InlineData("sum-pair 40 2")]
+    [InlineData("sum-group 20 20 2")]
+    public async Task ShouldDeconstructClassParameter(string input)
     {
-        private readonly RequestHandlerProvider _requestHandlerProvider;
+        var controllerHandler = TestUtils.CreateControllerHandler<ParameterDeconstructionTest>(
+            introspectionBuilder =>
+            {
+                introspectionBuilder.SetDeconstructionValidator(new TestDeconstructionValidator());
+                introspectionBuilder.AddEndpointMatching();
+                introspectionBuilder.AddTextParameterConversion();
+            },
+            pipelineBuilder =>
+            {
+                pipelineBuilder.AddEndpointMatching();
+                pipelineBuilder.AddTextParameterConversion();
+                pipelineBuilder.AddDefaultControllerHandling();
+            }
+        );
 
-        public ParameterDeconstructionTest(RequestHandlerProvider requestHandlerProvider)
-        {
-            _requestHandlerProvider = requestHandlerProvider;
-        }
+        var context = new TestContext(input);
+        var result = await controllerHandler.Handle(context);
 
-        private class NumberGroup
-        {
-            public NumberPair NumberPair { get; set; } = null!;
-            public int C { get; set; }
-        }
+        Assert.True(result.HasReturnValue);
+        Assert.Equal(42, result.ReturnValue);
+    }
 
-        private class NumberPair
-        {
-            public int A { get; set; }
-            public int B { get; set; }
-        }
+    private class TestController : Controller
+    {
+        [Pattern("sum-pair {a} {b}")]
+        public int SumPair(NumberPair pair) => pair.A + pair.B;
 
-        private class DeconstructionTestController : TestController
-        {
-            [Pattern("sum-pair {a} {b}")]
-            public int SumPair(NumberPair pair) => pair.A + pair.B;
+        [Pattern("sum-group {a} {b} {c}")]
+        public int SumGroup(NumberGroup numbers) => numbers.NumberPair.A + numbers.NumberPair.B + numbers.C;
+    }
 
-            [Pattern("sum-group {a} {b} {c}")]
-            public int SumGroup(NumberGroup numbers) => numbers.NumberPair.A + numbers.NumberPair.B + numbers.C;
-        }
+    private class TestDeconstructionValidator : IDeconstructionValidator
+    {
+        public bool CanDeconstruct(Type type) => true;
+    }
 
-        [Fact]
-        public async Task ShouldDeconstructClassParameter()
-        {
-            var context = new TestContext("sum-pair 40 2");
-            var result = await _requestHandlerProvider.RequestHandler.HandleAsync(context);
+    private class NumberGroup
+    {
+        public NumberPair NumberPair { get; set; } = null!;
+        public int C { get; set; }
+    }
 
-            Assert.True(result.HasReturnValue);
-            Assert.Equal(42, result.ReturnValue);
-        }
-
-        [Fact]
-        public async Task ShouldDeconstructClassParameterWithNestedParameters()
-        {
-            var context = new TestContext("sum-group 20 20 2");
-            var result = await _requestHandlerProvider.RequestHandler.HandleAsync(context);
-
-            Assert.True(result.HasReturnValue);
-            Assert.Equal(42, result.ReturnValue);
-        }
+    private class NumberPair
+    {
+        public int A { get; set; }
+        public int B { get; set; }
     }
 }

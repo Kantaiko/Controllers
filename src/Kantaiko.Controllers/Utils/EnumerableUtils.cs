@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 
-namespace Kantaiko.Controllers.Utils
+namespace Kantaiko.Controllers.Utils;
+
+public static class EnumerableUtils
 {
-    public static class EnumerableUtils
+    public static IEnumerable<T> Single<T>(T item)
     {
-        public static IEnumerable<T> Single<T>(T item)
-        {
-            yield return item;
-        }
+        yield return item;
     }
 }

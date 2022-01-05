@@ -1,30 +1,52 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Reflection;
-using Kantaiko.Controllers.Design.Properties;
+using Kantaiko.Properties.Immutable;
 
-namespace Kantaiko.Controllers.Introspection
+namespace Kantaiko.Controllers.Introspection;
+
+public record EndpointParameterInfo : IImmutablePropertyContainer
 {
-    public class EndpointParameterInfo
+    private readonly IReadOnlyList<EndpointParameterInfo> _children;
+
+    public EndpointParameterInfo(ICustomAttributeProvider attributeProvider,
+        string name, bool isOptional, Type parameterType,
+        IReadOnlyList<EndpointParameterInfo>? children = null,
+        IImmutablePropertyCollection? properties = null)
     {
-        internal EndpointParameterInfo(EndpointInfo endpoint, IDesignPropertyCollection properties,
-            string name, Type type, bool isOptional, ICustomAttributeProvider attributeProvider)
+        AttributeProvider = attributeProvider;
+        Name = name;
+        IsOptional = isOptional;
+        ParameterType = parameterType;
+        _children = children is not null ? AddParentReferences(children) : ImmutableArray<EndpointParameterInfo>.Empty;
+        Properties = properties ?? ImmutablePropertyCollection.Empty;
+    }
+
+    public IReadOnlyList<EndpointParameterInfo> Children
+    {
+        get => _children;
+        init => _children = AddParentReferences(value);
+    }
+
+    public ICustomAttributeProvider AttributeProvider { get; init; }
+    public string Name { get; init; }
+    public bool IsOptional { get; init; }
+    public Type ParameterType { get; init; }
+    public IImmutablePropertyCollection Properties { get; init; }
+
+    public EndpointParameterInfo? Parent { get; internal set; }
+    public EndpointInfo? Endpoint { get; internal set; }
+
+    private IReadOnlyList<EndpointParameterInfo> AddParentReferences(IReadOnlyList<EndpointParameterInfo> parameters)
+    {
+        foreach (var parameter in parameters)
         {
-            Endpoint = endpoint;
-            AttributeProvider = attributeProvider;
-            Properties = properties;
-            Name = name;
-            ParameterType = type;
-            IsOptional = isOptional;
+            parameter.Parent = this;
         }
 
-        public EndpointInfo Endpoint { get; }
-        public ICustomAttributeProvider AttributeProvider { get; }
-
-        public string Name { get; }
-
-        public bool IsOptional { get; }
-        public Type ParameterType { get; }
-
-        public IDesignPropertyCollection Properties { get; }
+        return parameters;
     }
+
+    public bool HasChildren => Children.Count is not 0;
 }

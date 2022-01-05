@@ -1,48 +1,63 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Reflection;
-using Kantaiko.Controllers.Design.Endpoints;
-using Kantaiko.Controllers.Design.Properties;
-using Kantaiko.Controllers.Internal;
 using Kantaiko.Controllers.Utils;
+using Kantaiko.Properties.Immutable;
 
-namespace Kantaiko.Controllers.Introspection
+namespace Kantaiko.Controllers.Introspection;
+
+public record EndpointInfo : IImmutablePropertyContainer
 {
-    public class EndpointInfo
+    private readonly IReadOnlyList<EndpointParameterInfo> _parameterTree;
+
+    public EndpointInfo(MethodInfo methodInfo, IReadOnlyList<EndpointParameterInfo> parameterTree,
+        IImmutablePropertyCollection? properties = null)
     {
-        internal EndpointInfo(ControllerInfo controller, MethodInfo methodInfo)
+        MethodInfo = methodInfo;
+
+        _parameterTree = parameterTree;
+        Parameters = AddParentReferences(Flatten(parameterTree).ToImmutableArray());
+
+        Properties = properties ?? ImmutablePropertyCollection.Empty;
+    }
+
+    public IReadOnlyList<EndpointParameterInfo> ParameterTree
+    {
+        get => _parameterTree;
+        init
         {
-            Controller = controller;
-            MethodInfo = methodInfo;
-            Properties = DesignPropertyExtractor.GetProperties<IEndpointDesignPropertyProvider>(methodInfo,
-                x => x.GetEndpointDesignProperties());
-        }
-
-        public ControllerInfo Controller { get; }
-        public MethodInfo MethodInfo { get; }
-
-        public IReadOnlyList<EndpointParameterInfo> Parameters { get; private set; } = null!;
-        public EndpointParameterTree ParameterTree { get; private set; } = null!;
-
-        public IDesignPropertyCollection Properties { get; }
-
-        private static IEnumerable<EndpointParameterInfo> Flatten(IEnumerable<EndpointParameterInfo> parameters)
-        {
-            return parameters.SelectMany(parameterInfo =>
-            {
-                if (parameterInfo is EndpointParameterNode node)
-                {
-                    return Flatten(node.Children);
-                }
-
-                return EnumerableUtils.Single(parameterInfo);
-            });
-        }
-
-        internal void SetParameterTree(EndpointParameterTree parameterTree)
-        {
-            ParameterTree = parameterTree;
-            Parameters = Flatten(parameterTree.Children).ToArray();
+            _parameterTree = value;
+            Parameters = AddParentReferences(Flatten(value).ToImmutableArray());
         }
     }
+
+    public MethodInfo MethodInfo { get; init; }
+    public IReadOnlyList<EndpointParameterInfo> Parameters { get; private init; }
+    public IImmutablePropertyCollection Properties { get; init; }
+
+    private static IEnumerable<EndpointParameterInfo> Flatten(IEnumerable<EndpointParameterInfo> parameters)
+    {
+        return parameters.SelectMany(parameterInfo =>
+        {
+            if (parameterInfo.HasChildren)
+            {
+                return Flatten(parameterInfo.Children);
+            }
+
+            return EnumerableUtils.Single(parameterInfo);
+        });
+    }
+
+    private IReadOnlyList<EndpointParameterInfo> AddParentReferences(IReadOnlyList<EndpointParameterInfo> parameters)
+    {
+        foreach (var parameter in parameters)
+        {
+            parameter.Endpoint = this;
+        }
+
+        return parameters;
+    }
+
+    public ControllerInfo? Controller { get; internal set; }
 }
