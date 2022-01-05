@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/saintedlama/versionize) for commit guidelines.
 
+<a name="0.6.0"></a>
+## [0.6.0](https://www.github.com/Kantaiko/Controllers/releases/tag/v0.6.0) (2022-1-5)
+
+### Features
+
+* Redesign the entire controller infrastructure ([81fb9f5](https://www.github.com/Kantaiko/Controllers/commit/81fb9f50e3036efc7a939564834e753bd97c746c))
+
 <a name="0.5.0"></a>
 ## [0.5.0](https://www.github.com/Kantaiko/Controllers/releases/tag/v0.5.0) (2021-11-12)
 
