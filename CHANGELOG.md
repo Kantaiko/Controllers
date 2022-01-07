@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/saintedlama/versionize) for commit guidelines.
 
+<a name="0.6.1"></a>
+## [0.6.1](https://www.github.com/Kantaiko/Controllers/releases/tag/v0.6.1) (2022-1-7)
+
+### Bug Fixes
+
+* Always assign context.Result in AwaitAsyncResultHandler ([ef85fe6](https://www.github.com/Kantaiko/Controllers/commit/ef85fe6a0d992b31644cc89b4b41633ddb5f5e41))
+
 <a name="0.6.0"></a>
 ## [0.6.0](https://www.github.com/Kantaiko/Controllers/releases/tag/v0.6.0) (2022-1-5)
 
