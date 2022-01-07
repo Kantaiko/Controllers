@@ -24,6 +24,10 @@ public class AwaitAsyncResultHandler<TContext> : ControllerExecutionHandler<TCon
             var resultProperty = task.GetType().GetProperty("Result");
             context.Result = resultProperty!.GetValue(task);
         }
+        else
+        {
+            context.Result = context.RawResult;
+        }
 
         return await next();
     }
