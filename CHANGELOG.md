@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/saintedlama/versionize) for commit guidelines.
 
+<a name="0.7.0"></a>
+## [0.7.0](https://www.github.com/Kantaiko/Controllers/releases/tag/v0.7.0) (2022-1-8)
+
+### Features
+
+* Add VisibilityParameterProperties ([fd7756a](https://www.github.com/Kantaiko/Controllers/commit/fd7756a72a8d0c7fec590e049a6a911c4971da04))
+
 <a name="0.6.1"></a>
 ## [0.6.1](https://www.github.com/Kantaiko/Controllers/releases/tag/v0.6.1) (2022-1-7)
 
