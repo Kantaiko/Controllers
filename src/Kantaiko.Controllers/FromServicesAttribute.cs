@@ -1,4 +1,5 @@
 ﻿using System;
+using Kantaiko.Controllers.Introspection;
 using Kantaiko.Controllers.Introspection.Factory.Attributes;
 using Kantaiko.Controllers.Introspection.Factory.Context;
 using Kantaiko.Controllers.ParameterConversion.Properties;
@@ -11,9 +12,8 @@ public class FromServicesAttribute : Attribute, IParameterPropertyProvider
 {
     public IImmutablePropertyCollection UpdateParameterProperties(ParameterFactoryContext context)
     {
-        return context.Parameter.Properties.Set(new ParameterServiceProperties
-        {
-            ServiceType = context.Parameter.ParameterType
-        });
+        return context.Parameter.Properties
+            .Set(new ParameterServiceProperties { ServiceType = context.Parameter.ParameterType })
+            .Set(new VisibilityParameterProperties { IsHidden = true });
     }
 }
