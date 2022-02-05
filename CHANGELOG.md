@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/saintedlama/versionize) for commit guidelines.
 
+<a name="0.7.1"></a>
+## [0.7.1](https://www.github.com/Kantaiko/Controllers/releases/tag/v0.7.1) (2022-2-5)
+
+### Bug Fixes
+
+* Transform children in CustomizationIntrospectionInfoTransformer ([7dd62fc](https://www.github.com/Kantaiko/Controllers/commit/7dd62fc8e6c31fbc941933cdfd4c89255a52b79f))
+
 <a name="0.7.0"></a>
 ## [0.7.0](https://www.github.com/Kantaiko/Controllers/releases/tag/v0.7.0) (2022-1-8)
 
