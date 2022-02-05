@@ -17,6 +17,6 @@ public class ParameterAttribute : Attribute, IParameterCustomizationProvider
 
     public (string Name, bool IsOptional) GetParameterCustomization(ParameterFactoryContext context)
     {
-        return (Name ?? context.Parameter.Name, IsOptional);
+        return (Name ?? context.Parameter.Name, context.Parameter.IsOptional || IsOptional);
     }
 }
