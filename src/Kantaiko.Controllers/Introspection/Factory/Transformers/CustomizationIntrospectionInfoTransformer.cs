@@ -18,6 +18,12 @@ public class CustomizationIntrospectionInfoTransformer : IntrospectionInfoTransf
         }
 
         var (name, isOptional) = customizationProvider.GetParameterCustomization(context);
-        return context.Parameter with { Name = name, IsOptional = isOptional };
+
+        return context.Parameter with
+        {
+            Name = name,
+            IsOptional = isOptional,
+            Children = TransformParameters(context.Parameter.Children, context.ServiceProvider)
+        };
     }
 }
