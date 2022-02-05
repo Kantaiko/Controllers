@@ -24,17 +24,17 @@ public abstract class IntrospectionInfoTransformer : IIntrospectionInfoTransform
 
     protected virtual IReadOnlyList<ControllerInfo> TransformControllers(IntrospectionFactoryContext context)
     {
-        var controllers = new ControllerInfo[context.IntrospectionInfo.Controllers.Count];
+        var controllers = context.IntrospectionInfo.Controllers;
+        var result = new ControllerInfo[context.IntrospectionInfo.Controllers.Count];
 
-        for (var index = 0; index < context.IntrospectionInfo.Controllers.Count; index++)
+        for (var index = 0; index < controllers.Count; index++)
         {
-            var controller = context.IntrospectionInfo.Controllers[index];
-            var factoryContext = new ControllerFactoryContext(controller, context.ServiceProvider);
+            var factoryContext = new ControllerFactoryContext(controllers[index], context.ServiceProvider);
 
-            controllers[index] = TransformController(factoryContext);
+            result[index] = TransformController(factoryContext);
         }
 
-        return controllers.ToImmutableArray();
+        return result.ToImmutableArray();
     }
 
     protected virtual ControllerInfo TransformController(ControllerFactoryContext context)
@@ -48,17 +48,17 @@ public abstract class IntrospectionInfoTransformer : IIntrospectionInfoTransform
 
     protected virtual IReadOnlyList<EndpointInfo> TransformEndpoints(ControllerFactoryContext context)
     {
-        var endpoints = new EndpointInfo[context.Controller.Endpoints.Count];
+        var endpoints = context.Controller.Endpoints;
+        var result = new EndpointInfo[endpoints.Count];
 
-        for (var index = 0; index < context.Controller.Endpoints.Count; index++)
+        for (var index = 0; index < endpoints.Count; index++)
         {
-            var endpoint = context.Controller.Endpoints[index];
-            var factoryContext = new EndpointFactoryContext(endpoint, context.ServiceProvider);
+            var factoryContext = new EndpointFactoryContext(endpoints[index], context.ServiceProvider);
 
-            endpoints[index] = TransformEndpoint(factoryContext);
+            result[index] = TransformEndpoint(factoryContext);
         }
 
-        return endpoints.ToImmutableArray();
+        return result.ToImmutableArray();
     }
 
     protected virtual IImmutablePropertyCollection TransformControllerProperties(ControllerFactoryContext context)
@@ -82,20 +82,19 @@ public abstract class IntrospectionInfoTransformer : IIntrospectionInfoTransform
     }
 
     protected virtual IReadOnlyList<EndpointParameterInfo> TransformParameters(
-        IReadOnlyList<EndpointParameterInfo> inputParameters,
+        IReadOnlyList<EndpointParameterInfo> parameters,
         IServiceProvider serviceProvider)
     {
-        var parameters = new EndpointParameterInfo[inputParameters.Count];
+        var result = new EndpointParameterInfo[parameters.Count];
 
-        for (var index = 0; index < inputParameters.Count; index++)
+        for (var index = 0; index < parameters.Count; index++)
         {
-            var parameter = inputParameters[index];
-            var factoryContext = new ParameterFactoryContext(parameter, serviceProvider);
+            var factoryContext = new ParameterFactoryContext(parameters[index], serviceProvider);
 
-            parameters[index] = TransformParameter(factoryContext);
+            result[index] = TransformParameter(factoryContext);
         }
 
-        return parameters.ToImmutableArray();
+        return result.ToImmutableArray();
     }
 
     protected virtual IImmutablePropertyCollection TransformEndpointProperties(EndpointFactoryContext context)
