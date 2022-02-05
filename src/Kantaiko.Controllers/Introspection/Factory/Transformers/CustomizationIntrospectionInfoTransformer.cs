@@ -14,7 +14,10 @@ public class CustomizationIntrospectionInfoTransformer : IntrospectionInfoTransf
 
         if (customizationProvider is null)
         {
-            return context.Parameter;
+            return context.Parameter with
+            {
+                Children = TransformParameters(context.Parameter.Children, context.ServiceProvider)
+            };
         }
 
         var (name, isOptional) = customizationProvider.GetParameterCustomization(context);
