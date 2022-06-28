@@ -95,7 +95,7 @@ internal class CommandAttribute : Attribute, IEndpointPropertyProvider
 
 internal class TestDeconstructionValidator : IDeconstructionValidator
 {
-    public bool CanDeconstruct(Type type)
+    public bool CanDeconstruct(Type type, ICustomAttributeProvider attributeProvider)
     {
         return type == typeof(InstallPackageInput);
     }

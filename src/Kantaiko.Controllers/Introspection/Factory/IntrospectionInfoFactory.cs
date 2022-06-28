@@ -42,7 +42,8 @@ public class IntrospectionInfoFactory
 
             var propertyType = propertyInfo.PropertyType;
 
-            if (!CanDeconstruct(propertyType) || _deconstructionValidator?.CanDeconstruct(propertyType) is not true)
+            if (!CanDeconstruct(propertyType) ||
+                _deconstructionValidator?.CanDeconstruct(propertyType, propertyInfo) is not true)
             {
                 return new EndpointParameterInfo(propertyInfo, name, isOptional, realType);
             }
@@ -74,7 +75,8 @@ public class IntrospectionInfoFactory
 
             var parameterType = parameterInfo.ParameterType;
 
-            if (!CanDeconstruct(parameterType) || _deconstructionValidator?.CanDeconstruct(parameterType) is not true)
+            if (!CanDeconstruct(parameterType) ||
+                _deconstructionValidator?.CanDeconstruct(parameterType, parameterInfo) is not true)
             {
                 return new EndpointParameterInfo(parameterInfo, parameterInfo.Name, isOptional, realType);
             }

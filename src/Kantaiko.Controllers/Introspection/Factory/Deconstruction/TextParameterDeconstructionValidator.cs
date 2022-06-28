@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 using Kantaiko.Controllers.Introspection.Factory.Attributes;
 using Kantaiko.Controllers.ParameterConversion.Text;
 
@@ -14,14 +15,14 @@ public class TextParameterDeconstructionValidator : IDeconstructionValidator
         _converterCollection = converterCollection;
     }
 
-    public bool CanDeconstruct(Type type)
+    public bool CanDeconstruct(Type type, ICustomAttributeProvider attributeProvider)
     {
         if (_converterCollection.HasConverter(type))
         {
             return false;
         }
 
-        var hasConverterFactory = type.GetCustomAttributes(true)
+        var hasConverterFactory = attributeProvider.GetCustomAttributes(true)
             .Any(x => x is ITextParameterConverterFactoryProvider or ITextParameterConverterTypeProvider);
 
         return !hasConverterFactory;

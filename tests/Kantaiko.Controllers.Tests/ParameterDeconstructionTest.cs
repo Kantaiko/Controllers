@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Threading.Tasks;
 using Kantaiko.Controllers.Execution;
 using Kantaiko.Controllers.Introspection.Factory;
@@ -49,7 +50,7 @@ public class ParameterDeconstructionTest
 
     private class TestDeconstructionValidator : IDeconstructionValidator
     {
-        public bool CanDeconstruct(Type type) => true;
+        public bool CanDeconstruct(Type type, ICustomAttributeProvider attributeProvider) => true;
     }
 
     private class NumberGroup
