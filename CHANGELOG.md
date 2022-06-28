@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/saintedlama/versionize) for commit guidelines.
 
+<a name="0.7.3"></a>
+## [0.7.3](https://www.github.com/Kantaiko/Controllers/releases/tag/v0.7.3) (2022-6-28)
+
+### Bug Fixes
+
+* Disable parameter deconstruction with attribute-specified converters ([124b88c](https://www.github.com/Kantaiko/Controllers/commit/124b88c29a0ba17dc4ff73596d5dce35244102da))
+* Fix nullability in ParameterAttribute ([61052f0](https://www.github.com/Kantaiko/Controllers/commit/61052f07b093736fc816d569cc430c5b53250ab2))
+
 <a name="0.7.2"></a>
 ## [0.7.2](https://www.github.com/Kantaiko/Controllers/releases/tag/v0.7.2) (2022-2-5)
 
