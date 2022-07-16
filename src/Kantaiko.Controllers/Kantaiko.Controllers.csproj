@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <Version>0.7.3</Version>
+    <Version>0.8.0</Version>
     <Description>An auxiliary library providing tools for implementing controller pattern</Description>
   </PropertyGroup>
 
