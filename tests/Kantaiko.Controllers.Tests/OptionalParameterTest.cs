@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Kantaiko.Controllers.Execution;
 using Kantaiko.Controllers.Introspection.Factory;
+using Kantaiko.Controllers.ParameterConversion;
 using Kantaiko.Controllers.ParameterConversion.Text;
 using Kantaiko.Controllers.Tests.Shared;
 using Xunit;
@@ -25,15 +26,15 @@ public class OptionalParameterTest
                 introspectionBuilder.AddTextParameterConversion();
                 introspectionBuilder.AddParameterCustomization();
             },
-            pipelineBuilder =>
+            handlers =>
             {
-                pipelineBuilder.AddEndpointMatching();
-                pipelineBuilder.AddTextParameterConversion();
-                pipelineBuilder.AddDefaultControllerHandling();
+                handlers.AddEndpointMatching();
+                handlers.AddParameterConversion(h => h.AddTextParameterConversion());
+                handlers.AddDefaultControllerHandling();
             });
 
         var context = new TestContext(pattern);
-        var result = await controllerHandler.Handle(context);
+        var result = await controllerHandler.HandleAsync(context);
 
         Assert.Equal(expectedResult, result.ReturnValue);
     }

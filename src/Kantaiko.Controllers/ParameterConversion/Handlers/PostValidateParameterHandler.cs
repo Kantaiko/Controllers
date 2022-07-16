@@ -1,27 +1,28 @@
 ﻿using System.Threading.Tasks;
 using Kantaiko.Controllers.ParameterConversion.Validation;
 using Kantaiko.Controllers.Result;
-using Kantaiko.Routing;
-using Kantaiko.Routing.Context;
 
 namespace Kantaiko.Controllers.ParameterConversion.Handlers;
 
-public class PostValidateParameterHandler<TContext> : ParameterConversionHandler<TContext> where TContext : IContext
+public class PostValidateParameterHandler<TContext> : ParameterConversionHandler<TContext>
 {
-    protected override Task<Unit> HandleAsync(ParameterConversionContext<TContext> context)
+    protected override Task HandleAsync(ParameterConversionContext<TContext> context)
     {
-        if (PostValidationParameterProperties.Of(context.Parameter)?.PostValidators is not { } postValidators)
+        if (PostValidationParameterProperties.Of(context.Parameter) is not { PostValidators: { } postValidators })
         {
-            return Unit.Task;
+            return Task.CompletedTask;
         }
 
         if (context.ResolvedValue is null)
         {
-            return Unit.Task;
+            return Task.CompletedTask;
         }
 
-        var validationContext = new ParameterPostValidationContext(context.ResolvedValue,
-            context.Parameter, context.ServiceProvider);
+        var validationContext = new ParameterPostValidationContext(
+            context.ResolvedValue,
+            context.Parameter,
+            context.ServiceProvider
+        );
 
         foreach (var validator in postValidators)
         {
@@ -29,11 +30,12 @@ public class PostValidateParameterHandler<TContext> : ParameterConversionHandler
 
             if (!result.IsValid)
             {
-                context.ExecutionResult = ControllerExecutionResult.Error(result.ErrorMessage);
-                return Unit.Task;
+                context.ExecutionResult = ControllerResult.Error(result.ErrorMessage, context.Parameter);
+
+                return Task.CompletedTask;
             }
         }
 
-        return Unit.Task;
+        return Task.CompletedTask;
     }
 }

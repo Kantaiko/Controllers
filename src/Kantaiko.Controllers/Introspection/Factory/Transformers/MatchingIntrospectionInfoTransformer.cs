@@ -4,11 +4,10 @@ using Kantaiko.Controllers.Introspection.Factory.Attributes;
 using Kantaiko.Controllers.Introspection.Factory.Context;
 using Kantaiko.Controllers.Matching;
 using Kantaiko.Properties.Immutable;
-using Kantaiko.Routing.Context;
 
 namespace Kantaiko.Controllers.Introspection.Factory.Transformers;
 
-public class MatchingIntrospectionInfoTransformer<TContext> : IntrospectionInfoTransformer where TContext : IContext
+public class MatchingIntrospectionInfoTransformer<TContext> : IntrospectionInfoTransformer
 {
     protected override IImmutablePropertyCollection TransformEndpointProperties(EndpointFactoryContext context)
     {

@@ -3,12 +3,10 @@ using Kantaiko.Controllers.Exceptions;
 using Kantaiko.Controllers.ParameterConversion.Handlers;
 using Kantaiko.Controllers.Result;
 using Kantaiko.Routing;
-using Kantaiko.Routing.Context;
 
 namespace Kantaiko.Controllers.ParameterConversion.Text.Handlers;
 
 public class ValidateTextParameterValueHandler<TContext> : ParameterConversionHandler<TContext>
-    where TContext : IContext
 {
     protected override Task<Unit> HandleAsync(ParameterConversionContext<TContext> context)
     {
@@ -26,7 +24,7 @@ public class ValidateTextParameterValueHandler<TContext> : ParameterConversionHa
 
         if (!validationResult.IsValid)
         {
-            context.ExecutionResult = ControllerExecutionResult.Error(validationResult.ErrorMessage);
+            context.ExecutionResult = ControllerResult.Error(validationResult.ErrorMessage);
         }
 
         return Unit.Task;

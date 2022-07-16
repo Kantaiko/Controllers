@@ -5,14 +5,12 @@ using System.Threading.Tasks;
 using Kantaiko.Controllers.Exceptions;
 using Kantaiko.Controllers.Introspection;
 using Kantaiko.Controllers.Result;
-using Kantaiko.Routing.Context;
 
 namespace Kantaiko.Controllers.Execution.Handlers;
 
-public class ConstructParametersHandler<TContext> : ControllerExecutionHandler<TContext> where TContext : IContext
+public class ConstructParametersHandler<TContext> : ControllerExecutionHandler<TContext>
 {
-    protected override Task<ControllerExecutionResult> HandleAsync(ControllerExecutionContext<TContext> context,
-        NextAction next)
+    protected override Task<ControllerResult> HandleAsync(ControllerContext<TContext> context, NextAction next)
     {
         PropertyNullException.ThrowIfNull(context.Endpoint);
         PropertyNullException.ThrowIfNull(context.ResolvedParameters);
@@ -33,6 +31,7 @@ public class ConstructParametersHandler<TContext> : ControllerExecutionHandler<T
         }
 
         context.ConstructedParameters = constructedParameters;
+
         return next();
     }
 
@@ -49,6 +48,7 @@ public class ConstructParametersHandler<TContext> : ControllerExecutionHandler<T
         foreach (var child in parameter.Children)
         {
             var property = (PropertyInfo) child.AttributeProvider;
+
             property.SetValue(instance, ConstructParameter(child, resolvedParameters));
         }
 

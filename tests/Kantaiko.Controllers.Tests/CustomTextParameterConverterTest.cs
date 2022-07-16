@@ -10,7 +10,6 @@ using Kantaiko.Controllers.ParameterConversion.Text;
 using Kantaiko.Controllers.ParameterConversion.Validation;
 using Kantaiko.Controllers.Result;
 using Kantaiko.Controllers.Tests.Shared;
-using Kantaiko.Routing;
 using Xunit;
 
 namespace Kantaiko.Controllers.Tests;
@@ -31,7 +30,7 @@ public class CustomTextParameterConverterTest
         var controllerHandler = CreateControllerHandler();
 
         var context = new TestContext("parse test@2.0.0");
-        var result = await controllerHandler.Handle(context);
+        var result = await controllerHandler.HandleAsync(context);
 
         Assert.Equal(TestPackageReference, result.ReturnValue);
     }
@@ -42,7 +41,7 @@ public class CustomTextParameterConverterTest
         var controllerHandler = CreateControllerHandler();
 
         var context = new TestContext("parse test");
-        var result = await controllerHandler.Handle(context);
+        var result = await controllerHandler.HandleAsync(context);
 
         Assert.True(result.IsExited);
 
@@ -56,7 +55,7 @@ public class CustomTextParameterConverterTest
         var controllerHandler = CreateControllerHandler();
 
         var context = new TestContext("find test@2.0.0");
-        var result = await controllerHandler.Handle(context);
+        var result = await controllerHandler.HandleAsync(context);
 
         Assert.True(result.HasReturnValue);
         Assert.Equal(TestPackageInfo, result.ReturnValue);
@@ -68,7 +67,7 @@ public class CustomTextParameterConverterTest
         var controllerHandler = CreateControllerHandler();
 
         var context = new TestContext("find test");
-        var result = await controllerHandler.Handle(context);
+        var result = await controllerHandler.HandleAsync(context);
 
         Assert.True(result.IsExited);
 
@@ -82,7 +81,7 @@ public class CustomTextParameterConverterTest
         var controllerHandler = CreateControllerHandler();
 
         var context = new TestContext("find test@1.0.0");
-        var result = await controllerHandler.Handle(context);
+        var result = await controllerHandler.HandleAsync(context);
 
         Assert.True(result.IsExited);
 
@@ -166,7 +165,7 @@ public class CustomTextParameterConverterTest
         }
     }
 
-    private static IHandler<TestContext, Task<ControllerExecutionResult>> CreateControllerHandler()
+    private static IControllerHandler<TestContext> CreateControllerHandler()
     {
         return TestUtils.CreateControllerHandler<CustomTextParameterConverterTest>(
             (introspectionBuilder, lookupTypes) =>
@@ -176,11 +175,11 @@ public class CustomTextParameterConverterTest
                 introspectionBuilder.AddEndpointMatching();
                 introspectionBuilder.AddTextParameterConversion(converterCollection);
             },
-            pipelineBuilder =>
+            handlers =>
             {
-                pipelineBuilder.AddEndpointMatching();
-                pipelineBuilder.AddTextParameterConversion();
-                pipelineBuilder.AddDefaultControllerHandling();
+                handlers.AddEndpointMatching();
+                handlers.AddParameterConversion(h => h.AddTextParameterConversion());
+                handlers.AddDefaultControllerHandling();
             }
         );
     }

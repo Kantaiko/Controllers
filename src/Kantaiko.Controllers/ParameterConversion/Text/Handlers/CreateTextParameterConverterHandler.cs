@@ -6,12 +6,10 @@ using Kantaiko.Controllers.ParameterConversion.Text.Properties;
 using Kantaiko.Properties;
 using Kantaiko.Routing;
 using Kantaiko.Routing.Abstractions;
-using Kantaiko.Routing.Context;
 
 namespace Kantaiko.Controllers.ParameterConversion.Text.Handlers;
 
 public class CreateTextParameterConverterHandler<TContext> : ParameterConversionHandler<TContext>
-    where TContext : IContext
 {
     private readonly IHandlerFactory _handlerFactory;
 
@@ -32,7 +30,7 @@ public class CreateTextParameterConverterHandler<TContext> : ParameterConversion
             throw new InvalidOperationException("Text parameter converter requires ConverterFactory or ConverterType");
         }
 
-        if (context.ExecutionContext.ParameterConversionProperties is not { } parameterConversionProperties)
+        if (context.Context.ParameterConversionProperties is not { } parameterConversionProperties)
         {
             throw new InvalidOperationException("Text parameter converter requires ParameterConversionProperties");
         }

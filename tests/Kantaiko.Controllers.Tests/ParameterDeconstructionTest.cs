@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Kantaiko.Controllers.Execution;
 using Kantaiko.Controllers.Introspection.Factory;
 using Kantaiko.Controllers.Introspection.Factory.Deconstruction;
+using Kantaiko.Controllers.ParameterConversion;
 using Kantaiko.Controllers.ParameterConversion.Text;
 using Kantaiko.Controllers.Tests.Shared;
 using Xunit;
@@ -24,16 +25,16 @@ public class ParameterDeconstructionTest
                 introspectionBuilder.AddEndpointMatching();
                 introspectionBuilder.AddTextParameterConversion();
             },
-            pipelineBuilder =>
+            handlers =>
             {
-                pipelineBuilder.AddEndpointMatching();
-                pipelineBuilder.AddTextParameterConversion();
-                pipelineBuilder.AddDefaultControllerHandling();
+                handlers.AddEndpointMatching();
+                handlers.AddParameterConversion(h => h.AddTextParameterConversion());
+                handlers.AddDefaultControllerHandling();
             }
         );
 
         var context = new TestContext(input);
-        var result = await controllerHandler.Handle(context);
+        var result = await controllerHandler.HandleAsync(context);
 
         Assert.True(result.HasReturnValue);
         Assert.Equal(42, result.ReturnValue);

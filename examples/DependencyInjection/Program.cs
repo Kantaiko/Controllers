@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Reflection;
 using System.Threading;
-using System.Threading.Tasks;
 using Kantaiko.Controllers;
 using Kantaiko.Controllers.Execution;
 using Kantaiko.Controllers.Introspection.Factory;
+using Kantaiko.Controllers.ParameterConversion;
 using Kantaiko.Controllers.ParameterConversion.Text;
-using Kantaiko.Controllers.Result;
-using Kantaiko.Properties;
-using Kantaiko.Routing;
 using Kantaiko.Routing.Abstractions;
 using Kantaiko.Routing.Context;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,14 +27,12 @@ serviceCollection.AddSingleton(provider =>
 
     var introspectionInfo = introspectionBuilder.CreateIntrospectionInfo(lookupTypes);
 
-    var pipelineBuilder = new PipelineBuilder<TestContext>();
+    var handlers = new HandlerCollection<TestContext>();
     var handlerFactory = new ServiceHandlerFactory();
 
-    pipelineBuilder.AddEndpointMatching();
-    pipelineBuilder.AddTextParameterConversion(handlerFactory);
-    pipelineBuilder.AddDefaultControllerHandling(handlerFactory);
-
-    var handlers = pipelineBuilder.Build();
+    handlers.AddEndpointMatching();
+    handlers.AddParameterConversion(h => h.AddTextParameterConversion(handlerFactory));
+    handlers.AddDefaultControllerHandling(handlerFactory);
 
     return ControllerHandlerFactory.CreateControllerHandler(introspectionInfo, handlers);
 });
@@ -46,21 +41,20 @@ serviceCollection.AddSingleton(provider =>
 var serviceProvider = serviceCollection.BuildServiceProvider();
 
 // Resolve controller handler
-var handler = serviceProvider.GetRequiredService<IHandler<TestContext, Task<ControllerExecutionResult>>>();
+var handler = serviceProvider.GetRequiredService<IControllerHandler<TestContext>>();
 
 // Handle request
 using var scope = serviceProvider.CreateScope();
 var context = new TestContext("Hello, world!", serviceProvider);
 
-var result = await handler.Handle(context);
+var result = await handler.HandleAsync(context);
 
-internal class TestContext : ContextBase
+internal class TestContext : AsyncContextBase
 {
     public TestContext(string text,
         IServiceProvider? serviceProvider = null,
-        IReadOnlyPropertyCollection? properties = null,
-        CancellationToken cancellationToken = default) :
-        base(serviceProvider, properties, cancellationToken)
+        CancellationToken cancellationToken = default
+    ) : base(serviceProvider, cancellationToken)
     {
         Text = text;
     }

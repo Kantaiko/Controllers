@@ -19,7 +19,7 @@ public class DefaultValueIntrospectionInfoTransformer : IntrospectionInfoTransfo
             return context.Parameter.Properties;
         }
 
-        return context.Parameter.Properties.Set(new DefaultValueResolutionParameterProperties
+        return context.Parameter.Properties.Set(new DefaultValueResolutionProperties
         {
             DefaultValueResolver = factory.CreateParameterDefaultValueResolve(context)
         });

@@ -4,6 +4,7 @@ using Kantaiko.Controllers.Execution;
 using Kantaiko.Controllers.Introspection.Factory;
 using Kantaiko.Controllers.Introspection.Factory.Attributes;
 using Kantaiko.Controllers.Introspection.Factory.Context;
+using Kantaiko.Controllers.ParameterConversion;
 using Kantaiko.Controllers.ParameterConversion.DefaultValue;
 using Kantaiko.Controllers.ParameterConversion.Text;
 using Kantaiko.Controllers.Tests.Shared;
@@ -25,16 +26,16 @@ public class DefaultValueResolutionTest
                 introspectionInfo.AddTextParameterConversion();
                 introspectionInfo.AddParameterDefaultValueResolution();
             },
-            pipelineBuilder =>
+            handlers =>
             {
-                pipelineBuilder.AddEndpointMatching();
-                pipelineBuilder.AddTextParameterConversion();
-                pipelineBuilder.AddDefaultControllerHandling();
+                handlers.AddEndpointMatching();
+                handlers.AddParameterConversion(h => h.AddTextParameterConversion());
+                handlers.AddDefaultControllerHandling();
             }
         );
 
         var context = new TestContext(request);
-        var result = await controllerHandler.Handle(context);
+        var result = await controllerHandler.HandleAsync(context);
 
         Assert.True(result.HasReturnValue);
         Assert.Equal(response, result.ReturnValue);

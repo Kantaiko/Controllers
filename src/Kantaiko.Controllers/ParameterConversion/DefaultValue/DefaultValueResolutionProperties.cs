@@ -2,8 +2,7 @@
 
 namespace Kantaiko.Controllers.ParameterConversion.DefaultValue;
 
-public record DefaultValueResolutionParameterProperties :
-    ReadOnlyPropertiesBase<DefaultValueResolutionParameterProperties>
+public record DefaultValueResolutionProperties : ReadOnlyPropertiesBase<DefaultValueResolutionProperties>
 {
     public IParameterDefaultValueResolver? DefaultValueResolver { get; init; }
 }

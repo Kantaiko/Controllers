@@ -1,5 +1,3 @@
-﻿using Kantaiko.Routing.Context;
+﻿namespace Kantaiko.Controllers;
 
-namespace Kantaiko.Controllers;
-
-public interface IAutoRegistrableController<TContext> where TContext : IContext { }
+public interface IAutoRegistrableController<TContext> { }

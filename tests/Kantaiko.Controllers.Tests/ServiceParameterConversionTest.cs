@@ -3,10 +3,9 @@ using System.Threading.Tasks;
 using Kantaiko.Controllers.Exceptions;
 using Kantaiko.Controllers.Execution;
 using Kantaiko.Controllers.Introspection.Factory;
+using Kantaiko.Controllers.ParameterConversion;
 using Kantaiko.Controllers.ParameterConversion.Handlers;
-using Kantaiko.Controllers.Result;
 using Kantaiko.Controllers.Tests.Shared;
-using Kantaiko.Routing;
 using Xunit;
 
 namespace Kantaiko.Controllers.Tests;
@@ -19,8 +18,8 @@ public class ServiceParameterConversionTest
         var controllerHandler = CreateControllerHandler();
         var serviceProvider = new TestServiceProvider();
 
-        var context = new TestContext("service 1", serviceProvider);
-        var result = await controllerHandler.Handle(context);
+        var context = new TestContext("service 1");
+        var result = await controllerHandler.HandleAsync(context, serviceProvider);
 
         Assert.Equal(42, result.ReturnValue);
     }
@@ -33,8 +32,8 @@ public class ServiceParameterConversionTest
 
         async Task Action()
         {
-            var context = new TestContext("service 2", serviceProvider);
-            await controllerHandler.Handle(context);
+            var context = new TestContext("service 2");
+            await controllerHandler.HandleAsync(context, serviceProvider);
         }
 
         await Assert.ThrowsAsync<ServiceNotFoundException>(Action);
@@ -46,8 +45,8 @@ public class ServiceParameterConversionTest
         var controllerHandler = CreateControllerHandler();
         var serviceProvider = new TestServiceProvider();
 
-        var context = new TestContext("service 3", serviceProvider);
-        var result = await controllerHandler.Handle(context);
+        var context = new TestContext("service 3");
+        var result = await controllerHandler.HandleAsync(context, serviceProvider);
 
         Assert.True(result.IsMatched);
     }
@@ -64,7 +63,7 @@ public class ServiceParameterConversionTest
         public void ResolveService3([FromServices] string? a = null) { }
     }
 
-    private static IHandler<TestContext, Task<ControllerExecutionResult>> CreateControllerHandler()
+    private static IControllerHandler<TestContext> CreateControllerHandler()
     {
         return TestUtils.CreateControllerHandler<ServiceParameterConversionTest>(
             introspectionBuilder =>
@@ -72,11 +71,11 @@ public class ServiceParameterConversionTest
                 introspectionBuilder.AddEndpointMatching();
                 introspectionBuilder.AddPropertyProviderAttributes();
             },
-            pipelineBuilder =>
+            handlers =>
             {
-                pipelineBuilder.AddEndpointMatching();
-                pipelineBuilder.AddParameterConversion(new[] { new ResolveServiceParameterHandler<TestContext>() });
-                pipelineBuilder.AddDefaultControllerHandling();
+                handlers.AddEndpointMatching();
+                handlers.AddParameterConversion(new[] { new ResolveServiceParameterHandler<TestContext>() });
+                handlers.AddDefaultControllerHandling();
             }
         );
     }

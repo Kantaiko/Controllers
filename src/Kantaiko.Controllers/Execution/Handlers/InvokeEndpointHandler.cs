@@ -2,14 +2,12 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Kantaiko.Controllers.Exceptions;
 using Kantaiko.Controllers.Result;
-using Kantaiko.Routing.Context;
 
 namespace Kantaiko.Controllers.Execution.Handlers;
 
-public class InvokeEndpointHandler<TContext> : ControllerExecutionHandler<TContext> where TContext : IContext
+public class InvokeEndpointHandler<TContext> : ControllerExecutionHandler<TContext>
 {
-    protected override async Task<ControllerExecutionResult> HandleAsync(ControllerExecutionContext<TContext> context,
-        NextAction next)
+    protected override async Task<ControllerResult> HandleAsync(ControllerContext<TContext> context, NextAction next)
     {
         PropertyNullException.ThrowIfNull(context.Endpoint);
         PropertyNullException.ThrowIfNull(context.ControllerInstance);
@@ -21,7 +19,7 @@ public class InvokeEndpointHandler<TContext> : ControllerExecutionHandler<TConte
         }
         catch (TargetInvocationException exception)
         {
-            return ControllerExecutionResult.Exception(exception.InnerException!);
+            return ControllerResult.Exception(exception.InnerException!);
         }
 
         return await next();

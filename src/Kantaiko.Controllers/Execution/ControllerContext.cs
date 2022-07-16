@@ -4,16 +4,22 @@ using System.Threading;
 using Kantaiko.Controllers.Introspection;
 using Kantaiko.Properties;
 using Kantaiko.Properties.Immutable;
-using Kantaiko.Routing.Context;
 
 namespace Kantaiko.Controllers.Execution;
 
-public class ControllerExecutionContext<TContext> : IPropertyContainer where TContext : IContext
+public class ControllerContext<TContext> : IPropertyContainer
 {
-    public ControllerExecutionContext(TContext requestContext, IntrospectionInfo introspectionInfo)
+    public ControllerContext(
+        TContext requestContext,
+        IntrospectionInfo introspectionInfo,
+        IServiceProvider serviceProvider,
+        CancellationToken cancellationToken)
     {
         RequestContext = requestContext;
         IntrospectionInfo = introspectionInfo;
+
+        ServiceProvider = serviceProvider;
+        CancellationToken = cancellationToken;
     }
 
     public TContext RequestContext { get; }
@@ -33,6 +39,6 @@ public class ControllerExecutionContext<TContext> : IPropertyContainer where TCo
     public object? RawResult { get; set; }
     public object? Result { get; set; }
 
-    public IServiceProvider ServiceProvider => RequestContext.ServiceProvider;
-    public CancellationToken CancellationToken => RequestContext.CancellationToken;
+    public IServiceProvider ServiceProvider { get; }
+    public CancellationToken CancellationToken { get; }
 }

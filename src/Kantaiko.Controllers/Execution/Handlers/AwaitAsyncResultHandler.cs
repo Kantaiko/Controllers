@@ -1,14 +1,16 @@
 using System;
+using System.Collections.Concurrent;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Kantaiko.Controllers.Result;
-using Kantaiko.Routing.Context;
 
 namespace Kantaiko.Controllers.Execution.Handlers;
 
-public class AwaitAsyncResultHandler<TContext> : ControllerExecutionHandler<TContext> where TContext : IContext
+public class AwaitAsyncResultHandler<TContext> : ControllerExecutionHandler<TContext>
 {
-    protected override async Task<ControllerExecutionResult> HandleAsync(ControllerExecutionContext<TContext> context,
-        NextAction next)
+    private readonly ConcurrentDictionary<Type, Func<object, object>> _resultAccessorCache = new();
+
+    protected override async Task<ControllerResult> HandleAsync(ControllerContext<TContext> context, NextAction next)
     {
         if (context.RawResult is Task task)
         {
@@ -18,11 +20,12 @@ public class AwaitAsyncResultHandler<TContext> : ControllerExecutionHandler<TCon
             }
             catch (Exception exception)
             {
-                return ControllerExecutionResult.Exception(exception);
+                return ControllerResult.Exception(exception);
             }
 
-            var resultProperty = task.GetType().GetProperty("Result");
-            context.Result = resultProperty!.GetValue(task);
+            var resultAccessor = _resultAccessorCache.GetOrAdd(task.GetType(), CreateResultAccessor);
+
+            context.Result = resultAccessor(task);
         }
         else
         {
@@ -30,5 +33,13 @@ public class AwaitAsyncResultHandler<TContext> : ControllerExecutionHandler<TCon
         }
 
         return await next();
+    }
+
+    private static Func<object, object> CreateResultAccessor(Type type)
+    {
+        var taskLike = Expression.Parameter(type);
+        var expression = Expression.Property(taskLike, "Result");
+
+        return Expression.Lambda<Func<object, object>>(expression, taskLike).Compile();
     }
 }

@@ -9,7 +9,6 @@ using Kantaiko.Controllers.Introspection.Factory.Deconstruction;
 using Kantaiko.Controllers.Introspection.Factory.Transformers;
 using Kantaiko.Controllers.Utils;
 using Kantaiko.Routing;
-using Kantaiko.Routing.Context;
 
 namespace Kantaiko.Controllers.Introspection.Factory;
 
@@ -147,12 +146,14 @@ public class IntrospectionInfoFactory
     private static (Type, bool) ExtractValueTypeInfo(Type type)
     {
         var parameterType = Nullable.GetUnderlyingType(type);
+
         return parameterType is null ? (type, false) : (parameterType, true);
     }
 
     private EndpointInfo CreateEndpointInfo(MethodInfo methodInfo)
     {
         var parameterTree = GetParameterTree(methodInfo);
+
         return new EndpointInfo(methodInfo, parameterTree);
     }
 
@@ -169,11 +170,11 @@ public class IntrospectionInfoFactory
         return new ControllerInfo(type, endpoints);
     }
 
-    public IntrospectionInfo CreateIntrospectionInfo<TContext>(IEnumerable<Type> lookupTypes) where TContext : IContext
+    public IntrospectionInfo CreateIntrospectionInfo<TContext>(IEnumerable<Type> lookupTypes)
     {
         ArgumentNullException.ThrowIfNull(lookupTypes);
 
-        var controllers = lookupTypes.Distinct()
+        var controllers = lookupTypes
             .Where(x => x.IsClass && !x.IsGenericType && !x.IsAbstract)
             .Where(x => x.IsAssignableTo(typeof(IAutoRegistrableController<TContext>)))
             .Select(CreateControllerInfo)

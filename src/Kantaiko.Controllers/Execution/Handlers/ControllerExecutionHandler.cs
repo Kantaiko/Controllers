@@ -1,23 +1,18 @@
 using System;
 using System.Threading.Tasks;
 using Kantaiko.Controllers.Result;
-using Kantaiko.Routing;
-using Kantaiko.Routing.Context;
 
 namespace Kantaiko.Controllers.Execution.Handlers;
 
-public abstract class ControllerExecutionHandler<TContext> :
-    IChainedHandler<ControllerExecutionContext<TContext>, Task<ControllerExecutionResult>>
-    where TContext : IContext
+public abstract class ControllerExecutionHandler<TContext> : IControllerExecutionHandler<TContext>
 {
-    protected abstract Task<ControllerExecutionResult> HandleAsync(ControllerExecutionContext<TContext> context,
-        NextAction next);
+    protected abstract Task<ControllerResult> HandleAsync(ControllerContext<TContext> context, NextAction next);
 
-    protected delegate Task<ControllerExecutionResult> NextAction(ControllerExecutionContext<TContext>? context = null);
+    protected delegate Task<ControllerResult> NextAction();
 
-    public Task<ControllerExecutionResult> Handle(ControllerExecutionContext<TContext> input,
-        Func<ControllerExecutionContext<TContext>, Task<ControllerExecutionResult>> next)
+    public Task<ControllerResult> Handle(ControllerContext<TContext> input,
+        Func<ControllerContext<TContext>, Task<ControllerResult>> next)
     {
-        return HandleAsync(input, context => next(context ?? input));
+        return HandleAsync(input, () => next(input));
     }
 }

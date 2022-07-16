@@ -2,14 +2,12 @@ using System.Threading.Tasks;
 using Kantaiko.Controllers.Exceptions;
 using Kantaiko.Controllers.Matching;
 using Kantaiko.Controllers.Result;
-using Kantaiko.Routing.Context;
 
 namespace Kantaiko.Controllers.Execution.Handlers;
 
-public class MathEndpointHandler<TContext> : ControllerExecutionHandler<TContext> where TContext : IContext
+public class MatchEndpointHandler<TContext> : ControllerExecutionHandler<TContext>
 {
-    protected override async Task<ControllerExecutionResult> HandleAsync(ControllerExecutionContext<TContext> context,
-        NextAction next)
+    protected override async Task<ControllerResult> HandleAsync(ControllerContext<TContext> context, NextAction next)
     {
         PropertyNullException.ThrowIfNull(context.IntrospectionInfo);
 
@@ -17,11 +15,16 @@ public class MathEndpointHandler<TContext> : ControllerExecutionHandler<TContext
         {
             foreach (var endpoint in controller.Endpoints)
             {
-                var matchers = MatchingEndpointProperties<TContext>.Of(endpoint)?.EndpointMatchers;
-                if (matchers is null) continue;
+                if (MatchingEndpointProperties<TContext>.Of(endpoint) is not { EndpointMatchers: { } matchers })
+                {
+                    continue;
+                }
 
-                var matchContext = new EndpointMatchContext<TContext>(context.RequestContext,
-                    endpoint, context.ServiceProvider);
+                var matchContext = new EndpointMatchContext<TContext>(
+                    context.RequestContext,
+                    endpoint,
+                    context.ServiceProvider
+                );
 
                 foreach (var matcher in matchers)
                 {
@@ -31,12 +34,13 @@ public class MathEndpointHandler<TContext> : ControllerExecutionHandler<TContext
                     {
                         context.Endpoint = endpoint;
                         context.ParameterConversionProperties = matchResult.Properties;
+
                         return await next();
                     }
                 }
             }
         }
 
-        return ControllerExecutionResult.NotMatched;
+        return ControllerResult.NotMatched;
     }
 }

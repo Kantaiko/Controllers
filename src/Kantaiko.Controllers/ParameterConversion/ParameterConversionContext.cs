@@ -4,21 +4,22 @@ using Kantaiko.Controllers.Execution;
 using Kantaiko.Controllers.Introspection;
 using Kantaiko.Controllers.Result;
 using Kantaiko.Properties;
-using Kantaiko.Routing.Context;
 
 namespace Kantaiko.Controllers.ParameterConversion;
 
-public class ParameterConversionContext<TContext> : IPropertyContainer where TContext : IContext
+public class ParameterConversionContext<TContext> : IPropertyContainer
 {
-    public ParameterConversionContext(ControllerExecutionContext<TContext> executionContext,
-        EndpointParameterInfo parameter)
+    public ParameterConversionContext(
+        ControllerContext<TContext> context,
+        EndpointParameterInfo parameter
+    )
     {
-        ExecutionContext = executionContext;
+        Context = context;
         Parameter = parameter;
     }
 
-    public ControllerExecutionContext<TContext> ExecutionContext { get; }
-    public TContext RequestContext => ExecutionContext.RequestContext;
+    public ControllerContext<TContext> Context { get; }
+    public TContext RequestContext => Context.RequestContext;
     public EndpointParameterInfo Parameter { get; }
 
     private IPropertyCollection? _properties;
@@ -28,8 +29,8 @@ public class ParameterConversionContext<TContext> : IPropertyContainer where TCo
     public bool ValueResolved { get; set; }
     public object? ResolvedValue { get; set; }
 
-    public ControllerExecutionResult? ExecutionResult { get; set; }
+    public ControllerResult? ExecutionResult { get; set; }
 
-    public IServiceProvider ServiceProvider => RequestContext.ServiceProvider;
-    public CancellationToken CancellationToken => RequestContext.CancellationToken;
+    public IServiceProvider ServiceProvider => Context.ServiceProvider;
+    public CancellationToken CancellationToken => Context.CancellationToken;
 }

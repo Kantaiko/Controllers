@@ -1,18 +1,16 @@
 ﻿using System.Threading.Tasks;
 using Kantaiko.Controllers.Exceptions;
 using Kantaiko.Controllers.ParameterConversion.Properties;
-using Kantaiko.Routing;
-using Kantaiko.Routing.Context;
 
 namespace Kantaiko.Controllers.ParameterConversion.Handlers;
 
-public class ResolveServiceParameterHandler<TContext> : ParameterConversionHandler<TContext> where TContext : IContext
+public class ResolveServiceParameterHandler<TContext> : ParameterConversionHandler<TContext>
 {
-    protected override Task<Unit> HandleAsync(ParameterConversionContext<TContext> context)
+    protected override Task HandleAsync(ParameterConversionContext<TContext> context)
     {
         if (ParameterServiceProperties.Of(context.Parameter)?.ServiceType is not { } serviceType)
         {
-            return Unit.Task;
+            return Task.CompletedTask;
         }
 
         var value = context.ServiceProvider.GetService(serviceType);
@@ -25,6 +23,6 @@ public class ResolveServiceParameterHandler<TContext> : ParameterConversionHandl
         context.ValueResolved = true;
         context.ResolvedValue = value;
 
-        return Unit.Task;
+        return Task.CompletedTask;
     }
 }

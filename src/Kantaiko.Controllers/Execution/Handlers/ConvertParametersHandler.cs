@@ -4,25 +4,21 @@ using System.Threading.Tasks;
 using Kantaiko.Controllers.Exceptions;
 using Kantaiko.Controllers.Introspection;
 using Kantaiko.Controllers.ParameterConversion;
+using Kantaiko.Controllers.ParameterConversion.Handlers;
 using Kantaiko.Controllers.Result;
-using Kantaiko.Routing;
-using Kantaiko.Routing.Context;
 
 namespace Kantaiko.Controllers.Execution.Handlers;
 
 public class ConvertParametersHandler<TContext> : ControllerExecutionHandler<TContext>
-    where TContext : IContext
 {
-    private readonly IEnumerable<IHandler<ParameterConversionContext<TContext>, Task<Unit>>> _handlers;
+    private readonly IEnumerable<IParameterConversionHandler<TContext>> _handlers;
 
-    public ConvertParametersHandler(
-        IEnumerable<IHandler<ParameterConversionContext<TContext>, Task<Unit>>> handlers)
+    public ConvertParametersHandler(IEnumerable<IParameterConversionHandler<TContext>> handlers)
     {
         _handlers = handlers;
     }
 
-    protected override async Task<ControllerExecutionResult> HandleAsync(ControllerExecutionContext<TContext> context,
-        NextAction next)
+    protected override async Task<ControllerResult> HandleAsync(ControllerContext<TContext> context, NextAction next)
     {
         PropertyNullException.ThrowIfNull(context.Endpoint);
 

@@ -2,11 +2,11 @@
 using System.Threading.Tasks;
 using Kantaiko.Controllers.Execution;
 using Kantaiko.Controllers.Introspection.Factory;
+using Kantaiko.Controllers.ParameterConversion;
 using Kantaiko.Controllers.ParameterConversion.Text;
 using Kantaiko.Controllers.Resources;
 using Kantaiko.Controllers.Result;
 using Kantaiko.Controllers.Tests.Shared;
-using Kantaiko.Routing;
 using Xunit;
 
 namespace Kantaiko.Controllers.Tests;
@@ -19,7 +19,7 @@ public class TextParameterConversionTest
         var controllerHandler = CreateControllerHandler();
 
         var context = new TestContext("test 40");
-        var result = await controllerHandler.Handle(context);
+        var result = await controllerHandler.HandleAsync(context);
 
         Assert.True(result.IsExited);
         var errorExitReason = Assert.IsType<ErrorExitReason>(result.ExitReason);
@@ -33,7 +33,7 @@ public class TextParameterConversionTest
         public void Test(int a, int b) => throw new InvalidOperationException();
     }
 
-    private static IHandler<TestContext, Task<ControllerExecutionResult>> CreateControllerHandler()
+    private static IControllerHandler<TestContext> CreateControllerHandler()
     {
         return TestUtils.CreateControllerHandler<TextParameterConversionTest>(
             introspectionBuilder =>
@@ -41,11 +41,11 @@ public class TextParameterConversionTest
                 introspectionBuilder.AddEndpointMatching();
                 introspectionBuilder.AddTextParameterConversion();
             },
-            pipelineBuilder =>
+            handlers =>
             {
-                pipelineBuilder.AddEndpointMatching();
-                pipelineBuilder.AddTextParameterConversion();
-                pipelineBuilder.AddDefaultControllerHandling();
+                handlers.AddEndpointMatching();
+                handlers.AddParameterConversion(h => h.AddTextParameterConversion());
+                handlers.AddDefaultControllerHandling();
             }
         );
     }

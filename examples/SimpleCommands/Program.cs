@@ -9,9 +9,9 @@ using Kantaiko.Controllers.Introspection.Factory.Attributes;
 using Kantaiko.Controllers.Introspection.Factory.Context;
 using Kantaiko.Controllers.Matching;
 using Kantaiko.Controllers.Matching.Text;
+using Kantaiko.Controllers.ParameterConversion;
 using Kantaiko.Controllers.ParameterConversion.Text;
 using Kantaiko.Controllers.Result;
-using Kantaiko.Properties;
 using Kantaiko.Routing.Context;
 
 // ReSharper disable LocalizableElement
@@ -30,20 +30,18 @@ introspectionBuilder.AddDefaultTransformation();
 var introspectionInfo = introspectionBuilder.CreateIntrospectionInfo(lookupTypes);
 
 // 2. Create controller execution pipeline
-var pipelineBuilder = new PipelineBuilder<TestContext>();
+var handlers = new HandlerCollection<TestContext>();
 
-pipelineBuilder.AddEndpointMatching();
-pipelineBuilder.AddTextParameterConversion();
-pipelineBuilder.AddDefaultControllerHandling();
-
-var handlers = pipelineBuilder.Build();
+handlers.AddEndpointMatching();
+handlers.AddParameterConversion(h => h.AddTextParameterConversion());
+handlers.AddDefaultControllerHandling();
 
 // 3. Assemble controller handler
 var controllerHandler = ControllerHandlerFactory.CreateControllerHandler(introspectionInfo, handlers);
 
 // Invoke request handler
 Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo("en");
-var result = await controllerHandler.Handle(new TestContext("Hello, world!"));
+var result = await controllerHandler.HandleAsync(new TestContext("Hello, world!"));
 
 // Handle result
 if (result.IsMatched)
@@ -78,11 +76,12 @@ internal class HelloController : TestController
 
 internal abstract class TestController : ControllerBase<TestContext> { }
 
-internal class TestContext : ContextBase
+internal class TestContext : AsyncContextBase
 {
-    public TestContext(string text, IServiceProvider? serviceProvider = null,
-        IReadOnlyPropertyCollection? properties = null, CancellationToken cancellationToken = default) :
-        base(serviceProvider, properties, cancellationToken)
+    public TestContext(string text,
+        IServiceProvider? serviceProvider = null,
+        CancellationToken cancellationToken = default
+    ) : base(serviceProvider, cancellationToken)
     {
         Text = text;
     }

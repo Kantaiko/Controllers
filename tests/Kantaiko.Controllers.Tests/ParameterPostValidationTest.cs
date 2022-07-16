@@ -1,12 +1,12 @@
 ﻿using System.Threading.Tasks;
 using Kantaiko.Controllers.Execution;
 using Kantaiko.Controllers.Introspection.Factory;
+using Kantaiko.Controllers.ParameterConversion;
 using Kantaiko.Controllers.ParameterConversion.Text;
 using Kantaiko.Controllers.ParameterConversion.Validation;
 using Kantaiko.Controllers.Resources;
 using Kantaiko.Controllers.Result;
 using Kantaiko.Controllers.Tests.Shared;
-using Kantaiko.Routing;
 using Xunit;
 
 namespace Kantaiko.Controllers.Tests;
@@ -19,7 +19,7 @@ public class ParameterPostValidationTest
         var controllerHandler = CreateControllerHandler();
 
         var context = new TestContext("sum-validation 40 2");
-        var result = await controllerHandler.Handle(context);
+        var result = await controllerHandler.HandleAsync(context);
 
         Assert.True(result.HasReturnValue);
         Assert.Equal(42, result.ReturnValue);
@@ -31,7 +31,7 @@ public class ParameterPostValidationTest
         var controllerHandler = CreateControllerHandler();
 
         var context = new TestContext("sum-validation 40 3");
-        var result = await controllerHandler.Handle(context);
+        var result = await controllerHandler.HandleAsync(context);
 
         Assert.True(result.IsExited);
 
@@ -45,7 +45,7 @@ public class ParameterPostValidationTest
         public int Sum([MinValue(40)] int a, [MaxValue(2)] int b) => a + b;
     }
 
-    private static IHandler<TestContext, Task<ControllerExecutionResult>> CreateControllerHandler()
+    private static IControllerHandler<TestContext> CreateControllerHandler()
     {
         return TestUtils.CreateControllerHandler<ParameterPostValidationTest>(
             introspectionBuilder =>
@@ -54,11 +54,11 @@ public class ParameterPostValidationTest
                 introspectionBuilder.AddTextParameterConversion();
                 introspectionBuilder.AddParameterPostValidation();
             },
-            pipelineBuilder =>
+            handlers =>
             {
-                pipelineBuilder.AddEndpointMatching();
-                pipelineBuilder.AddTextParameterConversion();
-                pipelineBuilder.AddDefaultControllerHandling();
+                handlers.AddEndpointMatching();
+                handlers.AddParameterConversion(h => h.AddTextParameterConversion());
+                handlers.AddDefaultControllerHandling();
             }
         );
     }

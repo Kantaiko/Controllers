@@ -4,7 +4,6 @@ using Kantaiko.Controllers.Execution;
 using Kantaiko.Controllers.Introspection.Factory;
 using Kantaiko.Controllers.Result;
 using Kantaiko.Controllers.Tests.Shared;
-using Kantaiko.Routing;
 using Xunit;
 
 namespace Kantaiko.Controllers.Tests;
@@ -19,7 +18,7 @@ public class EndpointInvocationTest
         var controllerHandler = CreateControllerHandler();
 
         var context = new TestContext(input);
-        var result = await controllerHandler.Handle(context);
+        var result = await controllerHandler.HandleAsync(context);
 
         var exceptionExitReason = Assert.IsType<ExceptionExitReason>(result.ExitReason);
         var invalidOperationException = Assert.IsType<InvalidOperationException>(exceptionExitReason.Exception);
@@ -42,15 +41,15 @@ public class EndpointInvocationTest
         }
     }
 
-    private static IHandler<TestContext, Task<ControllerExecutionResult>> CreateControllerHandler()
+    private static IControllerHandler<TestContext> CreateControllerHandler()
     {
         return TestUtils.CreateControllerHandler<EndpointInvocationTest>(
             introspectionBuilder => introspectionBuilder.AddEndpointMatching(),
-            pipelineBuilder =>
+            handlers =>
             {
-                pipelineBuilder.AddEndpointMatching();
-                pipelineBuilder.AddControllerInstantiation();
-                pipelineBuilder.AddEndpointInvocation();
+                handlers.AddEndpointMatching();
+                handlers.AddControllerInstantiation();
+                handlers.AddEndpointInvocation();
             }
         );
     }

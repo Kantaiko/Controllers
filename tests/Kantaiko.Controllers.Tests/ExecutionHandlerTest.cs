@@ -10,7 +10,6 @@ using Kantaiko.Controllers.Introspection.Factory.Attributes;
 using Kantaiko.Controllers.Introspection.Factory.Context;
 using Kantaiko.Controllers.Result;
 using Kantaiko.Controllers.Tests.Shared;
-using Kantaiko.Routing;
 using Xunit;
 
 namespace Kantaiko.Controllers.Tests;
@@ -22,17 +21,17 @@ public class ExecutionHandlerTest
     {
         var controllerHandler = TestUtils.CreateControllerHandler<ExecutionHandlerTest>(
             introspectionBuilder => introspectionBuilder.AddEndpointMatching(),
-            pipelineBuilder =>
+            handlers =>
             {
-                pipelineBuilder.AddEndpointMatching();
-                pipelineBuilder.AddHandler(new TestExecutionHandler());
-                pipelineBuilder.AddHandler(new ConstructParametersHandler<TestContext>());
-                pipelineBuilder.AddDefaultControllerHandling();
+                handlers.AddEndpointMatching();
+                handlers.Add(new TestExecutionHandler());
+                handlers.Add(new ConstructParametersHandler<TestContext>());
+                handlers.AddDefaultControllerHandling();
             }
         );
 
         var context = new TestContext("test 1");
-        var result = await controllerHandler.Handle(context);
+        var result = await controllerHandler.HandleAsync(context);
 
         Assert.Equal(42, result.ReturnValue);
     }
@@ -48,16 +47,16 @@ public class ExecutionHandlerTest
                 introspectionBuilder.AddEndpointMatching();
                 introspectionBuilder.AddSubHandlerAttributes();
             },
-            pipelineBuilder =>
+            handlers =>
             {
-                pipelineBuilder.AddEndpointMatching();
-                pipelineBuilder.AddSubHandlerExecution();
-                pipelineBuilder.AddHandler(new ConstructParametersHandler<TestContext>());
-                pipelineBuilder.AddDefaultControllerHandling();
+                handlers.AddEndpointMatching();
+                handlers.AddSubHandlerExecution();
+                handlers.Add(new ConstructParametersHandler<TestContext>());
+                handlers.AddDefaultControllerHandling();
             }
         );
 
-        var result = await controllerHandler.Handle(new TestContext(input));
+        var result = await controllerHandler.HandleAsync(new TestContext(input));
 
         Assert.Equal(42, result.ReturnValue);
     }
@@ -85,14 +84,12 @@ public class ExecutionHandlerTest
     private class SubHandlerAttribute : Attribute, IControllerExecutionHandlerFactory<TestContext>,
         IEndpointExecutionHandlerFactory<TestContext>
     {
-        public IChainedHandler<ControllerExecutionContext<TestContext>, Task<ControllerExecutionResult>> CreateHandler(
-            ControllerFactoryContext context)
+        public IControllerExecutionHandler<TestContext> CreateHandler(ControllerFactoryContext context)
         {
             return new TestExecutionHandler();
         }
 
-        public IChainedHandler<ControllerExecutionContext<TestContext>, Task<ControllerExecutionResult>> CreateHandler(
-            EndpointFactoryContext context)
+        public IControllerExecutionHandler<TestContext> CreateHandler(EndpointFactoryContext context)
         {
             return new TestExecutionHandler();
         }
@@ -100,8 +97,7 @@ public class ExecutionHandlerTest
 
     private class TestExecutionHandler : ControllerExecutionHandler<TestContext>
     {
-        protected override Task<ControllerExecutionResult> HandleAsync(ControllerExecutionContext<TestContext> context,
-            NextAction next)
+        protected override Task<ControllerResult> HandleAsync(ControllerContext<TestContext> context, NextAction next)
         {
             PropertyNullException.ThrowIfNull(context.Endpoint);
 

@@ -1,8 +1,6 @@
-﻿using Kantaiko.Routing.Context;
+﻿namespace Kantaiko.Controllers.Matching;
 
-namespace Kantaiko.Controllers.Matching;
-
-public interface IEndpointMatcher<TContext> where TContext : IContext
+public interface IEndpointMatcher<TContext>
 {
     EndpointMatchResult Match(EndpointMatchContext<TContext> context);
 }

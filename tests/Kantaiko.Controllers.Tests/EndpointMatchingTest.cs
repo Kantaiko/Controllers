@@ -1,9 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Kantaiko.Controllers.Execution;
 using Kantaiko.Controllers.Introspection.Factory;
-using Kantaiko.Controllers.Result;
 using Kantaiko.Controllers.Tests.Shared;
-using Kantaiko.Routing;
 using Xunit;
 
 namespace Kantaiko.Controllers.Tests;
@@ -16,7 +14,7 @@ public class EndpointMatchingTest
         var controllerHandler = CreateControllerHandler();
 
         var context = new TestContext("hi");
-        var result = await controllerHandler.Handle(context);
+        var result = await controllerHandler.HandleAsync(context);
 
         Assert.True(result.HasReturnValue);
         Assert.Equal("Hello!", result.ReturnValue);
@@ -28,7 +26,7 @@ public class EndpointMatchingTest
         var controllerHandler = CreateControllerHandler();
 
         var context = new TestContext("кто я");
-        var result = await controllerHandler.Handle(context);
+        var result = await controllerHandler.HandleAsync(context);
 
         Assert.False(result.IsMatched);
     }
@@ -39,14 +37,14 @@ public class EndpointMatchingTest
         public string Greet() => "Hello!";
     }
 
-    private static IHandler<TestContext, Task<ControllerExecutionResult>> CreateControllerHandler()
+    private static IControllerHandler<TestContext> CreateControllerHandler()
     {
         return TestUtils.CreateControllerHandler<EndpointMatchingTest>(
             introspectionBuilder => introspectionBuilder.AddEndpointMatching(),
-            pipelineBuilder =>
+            handlers =>
             {
-                pipelineBuilder.AddEndpointMatching();
-                pipelineBuilder.AddDefaultControllerHandling();
+                handlers.AddEndpointMatching();
+                handlers.AddDefaultControllerHandling();
             }
         );
     }

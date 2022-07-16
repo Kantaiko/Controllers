@@ -6,8 +6,10 @@ namespace Kantaiko.Controllers.ParameterConversion.DefaultValue;
 
 public class ParameterDefaultValueResolutionContext
 {
-    public ParameterDefaultValueResolutionContext(EndpointParameterInfo parameter,
-        IImmutablePropertyCollection? parameterConversionProperties, IServiceProvider serviceProvider)
+    public ParameterDefaultValueResolutionContext(
+        EndpointParameterInfo parameter,
+        IImmutablePropertyCollection? parameterConversionProperties,
+        IServiceProvider serviceProvider)
     {
         Parameter = parameter;
         ParameterConversionProperties = parameterConversionProperties;
