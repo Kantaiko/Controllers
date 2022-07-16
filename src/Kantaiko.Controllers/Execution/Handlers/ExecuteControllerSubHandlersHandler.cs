@@ -13,7 +13,7 @@ public class ExecuteControllerSubHandlersHandler<TContext> : ControllerExecution
 
         if (ControllerExecutionProperties<TContext>.Of(context.Endpoint.Controller)?.Handler is { } handler)
         {
-            return handler.Handle(context, _ => next());
+            return handler.Handle(context, () => next());
         }
 
         return next();

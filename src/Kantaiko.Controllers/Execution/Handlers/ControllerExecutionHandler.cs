@@ -10,9 +10,8 @@ public abstract class ControllerExecutionHandler<TContext> : IControllerExecutio
 
     protected delegate Task<ControllerResult> NextAction();
 
-    public Task<ControllerResult> Handle(ControllerContext<TContext> input,
-        Func<ControllerContext<TContext>, Task<ControllerResult>> next)
+    public Task<ControllerResult> Handle(ControllerContext<TContext> input, Func<Task<ControllerResult>> next)
     {
-        return HandleAsync(input, () => next(input));
+        return HandleAsync(input, () => next());
     }
 }
