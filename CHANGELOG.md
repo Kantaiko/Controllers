@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/saintedlama/versionize) for commit guidelines.
 
+<a name="0.8.1"></a>
+## [0.8.1](https://www.github.com/Kantaiko/Controllers/releases/tag/v0.8.1) (2022-7-16)
+
+### Bug Fixes
+
+* Update routing infrastructure ([03be137](https://www.github.com/Kantaiko/Controllers/commit/03be13781c862622b7bbbd9fa59ef0d77e914562))
+
 <a name="0.8.0"></a>
 ## [0.8.0](https://www.github.com/Kantaiko/Controllers/releases/tag/v0.8.0) (2022-7-16)
 
