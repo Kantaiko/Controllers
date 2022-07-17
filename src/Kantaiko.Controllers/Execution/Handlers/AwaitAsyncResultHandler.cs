@@ -37,9 +37,11 @@ public class AwaitAsyncResultHandler<TContext> : ControllerExecutionHandler<TCon
 
     private static Func<object, object> CreateResultAccessor(Type type)
     {
-        var taskLike = Expression.Parameter(type);
+        var parameter = Expression.Parameter(typeof(object));
+        var taskLike = Expression.Convert(parameter, type);
         var expression = Expression.Property(taskLike, "Result");
+        var result = Expression.Convert(expression, typeof(object));
 
-        return Expression.Lambda<Func<object, object>>(expression, taskLike).Compile();
+        return Expression.Lambda<Func<object, object>>(result, parameter).Compile();
     }
 }
