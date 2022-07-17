@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/saintedlama/versionize) for commit guidelines.
 
+<a name="0.8.2"></a>
+## [0.8.2](https://www.github.com/Kantaiko/Controllers/releases/tag/v0.8.2) (2022-7-17)
+
+### Bug Fixes
+
+* Make AwaitAsyncResultHandler correctly handle async method results ([99c0f7b](https://www.github.com/Kantaiko/Controllers/commit/99c0f7ba732c93e6c4c758586796f2ee3728c8c7))
+
 <a name="0.8.1"></a>
 ## [0.8.1](https://www.github.com/Kantaiko/Controllers/releases/tag/v0.8.1) (2022-7-16)
 
