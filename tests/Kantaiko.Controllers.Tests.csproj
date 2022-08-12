@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Kantaiko.Controllers\Kantaiko.Controllers.csproj" />
+    <ProjectReference Include="..\src\Kantaiko.Controllers.csproj" />
   </ItemGroup>
 
 </Project>

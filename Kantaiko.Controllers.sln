@@ -1,11 +1,5 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kantaiko.Controllers", "src\Kantaiko.Controllers\Kantaiko.Controllers.csproj", "{B7297A83-4D82-424F-9DDC-599F034E6892}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{A878B1CF-F517-4D30-8BF8-E8578857ABE3}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kantaiko.Controllers.Tests", "tests\Kantaiko.Controllers.Tests\Kantaiko.Controllers.Tests.csproj", "{C2D1538E-B34F-4605-A026-71FB22DB76E8}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "examples", "examples", "{DF1631A2-BBCD-4693-AA68-625EC5D639FB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DependencyInjection", "examples\DependencyInjection\DependencyInjection.csproj", "{A24A3421-19E7-4310-9514-E866E5326AEF}"
@@ -14,20 +8,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Introspection", "examples\I
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCommands", "examples\SimpleCommands\SimpleCommands.csproj", "{AB8DA8A8-FBCE-4095-9CF5-7203C1CDC976}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kantaiko.Controllers", "src\Kantaiko.Controllers.csproj", "{876983B0-DC74-42DE-B973-55C56D666BDB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kantaiko.Controllers.Tests", "tests\Kantaiko.Controllers.Tests.csproj", "{383FAC6A-AADF-4B18-A210-0298AF78665F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B7297A83-4D82-424F-9DDC-599F034E6892}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B7297A83-4D82-424F-9DDC-599F034E6892}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B7297A83-4D82-424F-9DDC-599F034E6892}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B7297A83-4D82-424F-9DDC-599F034E6892}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C2D1538E-B34F-4605-A026-71FB22DB76E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C2D1538E-B34F-4605-A026-71FB22DB76E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C2D1538E-B34F-4605-A026-71FB22DB76E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C2D1538E-B34F-4605-A026-71FB22DB76E8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A24A3421-19E7-4310-9514-E866E5326AEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A24A3421-19E7-4310-9514-E866E5326AEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A24A3421-19E7-4310-9514-E866E5326AEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -40,9 +30,16 @@ Global
 		{AB8DA8A8-FBCE-4095-9CF5-7203C1CDC976}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AB8DA8A8-FBCE-4095-9CF5-7203C1CDC976}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AB8DA8A8-FBCE-4095-9CF5-7203C1CDC976}.Release|Any CPU.Build.0 = Release|Any CPU
+		{876983B0-DC74-42DE-B973-55C56D666BDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{876983B0-DC74-42DE-B973-55C56D666BDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{876983B0-DC74-42DE-B973-55C56D666BDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{876983B0-DC74-42DE-B973-55C56D666BDB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{383FAC6A-AADF-4B18-A210-0298AF78665F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{383FAC6A-AADF-4B18-A210-0298AF78665F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{383FAC6A-AADF-4B18-A210-0298AF78665F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{383FAC6A-AADF-4B18-A210-0298AF78665F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{C2D1538E-B34F-4605-A026-71FB22DB76E8} = {A878B1CF-F517-4D30-8BF8-E8578857ABE3}
 		{A24A3421-19E7-4310-9514-E866E5326AEF} = {DF1631A2-BBCD-4693-AA68-625EC5D639FB}
 		{93168DA8-73FF-4A5C-83D2-7C5436155ECA} = {DF1631A2-BBCD-4693-AA68-625EC5D639FB}
 		{AB8DA8A8-FBCE-4095-9CF5-7203C1CDC976} = {DF1631A2-BBCD-4693-AA68-625EC5D639FB}
