@@ -3,9 +3,9 @@ using Kantaiko.Controllers.ParameterConversion.DefaultValue;
 
 namespace Kantaiko.Controllers.ParameterConversion.Handlers;
 
-public class ResolveDefaultParameterValueHandler<TContext> : ParameterConversionHandler<TContext>
+public class ResolveDefaultParameterValueHandler<TContext> : IParameterConversionHandler<TContext>
 {
-    protected override async Task HandleAsync(ParameterConversionContext<TContext> context)
+    public async Task HandleAsync(ParameterConversionContext<TContext> context)
     {
         if (context.ValueExists || context.ValueResolved)
         {
@@ -18,7 +18,7 @@ public class ResolveDefaultParameterValueHandler<TContext> : ParameterConversion
         }
 
         var resolutionContext = new ParameterDefaultValueResolutionContext(context.Parameter,
-            context.Context.ParameterConversionProperties, context.ServiceProvider);
+            context.ExecutionContext.ParameterConversionProperties, context.ServiceProvider);
 
         var value = await resolver.ResolveDefaultValueAsync(resolutionContext);
 

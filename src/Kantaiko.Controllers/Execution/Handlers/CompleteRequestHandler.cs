@@ -3,10 +3,13 @@ using Kantaiko.Controllers.Result;
 
 namespace Kantaiko.Controllers.Execution.Handlers;
 
-public class CompleteRequestHandler<TContext> : ControllerExecutionHandler<TContext>
+public class CompleteRequestHandler<TContext> : IControllerExecutionHandler<TContext>
 {
-    protected override Task<ControllerResult> HandleAsync(ControllerContext<TContext> context, NextAction next)
+    public Task HandleAsync(ControllerExecutionContext<TContext> context)
     {
-        return Task.FromResult(ControllerResult.Success(context.Result ?? context.RawResult));
+        context.ExecutionResult ??= ControllerExecutionResult.Success(
+            context.InvocationResult ?? context.RawInvocationResult);
+
+        return Task.CompletedTask;
     }
 }

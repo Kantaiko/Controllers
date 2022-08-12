@@ -4,13 +4,12 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Kantaiko.Controllers.Exceptions;
 using Kantaiko.Controllers.Introspection;
-using Kantaiko.Controllers.Result;
 
 namespace Kantaiko.Controllers.Execution.Handlers;
 
-public class ConstructParametersHandler<TContext> : ControllerExecutionHandler<TContext>
+public class ConstructParametersHandler<TContext> : IControllerExecutionHandler<TContext>
 {
-    protected override Task<ControllerResult> HandleAsync(ControllerContext<TContext> context, NextAction next)
+    public Task HandleAsync(ControllerExecutionContext<TContext> context)
     {
         PropertyNullException.ThrowIfNull(context.Endpoint);
         PropertyNullException.ThrowIfNull(context.ResolvedParameters);
@@ -32,7 +31,7 @@ public class ConstructParametersHandler<TContext> : ControllerExecutionHandler<T
 
         context.ConstructedParameters = constructedParameters;
 
-        return next();
+        return Task.CompletedTask;
     }
 
     private static object? ConstructParameter(EndpointParameterInfo parameter,

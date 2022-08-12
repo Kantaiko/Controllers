@@ -4,15 +4,15 @@ using Kantaiko.Controllers.Result;
 
 namespace Kantaiko.Controllers.ParameterConversion.Handlers;
 
-public class ReportMissingRequiredParameterHandler<TContext> : ParameterConversionHandler<TContext>
+public class ReportMissingRequiredParameterHandler<TContext> : IParameterConversionHandler<TContext>
 {
-    protected override Task HandleAsync(ParameterConversionContext<TContext> context)
+    public Task HandleAsync(ParameterConversionContext<TContext> context)
     {
         if (!context.ValueExists && !context.ValueResolved && !context.Parameter.IsOptional)
         {
             var errorMessage = string.Format(Locale.MissingRequiredParameter, context.Parameter.Name);
 
-            context.ExecutionResult = ControllerResult.Error(errorMessage, context.Parameter);
+            context.ExecutionContext.ExecutionResult = ControllerExecutionResult.Error(errorMessage, context.Parameter);
         }
 
         return Task.CompletedTask;

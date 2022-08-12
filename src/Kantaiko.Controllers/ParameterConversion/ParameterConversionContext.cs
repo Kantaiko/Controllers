@@ -10,16 +10,17 @@ namespace Kantaiko.Controllers.ParameterConversion;
 public class ParameterConversionContext<TContext> : IPropertyContainer
 {
     public ParameterConversionContext(
-        ControllerContext<TContext> context,
+        ControllerExecutionContext<TContext> executionContext,
         EndpointParameterInfo parameter
     )
     {
-        Context = context;
+        ExecutionContext = executionContext;
         Parameter = parameter;
     }
 
-    public ControllerContext<TContext> Context { get; }
-    public TContext RequestContext => Context.RequestContext;
+    public ControllerExecutionContext<TContext> ExecutionContext { get; }
+    public TContext RequestContext => ExecutionContext.RequestContext;
+
     public EndpointParameterInfo Parameter { get; }
 
     private IPropertyCollection? _properties;
@@ -29,8 +30,6 @@ public class ParameterConversionContext<TContext> : IPropertyContainer
     public bool ValueResolved { get; set; }
     public object? ResolvedValue { get; set; }
 
-    public ControllerResult? ExecutionResult { get; set; }
-
-    public IServiceProvider ServiceProvider => Context.ServiceProvider;
-    public CancellationToken CancellationToken => Context.CancellationToken;
+    public IServiceProvider ServiceProvider => ExecutionContext.ServiceProvider;
+    public CancellationToken CancellationToken => ExecutionContext.CancellationToken;
 }

@@ -9,7 +9,6 @@ using Kantaiko.Controllers.Introspection.Factory.Context;
 using Kantaiko.Controllers.Introspection.Factory.Deconstruction;
 using Kantaiko.Properties;
 using Kantaiko.Properties.Immutable;
-using Kantaiko.Routing.Context;
 
 var deconstructionValidator = new TestDeconstructionValidator();
 
@@ -101,5 +100,4 @@ internal class TestDeconstructionValidator : IDeconstructionValidator
     }
 }
 
-
-internal class TestContext : AsyncContextBase { }
+internal class TestContext { }

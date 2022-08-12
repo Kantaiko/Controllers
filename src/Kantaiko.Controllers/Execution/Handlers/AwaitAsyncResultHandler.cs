@@ -6,13 +6,13 @@ using Kantaiko.Controllers.Result;
 
 namespace Kantaiko.Controllers.Execution.Handlers;
 
-public class AwaitAsyncResultHandler<TContext> : ControllerExecutionHandler<TContext>
+public class AwaitAsyncResultHandler<TContext> : IControllerExecutionHandler<TContext>
 {
     private readonly ConcurrentDictionary<Type, Func<object, object>> _resultAccessorCache = new();
 
-    protected override async Task<ControllerResult> HandleAsync(ControllerContext<TContext> context, NextAction next)
+    public async Task HandleAsync(ControllerExecutionContext<TContext> context)
     {
-        if (context.RawResult is Task task)
+        if (context.RawInvocationResult is Task task)
         {
             try
             {
@@ -20,19 +20,18 @@ public class AwaitAsyncResultHandler<TContext> : ControllerExecutionHandler<TCon
             }
             catch (Exception exception)
             {
-                return ControllerResult.Exception(exception);
+                context.ExecutionResult = ControllerExecutionResult.Exception(exception);
+                return;
             }
 
             var resultAccessor = _resultAccessorCache.GetOrAdd(task.GetType(), CreateResultAccessor);
 
-            context.Result = resultAccessor(task);
+            context.InvocationResult = resultAccessor(task);
         }
         else
         {
-            context.Result = context.RawResult;
+            context.InvocationResult = context.RawInvocationResult;
         }
-
-        return await next();
     }
 
     private static Func<object, object> CreateResultAccessor(Type type)

@@ -2,13 +2,12 @@
 using Kantaiko.Controllers.Exceptions;
 using Kantaiko.Controllers.ParameterConversion.Handlers;
 using Kantaiko.Controllers.Result;
-using Kantaiko.Routing;
 
 namespace Kantaiko.Controllers.ParameterConversion.Text.Handlers;
 
-public class ResolveTextParameterValueHandler<TContext> : ParameterConversionHandler<TContext>
+public class ResolveTextParameterValueHandler<TContext> : IParameterConversionHandler<TContext>
 {
-    protected override async Task<Unit> HandleAsync(ParameterConversionContext<TContext> context)
+    public async Task HandleAsync(ParameterConversionContext<TContext> context)
     {
         var properties = context.Properties.GetOrCreate<TextParameterConversionProperties>();
 
@@ -17,20 +16,18 @@ public class ResolveTextParameterValueHandler<TContext> : ParameterConversionHan
 
         if (!context.ValueExists)
         {
-            return default;
+            return;
         }
 
         var resolutionResult = await properties.Converter.ResolveAsync(properties.ConversionContext);
 
         if (!resolutionResult.Success)
         {
-            context.ExecutionResult = ControllerResult.Error(resolutionResult.ErrorMessage);
-            return default;
+            context.ExecutionContext.ExecutionResult = ControllerExecutionResult.Error(resolutionResult.ErrorMessage);
+            return;
         }
 
         context.ResolvedValue = resolutionResult.Value;
         context.ValueResolved = true;
-
-        return default;
     }
 }

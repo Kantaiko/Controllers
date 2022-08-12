@@ -5,23 +5,23 @@ using Kantaiko.Controllers.Result;
 
 namespace Kantaiko.Controllers.Execution.Handlers;
 
-public class InvokeEndpointHandler<TContext> : ControllerExecutionHandler<TContext>
+public class InvokeEndpointHandler<TContext> : IControllerExecutionHandler<TContext>
 {
-    protected override async Task<ControllerResult> HandleAsync(ControllerContext<TContext> context, NextAction next)
+    public Task HandleAsync(ControllerExecutionContext<TContext> context)
     {
         PropertyNullException.ThrowIfNull(context.Endpoint);
         PropertyNullException.ThrowIfNull(context.ControllerInstance);
 
         try
         {
-            context.RawResult = context.Endpoint.MethodInfo
+            context.RawInvocationResult = context.Endpoint.MethodInfo
                 .Invoke(context.ControllerInstance, context.ConstructedParameters);
         }
         catch (TargetInvocationException exception)
         {
-            return ControllerResult.Exception(exception.InnerException!);
+            context.ExecutionResult = ControllerExecutionResult.Exception(exception.InnerException!);
         }
 
-        return await next();
+        return Task.CompletedTask;
     }
 }

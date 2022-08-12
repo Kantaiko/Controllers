@@ -1,12 +1,10 @@
 using System.Threading.Tasks;
 using Kantaiko.Controllers.Exceptions;
-using Kantaiko.Controllers.Result;
-using Kantaiko.Routing;
-using Kantaiko.Routing.Abstractions;
+using Kantaiko.Controllers.Handlers;
 
 namespace Kantaiko.Controllers.Execution.Handlers;
 
-public class InstantiateControllerHandler<TContext> : ControllerExecutionHandler<TContext>
+public class InstantiateControllerHandler<TContext> : IControllerExecutionHandler<TContext>
 {
     private readonly IHandlerFactory _handlerFactory;
 
@@ -15,7 +13,7 @@ public class InstantiateControllerHandler<TContext> : ControllerExecutionHandler
         _handlerFactory = handlerFactory ?? DefaultHandlerFactory.Instance;
     }
 
-    protected override Task<ControllerResult> HandleAsync(ControllerContext<TContext> context, NextAction next)
+    public Task HandleAsync(ControllerExecutionContext<TContext> context)
     {
         PropertyNullException.ThrowIfNull(context.Endpoint);
         PropertyNullException.ThrowIfNull(context.Endpoint.Controller);
@@ -28,6 +26,6 @@ public class InstantiateControllerHandler<TContext> : ControllerExecutionHandler
             contextAcceptor.SetContext(context.RequestContext);
         }
 
-        return next();
+        return Task.CompletedTask;
     }
 }

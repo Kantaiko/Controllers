@@ -4,9 +4,9 @@ using Kantaiko.Controllers.Result;
 
 namespace Kantaiko.Controllers.ParameterConversion.Handlers;
 
-public class PostValidateParameterHandler<TContext> : ParameterConversionHandler<TContext>
+public class PostValidateParameterHandler<TContext> : IParameterConversionHandler<TContext>
 {
-    protected override Task HandleAsync(ParameterConversionContext<TContext> context)
+    public Task HandleAsync(ParameterConversionContext<TContext> context)
     {
         if (PostValidationParameterProperties.Of(context.Parameter) is not { PostValidators: { } postValidators })
         {
@@ -30,7 +30,8 @@ public class PostValidateParameterHandler<TContext> : ParameterConversionHandler
 
             if (!result.IsValid)
             {
-                context.ExecutionResult = ControllerResult.Error(result.ErrorMessage, context.Parameter);
+                context.ExecutionContext.ExecutionResult =
+                    ControllerExecutionResult.Error(result.ErrorMessage, context.Parameter);
 
                 return Task.CompletedTask;
             }

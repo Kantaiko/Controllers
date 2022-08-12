@@ -39,11 +39,6 @@ public static class IntrospectionBuilderExtensions
         builder.AddTransformer(new PostValidationIntrospectionInfoTransformer());
     }
 
-    public static void AddSubHandlerAttributes<TContext>(this IntrospectionBuilder<TContext> builder)
-    {
-        builder.AddTransformer(new ExecutionIntrospectionInfoTransformer<TContext>());
-    }
-
     public static void AddParameterDefaultValueResolution<TContext>(this IntrospectionBuilder<TContext> builder)
     {
         builder.AddTransformer(new DefaultValueIntrospectionInfoTransformer());
@@ -54,7 +49,6 @@ public static class IntrospectionBuilderExtensions
         builder.AddVisibilityFiltering();
         builder.AddFilteringAttributes();
         builder.AddPropertyProviderAttributes();
-        builder.AddSubHandlerAttributes();
         builder.AddParameterCustomization();
         builder.AddParameterPostValidation();
         builder.AddParameterDefaultValueResolution();

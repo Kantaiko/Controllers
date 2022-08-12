@@ -1,13 +1,12 @@
 ﻿using System.Threading.Tasks;
 using Kantaiko.Controllers.Exceptions;
 using Kantaiko.Controllers.ParameterConversion.Handlers;
-using Kantaiko.Routing;
 
 namespace Kantaiko.Controllers.ParameterConversion.Text.Handlers;
 
-public class CheckTextParameterValueExistenceHandler<TContext> : ParameterConversionHandler<TContext>
+public class CheckTextParameterValueExistenceHandler<TContext> : IParameterConversionHandler<TContext>
 {
-    protected override Task<Unit> HandleAsync(ParameterConversionContext<TContext> context)
+    public Task HandleAsync(ParameterConversionContext<TContext> context)
     {
         var properties = context.Properties.GetOrCreate<TextParameterConversionProperties>();
 
@@ -16,6 +15,6 @@ public class CheckTextParameterValueExistenceHandler<TContext> : ParameterConver
 
         context.ValueExists = properties.Converter.CheckValueExistence(properties.ConversionContext);
 
-        return Unit.Task;
+        return Task.CompletedTask;
     }
 }

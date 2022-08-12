@@ -5,11 +5,10 @@ using Kantaiko.Controllers.Exceptions;
 using Kantaiko.Controllers.Introspection;
 using Kantaiko.Controllers.ParameterConversion;
 using Kantaiko.Controllers.ParameterConversion.Handlers;
-using Kantaiko.Controllers.Result;
 
 namespace Kantaiko.Controllers.Execution.Handlers;
 
-public class ConvertParametersHandler<TContext> : ControllerExecutionHandler<TContext>
+public class ConvertParametersHandler<TContext> : IControllerExecutionHandler<TContext>
 {
     private readonly IEnumerable<IParameterConversionHandler<TContext>> _handlers;
 
@@ -18,7 +17,7 @@ public class ConvertParametersHandler<TContext> : ControllerExecutionHandler<TCo
         _handlers = handlers;
     }
 
-    protected override async Task<ControllerResult> HandleAsync(ControllerContext<TContext> context, NextAction next)
+    public async Task HandleAsync(ControllerExecutionContext<TContext> context)
     {
         PropertyNullException.ThrowIfNull(context.Endpoint);
 
@@ -32,11 +31,11 @@ public class ConvertParametersHandler<TContext> : ControllerExecutionHandler<TCo
         {
             foreach (var conversionContext in conversionContexts)
             {
-                await handler.Handle(conversionContext);
+                await handler.HandleAsync(conversionContext);
 
-                if (conversionContext.ExecutionResult is not null)
+                if (context.ExecutionResult is not null)
                 {
-                    return conversionContext.ExecutionResult;
+                    return;
                 }
 
                 if (conversionContext.ValueResolved)
@@ -45,7 +44,5 @@ public class ConvertParametersHandler<TContext> : ControllerExecutionHandler<TCo
                 }
             }
         }
-
-        return await next();
     }
 }

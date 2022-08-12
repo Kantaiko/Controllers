@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Reflection;
-using System.Threading;
 using Kantaiko.Controllers;
 using Kantaiko.Controllers.Execution;
+using Kantaiko.Controllers.Handlers;
 using Kantaiko.Controllers.Introspection.Factory;
 using Kantaiko.Controllers.ParameterConversion;
 using Kantaiko.Controllers.ParameterConversion.Text;
-using Kantaiko.Routing.Abstractions;
-using Kantaiko.Routing.Context;
 using Microsoft.Extensions.DependencyInjection;
 
 var serviceCollection = new ServiceCollection();
@@ -47,20 +45,12 @@ var handler = serviceProvider.GetRequiredService<IControllerHandler<TestContext>
 using var scope = serviceProvider.CreateScope();
 var context = new TestContext("Hello, world!", serviceProvider);
 
-var result = await handler.HandleAsync(context);
+// Note: you should pass service provider to both the context and the HandleAsync call
+// The execution pipeline makes no assumptions about whether the context contains a service provider or not
+// The same applies to the CancellationToken parameter
+var result = await handler.HandleAsync(context, serviceProvider);
 
-internal class TestContext : AsyncContextBase
-{
-    public TestContext(string text,
-        IServiceProvider? serviceProvider = null,
-        CancellationToken cancellationToken = default
-    ) : base(serviceProvider, cancellationToken)
-    {
-        Text = text;
-    }
-
-    public string Text { get; }
-}
+internal record TestContext(string Text, IServiceProvider ServiceProvider);
 
 internal class ServiceHandlerFactory : IHandlerFactory
 {

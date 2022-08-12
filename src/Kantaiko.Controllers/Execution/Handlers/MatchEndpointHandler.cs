@@ -1,16 +1,13 @@
 using System.Threading.Tasks;
-using Kantaiko.Controllers.Exceptions;
 using Kantaiko.Controllers.Matching;
 using Kantaiko.Controllers.Result;
 
 namespace Kantaiko.Controllers.Execution.Handlers;
 
-public class MatchEndpointHandler<TContext> : ControllerExecutionHandler<TContext>
+public class MatchEndpointHandler<TContext> : IControllerExecutionHandler<TContext>
 {
-    protected override async Task<ControllerResult> HandleAsync(ControllerContext<TContext> context, NextAction next)
+    public Task HandleAsync(ControllerExecutionContext<TContext> context)
     {
-        PropertyNullException.ThrowIfNull(context.IntrospectionInfo);
-
         foreach (var controller in context.IntrospectionInfo.Controllers)
         {
             foreach (var endpoint in controller.Endpoints)
@@ -35,12 +32,13 @@ public class MatchEndpointHandler<TContext> : ControllerExecutionHandler<TContex
                         context.Endpoint = endpoint;
                         context.ParameterConversionProperties = matchResult.Properties;
 
-                        return await next();
+                        return Task.CompletedTask;
                     }
                 }
             }
         }
 
-        return ControllerResult.NotMatched;
+        context.ExecutionResult = ControllerExecutionResult.NotMatched;
+        return Task.CompletedTask;
     }
 }

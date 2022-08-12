@@ -14,8 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Kantaiko.Properties" Version="0.4.0" />
-    <PackageReference Include="Kantaiko.Routing" Version="0.9.1" />
+    <PackageReference Include="Kantaiko.Properties" Version="1.0.0-alpha.0" />
   </ItemGroup>
 
 </Project>

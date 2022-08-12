@@ -12,7 +12,6 @@ using Kantaiko.Controllers.Matching.Text;
 using Kantaiko.Controllers.ParameterConversion;
 using Kantaiko.Controllers.ParameterConversion.Text;
 using Kantaiko.Controllers.Result;
-using Kantaiko.Routing.Context;
 
 // ReSharper disable LocalizableElement
 
@@ -39,7 +38,7 @@ handlers.AddDefaultControllerHandling();
 // 3. Assemble controller handler
 var controllerHandler = ControllerHandlerFactory.CreateControllerHandler(introspectionInfo, handlers);
 
-// Invoke request handler
+// 4. Set request locale and invoke request handler
 Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo("en");
 var result = await controllerHandler.HandleAsync(new TestContext("Hello, world!"));
 
@@ -76,18 +75,7 @@ internal class HelloController : TestController
 
 internal abstract class TestController : ControllerBase<TestContext> { }
 
-internal class TestContext : AsyncContextBase
-{
-    public TestContext(string text,
-        IServiceProvider? serviceProvider = null,
-        CancellationToken cancellationToken = default
-    ) : base(serviceProvider, cancellationToken)
-    {
-        Text = text;
-    }
-
-    public string Text { get; }
-}
+internal record TestContext(string Text);
 
 internal class PatternMatcher : IEndpointMatcher<TestContext>
 {

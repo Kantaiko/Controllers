@@ -7,7 +7,7 @@ namespace Kantaiko.Controllers.Execution;
 
 public interface IControllerHandler<in TContext>
 {
-    Task<ControllerResult> HandleAsync(
+    Task<ControllerExecutionResult> HandleAsync(
         TContext context,
         IServiceProvider? serviceProvider = null,
         CancellationToken cancellationToken = default

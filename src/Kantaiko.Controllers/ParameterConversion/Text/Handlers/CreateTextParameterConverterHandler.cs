@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Kantaiko.Controllers.Handlers;
 using Kantaiko.Controllers.Matching.Text;
 using Kantaiko.Controllers.ParameterConversion.Handlers;
 using Kantaiko.Controllers.ParameterConversion.Text.Properties;
 using Kantaiko.Properties;
-using Kantaiko.Routing;
-using Kantaiko.Routing.Abstractions;
 
 namespace Kantaiko.Controllers.ParameterConversion.Text.Handlers;
 
-public class CreateTextParameterConverterHandler<TContext> : ParameterConversionHandler<TContext>
+public class CreateTextParameterConverterHandler<TContext> : IParameterConversionHandler<TContext>
 {
     private readonly IHandlerFactory _handlerFactory;
 
@@ -18,7 +17,7 @@ public class CreateTextParameterConverterHandler<TContext> : ParameterConversion
         _handlerFactory = handlerFactory ?? DefaultHandlerFactory.Instance;
     }
 
-    protected override Task<Unit> HandleAsync(ParameterConversionContext<TContext> context)
+    public Task HandleAsync(ParameterConversionContext<TContext> context)
     {
         if (TextConversionParameterProperties.Of(context.Parameter) is not { } parameterProperties)
         {
@@ -30,7 +29,7 @@ public class CreateTextParameterConverterHandler<TContext> : ParameterConversion
             throw new InvalidOperationException("Text parameter converter requires ConverterFactory or ConverterType");
         }
 
-        if (context.Context.ParameterConversionProperties is not { } parameterConversionProperties)
+        if (context.ExecutionContext.ParameterConversionProperties is not { } parameterConversionProperties)
         {
             throw new InvalidOperationException("Text parameter converter requires ParameterConversionProperties");
         }
@@ -53,6 +52,6 @@ public class CreateTextParameterConverterHandler<TContext> : ParameterConversion
             properties.ConversionContext = new TextParameterConversionContext(parameters, context.Parameter);
         });
 
-        return Unit.Task;
+        return Task.CompletedTask;
     }
 }

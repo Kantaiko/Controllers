@@ -5,10 +5,10 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using Kantaiko.Controllers.Exceptions;
+using Kantaiko.Controllers.Handlers;
 using Kantaiko.Controllers.Introspection.Factory.Deconstruction;
 using Kantaiko.Controllers.Introspection.Factory.Transformers;
 using Kantaiko.Controllers.Utils;
-using Kantaiko.Routing;
 
 namespace Kantaiko.Controllers.Introspection.Factory;
 
@@ -26,7 +26,7 @@ public class IntrospectionInfoFactory
         IDeconstructionValidator? deconstructionValidator = null)
     {
         _transformers = transformers ?? Enumerable.Empty<IIntrospectionInfoTransformer>();
-        _serviceProvider = serviceProvider ?? DefaultServiceProvider.Instance;
+        _serviceProvider = serviceProvider ?? EmptyServiceProvider.Instance;
         _deconstructionValidator = deconstructionValidator;
     }
 

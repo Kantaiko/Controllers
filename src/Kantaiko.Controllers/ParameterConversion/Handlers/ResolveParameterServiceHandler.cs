@@ -4,9 +4,9 @@ using Kantaiko.Controllers.ParameterConversion.Properties;
 
 namespace Kantaiko.Controllers.ParameterConversion.Handlers;
 
-public class ResolveServiceParameterHandler<TContext> : ParameterConversionHandler<TContext>
+public class ResolveServiceParameterHandler<TContext> : IParameterConversionHandler<TContext>
 {
-    protected override Task HandleAsync(ParameterConversionContext<TContext> context)
+    public Task HandleAsync(ParameterConversionContext<TContext> context)
     {
         if (ParameterServiceProperties.Of(context.Parameter)?.ServiceType is not { } serviceType)
         {

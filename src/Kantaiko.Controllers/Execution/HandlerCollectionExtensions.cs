@@ -1,6 +1,6 @@
 ﻿using System;
 using Kantaiko.Controllers.Execution.Handlers;
-using Kantaiko.Routing.Abstractions;
+using Kantaiko.Controllers.Handlers;
 
 namespace Kantaiko.Controllers.Execution;
 
@@ -11,14 +11,6 @@ public static class HandlerCollectionExtensions
         ArgumentNullException.ThrowIfNull(handlers);
 
         handlers.Add(new MatchEndpointHandler<TContext>());
-    }
-
-    public static void AddSubHandlerExecution<TContext>(this IHandlerCollection<TContext> handlers)
-    {
-        ArgumentNullException.ThrowIfNull(handlers);
-
-        handlers.Add(new ExecuteControllerSubHandlersHandler<TContext>());
-        handlers.Add(new ExecuteEndpointSubHandlersHandler<TContext>());
     }
 
     public static void AddControllerInstantiation<TContext>(this IHandlerCollection<TContext> handlers,

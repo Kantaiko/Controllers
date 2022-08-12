@@ -2,14 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using Kantaiko.Controllers.Introspection;
+using Kantaiko.Controllers.Result;
 using Kantaiko.Properties;
 using Kantaiko.Properties.Immutable;
 
 namespace Kantaiko.Controllers.Execution;
 
-public class ControllerContext<TContext> : IPropertyContainer
+public class ControllerExecutionContext<TContext> : IPropertyContainer
 {
-    public ControllerContext(
+    public ControllerExecutionContext(
         TContext requestContext,
         IntrospectionInfo introspectionInfo,
         IServiceProvider serviceProvider,
@@ -36,8 +37,9 @@ public class ControllerContext<TContext> : IPropertyContainer
     public Dictionary<EndpointParameterInfo, object?>? ResolvedParameters { get; set; }
     public object?[]? ConstructedParameters { get; set; }
 
-    public object? RawResult { get; set; }
-    public object? Result { get; set; }
+    public object? RawInvocationResult { get; set; }
+    public object? InvocationResult { get; set; }
+    public ControllerExecutionResult? ExecutionResult { get; set; }
 
     public IServiceProvider ServiceProvider { get; }
     public CancellationToken CancellationToken { get; }
