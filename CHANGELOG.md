@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/saintedlama/versionize) for commit guidelines.
 
+<a name="1.0.0-alpha.0"></a>
+## [1.0.0-alpha.0](https://www.github.com/Kantaiko/Controllers/releases/tag/v1.0.0-alpha.0) (2022-8-12)
+
+### Features
+
+* Remove dependency on Kantaiko.Routing ([06edfc5](https://www.github.com/Kantaiko/Controllers/commit/06edfc51d41bbfba81399206e9932e72f38a3607))
+
 <a name="0.8.2"></a>
 ## [0.8.2](https://www.github.com/Kantaiko/Controllers/releases/tag/v0.8.2) (2022-7-17)
 
