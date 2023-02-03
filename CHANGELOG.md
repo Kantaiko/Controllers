@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/saintedlama/versionize) for commit guidelines.
 
+<a name="1.0.0-alpha.1"></a>
+## [1.0.0-alpha.1](https://www.github.com/Kantaiko/Controllers/releases/tag/v1.0.0-alpha.1) (2023-2-3)
+
+### Features
+
+* Yet another epic redesign ([1f2f850](https://www.github.com/Kantaiko/Controllers/commit/1f2f8503b35b7bf634704c8d355786f7175aa6d1))
+
 <a name="1.0.0-alpha.0"></a>
 ## [1.0.0-alpha.0](https://www.github.com/Kantaiko/Controllers/releases/tag/v1.0.0-alpha.0) (2022-8-12)
 
