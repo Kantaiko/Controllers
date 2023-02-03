@@ -1,6 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using Kantaiko.Controllers.EndpointMatching;
 using Kantaiko.Controllers.Execution;
-using Kantaiko.Controllers.Introspection.Factory;
 using Kantaiko.Controllers.Tests.Shared;
 using Xunit;
 
@@ -11,24 +10,23 @@ public class EndpointMatchingTest
     [Fact]
     public async Task ShouldProcessSimpleRequest()
     {
-        var controllerHandler = CreateControllerHandler();
+        var executor = CreateControllerExecutor();
 
         var context = new TestContext("hi");
-        var result = await controllerHandler.HandleAsync(context);
+        var result = await executor.HandleAsync(context);
 
-        Assert.True(result.HasReturnValue);
-        Assert.Equal("Hello!", result.ReturnValue);
+        Assert.Equal("Hello!", result.EndpointResult);
     }
 
     [Fact]
-    public async Task ShouldIgnoreUnmatchedRequest()
+    public async Task ShouldReportUnmatchedRequest()
     {
-        var controllerHandler = CreateControllerHandler();
+        var executor = CreateControllerExecutor();
 
         var context = new TestContext("кто я");
-        var result = await controllerHandler.HandleAsync(context);
+        var result = await executor.HandleAsync(context);
 
-        Assert.False(result.IsMatched);
+        Assert.Equal(ControllerErrorCodes.NotMatched, result.Error?.Code);
     }
 
     private class TestController : Controller
@@ -37,15 +35,12 @@ public class EndpointMatchingTest
         public string Greet() => "Hello!";
     }
 
-    private static IControllerHandler<TestContext> CreateControllerHandler()
+    private static ControllerExecutor CreateControllerExecutor()
     {
-        return TestUtils.CreateControllerHandler<EndpointMatchingTest>(
-            introspectionBuilder => introspectionBuilder.AddEndpointMatching(),
-            handlers =>
-            {
-                handlers.AddEndpointMatching();
-                handlers.AddDefaultControllerHandling();
-            }
-        );
+        return TestUtils.CreateControllerExecutor<EndpointMatchingTest>(builder =>
+        {
+            builder.AddEndpointMatching();
+            builder.AddDefaultHandlers();
+        });
     }
 }

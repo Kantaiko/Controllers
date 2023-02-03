@@ -1,11 +1,6 @@
-﻿using System;
-using System.Reflection;
-using System.Threading.Tasks;
+﻿using Kantaiko.Controllers.EndpointMatching;
 using Kantaiko.Controllers.Execution;
-using Kantaiko.Controllers.Introspection.Factory;
-using Kantaiko.Controllers.Introspection.Factory.Deconstruction;
 using Kantaiko.Controllers.ParameterConversion;
-using Kantaiko.Controllers.ParameterConversion.Text;
 using Kantaiko.Controllers.Tests.Shared;
 using Xunit;
 
@@ -18,26 +13,18 @@ public class ParameterDeconstructionTest
     [InlineData("sum-group 20 20 2")]
     public async Task ShouldDeconstructClassParameter(string input)
     {
-        var controllerHandler = TestUtils.CreateControllerHandler<ParameterDeconstructionTest>(
-            introspectionBuilder =>
-            {
-                introspectionBuilder.SetDeconstructionValidator(new TestDeconstructionValidator());
-                introspectionBuilder.AddEndpointMatching();
-                introspectionBuilder.AddTextParameterConversion();
-            },
-            handlers =>
-            {
-                handlers.AddEndpointMatching();
-                handlers.AddParameterConversion(h => h.AddTextParameterConversion());
-                handlers.AddDefaultControllerHandling();
-            }
-        );
+        var executor = TestUtils.CreateControllerExecutor<ParameterDeconstructionTest>(builder =>
+        {
+            builder.AddEndpointMatching();
+            builder.AddTextParameterConversion();
+            builder.AddDefaultHandlers();
+        });
 
         var context = new TestContext(input);
-        var result = await controllerHandler.HandleAsync(context);
+        var result = await executor.HandleAsync(context);
 
-        Assert.True(result.HasReturnValue);
-        Assert.Equal(42, result.ReturnValue);
+        result.ThrowOnError();
+        Assert.Equal(42, result.EndpointResult);
     }
 
     private class TestController : Controller
@@ -49,20 +36,17 @@ public class ParameterDeconstructionTest
         public int SumGroup(NumberGroup numbers) => numbers.NumberPair.A + numbers.NumberPair.B + numbers.C;
     }
 
-    private class TestDeconstructionValidator : IDeconstructionValidator
-    {
-        public bool CanDeconstruct(Type type, ICustomAttributeProvider attributeProvider) => true;
-    }
-
+    [CompositeParameter]
     private class NumberGroup
     {
-        public NumberPair NumberPair { get; set; } = null!;
-        public int C { get; set; }
+        public required NumberPair NumberPair { get; init; }
+        public int C { get; init; }
     }
 
+    [CompositeParameter]
     private class NumberPair
     {
-        public int A { get; set; }
-        public int B { get; set; }
+        public int A { get; init; }
+        public int B { get; init; }
     }
 }

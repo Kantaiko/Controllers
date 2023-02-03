@@ -1,10 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using Kantaiko.Controllers.EndpointMatching;
 using Kantaiko.Controllers.Exceptions;
 using Kantaiko.Controllers.Execution;
-using Kantaiko.Controllers.Introspection.Factory;
 using Kantaiko.Controllers.ParameterConversion;
-using Kantaiko.Controllers.ParameterConversion.Handlers;
 using Kantaiko.Controllers.Tests.Shared;
 using Xunit;
 
@@ -15,40 +12,40 @@ public class ServiceParameterConversionTest
     [Fact]
     public async Task ShouldResolveParameterAsService()
     {
-        var controllerHandler = CreateControllerHandler();
+        var controllerExecutor = CreateControllerExecutor();
         var serviceProvider = new TestServiceProvider();
 
         var context = new TestContext("service 1");
-        var result = await controllerHandler.HandleAsync(context, serviceProvider);
+        var result = await controllerExecutor.HandleAsync(context, serviceProvider);
 
-        Assert.Equal(42, result.ReturnValue);
+        result.ThrowOnError();
+        Assert.Equal(42, result.EndpointResult);
     }
 
     [Fact]
     public async Task ShouldThrowWhenParameterServiceIsNotRegistered()
     {
-        var controllerHandler = CreateControllerHandler();
+        var controllerExecutor = CreateControllerExecutor();
         var serviceProvider = new TestServiceProvider();
 
-        async Task Action()
-        {
-            var context = new TestContext("service 2");
-            await controllerHandler.HandleAsync(context, serviceProvider);
-        }
+        var context = new TestContext("service 2");
+        var result = await controllerExecutor.HandleAsync(context, serviceProvider);
 
-        await Assert.ThrowsAsync<ServiceNotFoundException>(Action);
+        Assert.Equal(ControllerErrorCodes.ParameterConversionException, result.Error?.Code);
+        Assert.IsType<ServiceNotFoundException>(result.Error?.Exception);
     }
 
     [Fact]
     public async Task ShouldResolveNullWhenOptionalParameterServiceIsNotRegistered()
     {
-        var controllerHandler = CreateControllerHandler();
+        var controllerExecutor = CreateControllerExecutor();
         var serviceProvider = new TestServiceProvider();
 
         var context = new TestContext("service 3");
-        var result = await controllerHandler.HandleAsync(context, serviceProvider);
+        var result = await controllerExecutor.HandleAsync(context, serviceProvider);
 
-        Assert.True(result.IsMatched);
+        result.ThrowOnError();
+        Assert.True(result.Success);
     }
 
     private class TestController : Controller
@@ -60,24 +57,7 @@ public class ServiceParameterConversionTest
         public void ResolveService2([FromServices] string a) { }
 
         [Pattern("service 3")]
-        public void ResolveService3([FromServices] string? a = null) { }
-    }
-
-    private static IControllerHandler<TestContext> CreateControllerHandler()
-    {
-        return TestUtils.CreateControllerHandler<ServiceParameterConversionTest>(
-            introspectionBuilder =>
-            {
-                introspectionBuilder.AddEndpointMatching();
-                introspectionBuilder.AddPropertyProviderAttributes();
-            },
-            handlers =>
-            {
-                handlers.AddEndpointMatching();
-                handlers.AddParameterConversion(new[] { new ResolveServiceParameterHandler<TestContext>() });
-                handlers.AddDefaultControllerHandling();
-            }
-        );
+        public void ResolveService3([FromServices] string? a) { }
     }
 
     private class TestServiceProvider : IServiceProvider
@@ -89,5 +69,15 @@ public class ServiceParameterConversionTest
 
             return null;
         }
+    }
+
+    private static ControllerExecutor CreateControllerExecutor()
+    {
+        return TestUtils.CreateControllerExecutor<ServiceParameterConversionTest>(builder =>
+        {
+            builder.AddEndpointMatching();
+            builder.AddTextParameterConversion();
+            builder.AddDefaultHandlers();
+        });
     }
 }

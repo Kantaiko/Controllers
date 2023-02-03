@@ -1,10 +1,16 @@
 ﻿using Kantaiko.Controllers.Introspection;
+using Kantaiko.Controllers.Resources;
 
 namespace Kantaiko.Controllers.Exceptions;
 
-public class ServiceNotFoundException : ControllersException
+/// <summary>
+/// The exception that is thrown when a service cannot be found.
+/// </summary>
+public sealed class ServiceNotFoundException : Exception
 {
-    public ServiceNotFoundException(EndpointParameterInfo parameterInfo) : base(
-        $"Service with type \"{parameterInfo.ParameterType}\" was not registered, " +
-        $"but is required by endpoint \"{parameterInfo.Endpoint!.MethodInfo.Name}\"") { }
+    internal ServiceNotFoundException(EndpointParameterInfo parameterInfo) : base(
+        string.Format(Strings.ServiceNotFound,
+            parameterInfo.ParameterType,
+            parameterInfo.Endpoint.MethodInfo.Name)
+    ) { }
 }

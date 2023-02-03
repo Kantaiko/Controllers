@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+              xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral,
+      PublicKeyToken=b77a5c561934e089
+    </value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral,
+      PublicKeyToken=b77a5c561934e089
+    </value>
+  </resheader>
+  <data name="MissingRequiredParameter" xml:space="preserve">
+    <value>Missing required parameter '{0}'.</value>
+  </data>
+  <data name="ParameterConversationFailed" xml:space="preserve">
+    <value>Failed to convert parameter value. Check the inner error for more details.</value>
+  </data>
+  <data name="MatchingError" xml:space="preserve">
+    <value>An error was returned by the endpoint matcher. Check the inner error for more details.</value>
+  </data>
+  <data name="MatchingException" xml:space="preserve">
+    <value>An exception was thrown by the endpoint matcher.</value>
+  </data>
+  <data name="RequiredContextPropertyNotSet" xml:space="preserve">
+    <value>The property "{0}" of the execution context is required for the {1}, but was not set.</value>
+  </data>
+  <data name="ResolvedParameterNumberMismatch" xml:space="preserve">
+    <value>The number of resolved parameters ({0}) does not match the number of the endpoint parameters ({1}).</value>
+  </data>
+  <data name="DuplicateCompositeProperty" xml:space="preserve">
+    <value>Composite parameter "{0}" defines multiple properties with type "{1}": "{2}" and "{3}".</value>
+  </data>
+  <data name="DuplicateCompositeParameter" xml:space="preserve">
+    <value>Endpoint "{0}" of controller "{1}" defines multiple composite parameters of type "{2}": "{3}" and "{4}"</value>
+  </data>
+  <data name="ServiceNotFound" xml:space="preserve">
+    <value>Service with type "{0}" was not registered, but is required by endpoint "{1}"</value>
+  </data>
+  <data name="ParameterValidationException" xml:space="preserve">
+    <value>An exception occurred while validating a parameter.</value>
+  </data>
+  <data name="ParameterValidationFailed" xml:space="preserve">
+    <value>Parameter validation failed. Check the inner error for more details.</value>
+  </data>
+  <data name="NotMatched" xml:space="preserve">
+    <value>No matching endpoint found.</value>
+  </data>
+  <data name="InvalidMatcherContextType" xml:space="preserve">
+    <value>The request context type "{0}" is not compatible with the matcher type "{1}".</value>
+  </data>
+  <data name="InvalidValidatorValueType" xml:space="preserve">
+    <value>The value type "{0}" is not compatible with the validator type "{1}".</value>
+  </data>
+  <data name="NoParameterConversionProperties" xml:space="preserve">
+    <value>No ParameterConversionProperties defined on the parameter.</value>
+  </data>
+  <data name="ParameterConversionException" xml:space="preserve">
+    <value>An exception occurred during parameter conversion.</value>
+  </data>
+  <data name="NoSuitableParameterConverter" xml:space="preserve">
+    <value>No suitable parameter converter found for parameter of type "{0}".</value>
+  </data>
+  <data name="NoTextPatternMatchProperties" xml:space="preserve">
+    <value>Text parameter converter can only be used with text pattern matching. TextPatternMatchProperties are not found.</value>
+  </data>
+  <data name="PipelineException" xml:space="preserve">
+    <value>An exception was thrown by one of the pipeline handlers.</value>
+  </data>
+  <data name="ParentNotLinked" xml:space="preserve">
+    <value>The parent of the instance of type "{0}" is not linked.</value>
+  </data>
+  <data name="InvocationException" xml:space="preserve">
+    <value>An exception occurred while invoking the endpoint.</value>
+  </data>
+</root>

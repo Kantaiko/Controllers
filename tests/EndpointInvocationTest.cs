@@ -1,8 +1,5 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using Kantaiko.Controllers.EndpointMatching;
 using Kantaiko.Controllers.Execution;
-using Kantaiko.Controllers.Introspection.Factory;
-using Kantaiko.Controllers.Result;
 using Kantaiko.Controllers.Tests.Shared;
 using Xunit;
 
@@ -11,46 +8,67 @@ namespace Kantaiko.Controllers.Tests;
 public class EndpointInvocationTest
 {
     [Theory]
-    [InlineData("test 1")]
-    [InlineData("test 2")]
-    public async Task ShouldReportExceptionThrownByEndpoint(string input)
+    [InlineData("result")]
+    [InlineData("result-task")]
+    public async Task ShouldCollectValueReturnedByEndpoint(string input)
     {
-        var controllerHandler = CreateControllerHandler();
+        var executor = CreateControllerExecutor();
 
         var context = new TestContext(input);
-        var result = await controllerHandler.HandleAsync(context);
+        var result = await executor.HandleAsync(context);
 
-        var exceptionExitReason = Assert.IsType<ExceptionExitReason>(result.ExitReason);
-        var invalidOperationException = Assert.IsType<InvalidOperationException>(exceptionExitReason.Exception);
-        Assert.Equal("hi", invalidOperationException.Message);
+        result.ThrowOnError();
+        Assert.Equal(42, result.EndpointResult);
+    }
+
+    [Theory]
+    [InlineData("exception")]
+    [InlineData("exception-async")]
+    public async Task ShouldReportExceptionThrownByEndpoint(string input)
+    {
+        var executor = CreateControllerExecutor();
+
+        var context = new TestContext(input);
+        var result = await executor.HandleAsync(context);
+
+        Assert.Equal(ControllerErrorCodes.InvocationException, result.Error?.Code);
+        Assert.Equal("hi", result.Error?.Exception?.Message);
     }
 
     private class TestController : Controller
     {
-        [Pattern("test 1")]
-        public void TestException()
+        [Pattern("result-task")]
+        public Task<int> TestValueTaskResult()
         {
-            throw new InvalidOperationException("hi");
+            return Task.FromResult(42);
         }
 
-        [Pattern("test 2")]
+        [Pattern("result")]
+        public int TestResult()
+        {
+            return 42;
+        }
+
+        [Pattern("exception-async")]
         public async Task TestExceptionAsync()
         {
             await Task.Yield();
             throw new InvalidOperationException("hi");
         }
+
+        [Pattern("exception")]
+        public void TestException()
+        {
+            throw new InvalidOperationException("hi");
+        }
     }
 
-    private static IControllerHandler<TestContext> CreateControllerHandler()
+    private static ControllerExecutor CreateControllerExecutor()
     {
-        return TestUtils.CreateControllerHandler<EndpointInvocationTest>(
-            introspectionBuilder => introspectionBuilder.AddEndpointMatching(),
-            handlers =>
-            {
-                handlers.AddEndpointMatching();
-                handlers.AddControllerInstantiation();
-                handlers.AddEndpointInvocation();
-            }
-        );
+        return TestUtils.CreateControllerExecutor<EndpointInvocationTest>(builder =>
+        {
+            builder.AddEndpointMatching();
+            builder.AddDefaultHandlers();
+        });
     }
 }

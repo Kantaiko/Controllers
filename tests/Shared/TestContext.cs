@@ -1,6 +1,6 @@
 ﻿namespace Kantaiko.Controllers.Tests.Shared;
 
-public class TestContext
+internal class TestContext
 {
     public TestContext(string message)
     {

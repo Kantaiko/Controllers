@@ -1,0 +1,369 @@
+const Kantaiko.Controllers.Execution.ControllerErrorCodes.InvocationException = "WellKnown:InvocationException" -> string!
+const Kantaiko.Controllers.Execution.ControllerErrorCodes.MatchingException = "WellKnown:MatchingException" -> string!
+const Kantaiko.Controllers.Execution.ControllerErrorCodes.MatchingFailed = "WellKnown:MatchingFailed" -> string!
+const Kantaiko.Controllers.Execution.ControllerErrorCodes.NoSuitableParameterConverter = "WellKnown:NoSuitableParameterConverter" -> string!
+const Kantaiko.Controllers.Execution.ControllerErrorCodes.NotMatched = "WellKnown:NotMatched" -> string!
+const Kantaiko.Controllers.Execution.ControllerErrorCodes.ParameterConversionException = "WellKnown:ParameterConversionException" -> string!
+const Kantaiko.Controllers.Execution.ControllerErrorCodes.ParameterConversionFailed = "WellKnown:ParameterConversionFailed" -> string!
+const Kantaiko.Controllers.Execution.ControllerErrorCodes.ParameterValidationException = "WellKnown:ParameterValidationException" -> string!
+const Kantaiko.Controllers.Execution.ControllerErrorCodes.ParameterValidationFailed = "WellKnown:ParameterValidationFailed" -> string!
+const Kantaiko.Controllers.Execution.ControllerErrorCodes.PipelineException = "WellKnown:PipelineException" -> string!
+const Kantaiko.Controllers.ParameterConversion.ParameterErrorCodes.InvalidBool = "WellKnown:InvalidBool" -> string!
+const Kantaiko.Controllers.ParameterConversion.ParameterErrorCodes.InvalidDateTime = "WellKnown:InvalidDateTime" -> string!
+const Kantaiko.Controllers.ParameterConversion.ParameterErrorCodes.InvalidDateTimeOffset = "WellKnown:InvalidDateTimeOffset" -> string!
+const Kantaiko.Controllers.ParameterConversion.ParameterErrorCodes.InvalidDecimal = "WellKnown:InvalidDecimal" -> string!
+const Kantaiko.Controllers.ParameterConversion.ParameterErrorCodes.InvalidDouble = "WellKnown:InvalidDouble" -> string!
+const Kantaiko.Controllers.ParameterConversion.ParameterErrorCodes.InvalidFloat = "WellKnown:InvalidFloat" -> string!
+const Kantaiko.Controllers.ParameterConversion.ParameterErrorCodes.InvalidGuid = "WellKnown:InvalidGuid" -> string!
+const Kantaiko.Controllers.ParameterConversion.ParameterErrorCodes.InvalidInt = "WellKnown:InvalidInt" -> string!
+const Kantaiko.Controllers.ParameterConversion.ParameterErrorCodes.InvalidLong = "WellKnown:InvalidLong" -> string!
+const Kantaiko.Controllers.ParameterConversion.ParameterErrorCodes.InvalidTimeSpan = "WellKnown:InvalidTimeSpan" -> string!
+const Kantaiko.Controllers.ParameterConversion.ParameterErrorCodes.MissingRequiredParameter = "WellKnown:MissingRequiredParameter" -> string!
+const Kantaiko.Controllers.ParameterConversion.ParameterErrorCodes.ValidationAttributeFailed = "WellKnown:ValidationAttributeFailed" -> string!
+Kantaiko.Controllers.CompositeParameterAttribute
+Kantaiko.Controllers.CompositeParameterAttribute.CompositeParameterAttribute() -> void
+Kantaiko.Controllers.ControllerBase<TContext>
+Kantaiko.Controllers.ControllerBase<TContext>.Context.get -> TContext
+Kantaiko.Controllers.ControllerBase<TContext>.ControllerBase() -> void
+Kantaiko.Controllers.EndpointMatching.ControllerExecutorBuilderExtensions
+Kantaiko.Controllers.EndpointMatching.EndpointMatchingContext
+Kantaiko.Controllers.EndpointMatching.EndpointMatchingContext.Endpoint.get -> Kantaiko.Controllers.Introspection.EndpointInfo!
+Kantaiko.Controllers.EndpointMatching.EndpointMatchingContext.EndpointMatchingContext() -> void
+Kantaiko.Controllers.EndpointMatching.EndpointMatchingContext.RequestContext.get -> object!
+Kantaiko.Controllers.EndpointMatching.EndpointMatchingContext.ServiceProvider.get -> System.IServiceProvider!
+Kantaiko.Controllers.EndpointMatching.EndpointMatchingContext<TContext>
+Kantaiko.Controllers.EndpointMatching.EndpointMatchingContext<TContext>.Endpoint.get -> Kantaiko.Controllers.Introspection.EndpointInfo!
+Kantaiko.Controllers.EndpointMatching.EndpointMatchingContext<TContext>.EndpointMatchingContext() -> void
+Kantaiko.Controllers.EndpointMatching.EndpointMatchingContext<TContext>.RequestContext.get -> TContext
+Kantaiko.Controllers.EndpointMatching.EndpointMatchingContext<TContext>.ServiceProvider.get -> System.IServiceProvider!
+Kantaiko.Controllers.EndpointMatching.EndpointMatchingHandler
+Kantaiko.Controllers.EndpointMatching.EndpointMatchingHandler.EndpointMatchingHandler() -> void
+Kantaiko.Controllers.EndpointMatching.EndpointMatchingProperties
+Kantaiko.Controllers.EndpointMatching.EndpointMatchingProperties.EndpointMatchingProperties(System.Collections.Generic.IReadOnlyList<Kantaiko.Controllers.EndpointMatching.IEndpointMatcher!>! Matchers) -> void
+Kantaiko.Controllers.EndpointMatching.EndpointMatchingProperties.Matchers.get -> System.Collections.Generic.IReadOnlyList<Kantaiko.Controllers.EndpointMatching.IEndpointMatcher!>!
+Kantaiko.Controllers.EndpointMatching.EndpointMatchingProperties.Matchers.init -> void
+Kantaiko.Controllers.EndpointMatching.EndpointMatchingResult
+Kantaiko.Controllers.EndpointMatching.EndpointMatchingResult.EndpointMatchingResult() -> void
+Kantaiko.Controllers.EndpointMatching.EndpointMatchingResult.EndpointMatchingResult(bool matched, Kantaiko.Controllers.Execution.ControllerError? error = null) -> void
+Kantaiko.Controllers.EndpointMatching.EndpointMatchingResult.Error.get -> Kantaiko.Controllers.Execution.ControllerError?
+Kantaiko.Controllers.EndpointMatching.EndpointMatchingResult.Matched.get -> bool
+Kantaiko.Controllers.EndpointMatching.EndpointMatchingResult.MatchProperties.get -> Kantaiko.Properties.Immutable.IImmutablePropertyCollection!
+Kantaiko.Controllers.EndpointMatching.EndpointMatchingResult.MatchProperties.init -> void
+Kantaiko.Controllers.EndpointMatching.EndpointMatchingTransformer
+Kantaiko.Controllers.EndpointMatching.EndpointMatchingTransformer.EndpointMatchingTransformer() -> void
+Kantaiko.Controllers.EndpointMatching.IEndpointMatcher
+Kantaiko.Controllers.EndpointMatching.IEndpointMatcher.Match(Kantaiko.Controllers.EndpointMatching.EndpointMatchingContext context) -> Kantaiko.Controllers.EndpointMatching.EndpointMatchingResult
+Kantaiko.Controllers.EndpointMatching.IEndpointMatcher<TContext>
+Kantaiko.Controllers.EndpointMatching.Text.PatternOptions
+Kantaiko.Controllers.EndpointMatching.Text.PatternOptions.CompleteMatch = 4 -> Kantaiko.Controllers.EndpointMatching.Text.PatternOptions
+Kantaiko.Controllers.EndpointMatching.Text.PatternOptions.IgnoreCase = 1 -> Kantaiko.Controllers.EndpointMatching.Text.PatternOptions
+Kantaiko.Controllers.EndpointMatching.Text.PatternOptions.MultiLine = 2 -> Kantaiko.Controllers.EndpointMatching.Text.PatternOptions
+Kantaiko.Controllers.EndpointMatching.Text.PatternOptions.None = 0 -> Kantaiko.Controllers.EndpointMatching.Text.PatternOptions
+Kantaiko.Controllers.EndpointMatching.Text.PatternTextMatcher
+Kantaiko.Controllers.EndpointMatching.Text.PatternTextMatcher.PatternTextMatcher(string! pattern, Kantaiko.Controllers.EndpointMatching.Text.PatternOptions options = Kantaiko.Controllers.EndpointMatching.Text.PatternOptions.None) -> void
+Kantaiko.Controllers.EndpointMatching.Text.RegexTextMatcher
+Kantaiko.Controllers.EndpointMatching.Text.RegexTextMatcher.Match(string! text) -> Kantaiko.Controllers.EndpointMatching.EndpointMatchingResult
+Kantaiko.Controllers.EndpointMatching.Text.RegexTextMatcher.RegexTextMatcher(System.Text.RegularExpressions.Regex! pattern) -> void
+Kantaiko.Controllers.EndpointMatching.Text.TextMatchProperties
+Kantaiko.Controllers.EndpointMatching.Text.TextMatchProperties.Parameters.get -> System.Collections.Generic.IReadOnlyDictionary<string!, string!>!
+Kantaiko.Controllers.EndpointMatching.Text.TextMatchProperties.Parameters.init -> void
+Kantaiko.Controllers.Exceptions.DuplicateCompositeParameterException
+Kantaiko.Controllers.Exceptions.DuplicateCompositePropertyException
+Kantaiko.Controllers.Exceptions.ParentNotLinkedException
+Kantaiko.Controllers.Exceptions.ServiceNotFoundException
+Kantaiko.Controllers.Execution.ControllerError
+Kantaiko.Controllers.Execution.ControllerError.Code.get -> string!
+Kantaiko.Controllers.Execution.ControllerError.ControllerError(string! code) -> void
+Kantaiko.Controllers.Execution.ControllerError.Endpoint.get -> Kantaiko.Controllers.Introspection.EndpointInfo?
+Kantaiko.Controllers.Execution.ControllerError.Endpoint.init -> void
+Kantaiko.Controllers.Execution.ControllerError.Exception.get -> System.Exception?
+Kantaiko.Controllers.Execution.ControllerError.Exception.init -> void
+Kantaiko.Controllers.Execution.ControllerError.InnerError.get -> Kantaiko.Controllers.Execution.ControllerError?
+Kantaiko.Controllers.Execution.ControllerError.InnerError.init -> void
+Kantaiko.Controllers.Execution.ControllerError.Message.get -> string?
+Kantaiko.Controllers.Execution.ControllerError.Message.init -> void
+Kantaiko.Controllers.Execution.ControllerError.Parameter.get -> Kantaiko.Controllers.Introspection.EndpointParameterInfo?
+Kantaiko.Controllers.Execution.ControllerError.Parameter.init -> void
+Kantaiko.Controllers.Execution.ControllerError.Properties.get -> Kantaiko.Properties.IReadOnlyPropertyCollection!
+Kantaiko.Controllers.Execution.ControllerError.Properties.init -> void
+Kantaiko.Controllers.Execution.ControllerErrorCodes
+Kantaiko.Controllers.Execution.ControllerExecutionContext
+Kantaiko.Controllers.Execution.ControllerExecutionContext.CancellationToken.get -> System.Threading.CancellationToken
+Kantaiko.Controllers.Execution.ControllerExecutionContext.ControllerInstance.get -> object?
+Kantaiko.Controllers.Execution.ControllerExecutionContext.ControllerInstance.set -> void
+Kantaiko.Controllers.Execution.ControllerExecutionContext.Endpoint.get -> Kantaiko.Controllers.Introspection.EndpointInfo?
+Kantaiko.Controllers.Execution.ControllerExecutionContext.Endpoint.set -> void
+Kantaiko.Controllers.Execution.ControllerExecutionContext.ExecutionError.get -> Kantaiko.Controllers.Execution.ControllerError?
+Kantaiko.Controllers.Execution.ControllerExecutionContext.ExecutionError.set -> void
+Kantaiko.Controllers.Execution.ControllerExecutionContext.IntrospectionInfo.get -> Kantaiko.Controllers.Introspection.IntrospectionInfo!
+Kantaiko.Controllers.Execution.ControllerExecutionContext.InvocationResult.get -> object?
+Kantaiko.Controllers.Execution.ControllerExecutionContext.InvocationResult.set -> void
+Kantaiko.Controllers.Execution.ControllerExecutionContext.MatchProperties.get -> Kantaiko.Properties.Immutable.IImmutablePropertyCollection!
+Kantaiko.Controllers.Execution.ControllerExecutionContext.MatchProperties.set -> void
+Kantaiko.Controllers.Execution.ControllerExecutionContext.Properties.get -> Kantaiko.Properties.IPropertyCollection!
+Kantaiko.Controllers.Execution.ControllerExecutionContext.RequestContext.get -> object!
+Kantaiko.Controllers.Execution.ControllerExecutionContext.ResolvedParameters.get -> object?[]!
+Kantaiko.Controllers.Execution.ControllerExecutionContext.ResolvedParameters.set -> void
+Kantaiko.Controllers.Execution.ControllerExecutionContext.ServiceProvider.get -> System.IServiceProvider!
+Kantaiko.Controllers.Execution.ControllerExecutionResult
+Kantaiko.Controllers.Execution.ControllerExecutionResult.EndpointResult.get -> object?
+Kantaiko.Controllers.Execution.ControllerExecutionResult.EndpointResult.init -> void
+Kantaiko.Controllers.Execution.ControllerExecutionResult.Error.get -> Kantaiko.Controllers.Execution.ControllerError?
+Kantaiko.Controllers.Execution.ControllerExecutionResult.Error.init -> void
+Kantaiko.Controllers.Execution.ControllerExecutionResult.Properties.get -> Kantaiko.Properties.IReadOnlyPropertyCollection!
+Kantaiko.Controllers.Execution.ControllerExecutionResult.Success.get -> bool
+Kantaiko.Controllers.Execution.ControllerExecutor
+Kantaiko.Controllers.Execution.ControllerExecutor.ControllerExecutor(Kantaiko.Controllers.Introspection.IntrospectionInfo! introspectionInfo, System.Collections.Generic.IEnumerable<Kantaiko.Controllers.Execution.Handlers.IControllerExecutionHandler!>! pipelineHandlers) -> void
+Kantaiko.Controllers.Execution.ControllerExecutor.HandleAsync(object! context, System.IServiceProvider? serviceProvider = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<Kantaiko.Controllers.Execution.ControllerExecutionResult!>!
+Kantaiko.Controllers.Execution.ControllerExecutorBuilder
+Kantaiko.Controllers.Execution.ControllerExecutorBuilder.Build<TController>(System.Collections.Generic.IEnumerable<System.Type!>! lookupTypes, System.IServiceProvider? serviceProvider = null) -> Kantaiko.Controllers.Execution.ControllerExecutor!
+Kantaiko.Controllers.Execution.ControllerExecutorBuilder.ControllerExecutorBuilder() -> void
+Kantaiko.Controllers.Execution.ControllerExecutorBuilder.DeconstructionValidator.get -> Kantaiko.Controllers.Introspection.Deconstruction.IDeconstructionValidator?
+Kantaiko.Controllers.Execution.ControllerExecutorBuilder.DeconstructionValidator.set -> void
+Kantaiko.Controllers.Execution.ControllerExecutorBuilder.Handlers.get -> System.Collections.Generic.ICollection<Kantaiko.Controllers.Execution.Handlers.IControllerExecutionHandler!>!
+Kantaiko.Controllers.Execution.ControllerExecutorBuilder.Properties.get -> Kantaiko.Properties.IPropertyCollection!
+Kantaiko.Controllers.Execution.ControllerExecutorBuilder.Transformers.get -> System.Collections.Generic.ICollection<Kantaiko.Controllers.Introspection.Transformers.IIntrospectionInfoTransformer!>!
+Kantaiko.Controllers.Execution.ControllerExecutorBuilderExtensions
+Kantaiko.Controllers.Execution.DefaultControllerFactory
+Kantaiko.Controllers.Execution.DefaultControllerFactory.CreateHandler(System.Type! handlerType, System.IServiceProvider! serviceProvider) -> object!
+Kantaiko.Controllers.Execution.EmptyServiceProvider
+Kantaiko.Controllers.Execution.EmptyServiceProvider.GetService(System.Type! serviceType) -> object?
+Kantaiko.Controllers.Execution.Handlers.ControllerInstantiationHandler
+Kantaiko.Controllers.Execution.Handlers.ControllerInstantiationHandler.ControllerInstantiationHandler(Kantaiko.Controllers.Execution.IControllerFactory? controllerFactory = null) -> void
+Kantaiko.Controllers.Execution.Handlers.EndpointInvocationHandler
+Kantaiko.Controllers.Execution.Handlers.EndpointInvocationHandler.EndpointInvocationHandler() -> void
+Kantaiko.Controllers.Execution.Handlers.IControllerExecutionHandler
+Kantaiko.Controllers.Execution.Handlers.IControllerExecutionHandler.HandleAsync(Kantaiko.Controllers.Execution.ControllerExecutionContext! context) -> System.Threading.Tasks.Task!
+Kantaiko.Controllers.Execution.IControllerFactory
+Kantaiko.Controllers.Execution.IControllerFactory.CreateHandler(System.Type! handlerType, System.IServiceProvider! serviceProvider) -> object!
+Kantaiko.Controllers.FromServicesAttribute
+Kantaiko.Controllers.FromServicesAttribute.FromServicesAttribute() -> void
+Kantaiko.Controllers.IContextAcceptor
+Kantaiko.Controllers.IContextAcceptor.SetContext(object! context) -> void
+Kantaiko.Controllers.Introspection.Context.ControllerTransformationContext
+Kantaiko.Controllers.Introspection.Context.ControllerTransformationContext.Controller.get -> Kantaiko.Controllers.Introspection.ControllerInfo!
+Kantaiko.Controllers.Introspection.Context.ControllerTransformationContext.ControllerTransformationContext() -> void
+Kantaiko.Controllers.Introspection.Context.ControllerTransformationContext.ControllerTransformationContext(Kantaiko.Controllers.Introspection.ControllerInfo! controller, System.IServiceProvider! serviceProvider) -> void
+Kantaiko.Controllers.Introspection.Context.ControllerTransformationContext.ServiceProvider.get -> System.IServiceProvider!
+Kantaiko.Controllers.Introspection.Context.EndpointTransformationContext
+Kantaiko.Controllers.Introspection.Context.EndpointTransformationContext.Endpoint.get -> Kantaiko.Controllers.Introspection.EndpointInfo!
+Kantaiko.Controllers.Introspection.Context.EndpointTransformationContext.EndpointTransformationContext() -> void
+Kantaiko.Controllers.Introspection.Context.EndpointTransformationContext.EndpointTransformationContext(Kantaiko.Controllers.Introspection.EndpointInfo! endpoint, System.IServiceProvider! serviceProvider) -> void
+Kantaiko.Controllers.Introspection.Context.EndpointTransformationContext.ServiceProvider.get -> System.IServiceProvider!
+Kantaiko.Controllers.Introspection.Context.IntrospectionTransformationContext
+Kantaiko.Controllers.Introspection.Context.IntrospectionTransformationContext.IntrospectionInfo.get -> Kantaiko.Controllers.Introspection.IntrospectionInfo!
+Kantaiko.Controllers.Introspection.Context.IntrospectionTransformationContext.IntrospectionTransformationContext() -> void
+Kantaiko.Controllers.Introspection.Context.IntrospectionTransformationContext.IntrospectionTransformationContext(Kantaiko.Controllers.Introspection.IntrospectionInfo! introspectionInfo, System.IServiceProvider! serviceProvider) -> void
+Kantaiko.Controllers.Introspection.Context.IntrospectionTransformationContext.ServiceProvider.get -> System.IServiceProvider!
+Kantaiko.Controllers.Introspection.Context.ParameterTransformationContext
+Kantaiko.Controllers.Introspection.Context.ParameterTransformationContext.Parameter.get -> Kantaiko.Controllers.Introspection.EndpointParameterInfo!
+Kantaiko.Controllers.Introspection.Context.ParameterTransformationContext.ParameterTransformationContext() -> void
+Kantaiko.Controllers.Introspection.Context.ParameterTransformationContext.ParameterTransformationContext(Kantaiko.Controllers.Introspection.EndpointParameterInfo! parameter, System.IServiceProvider! serviceProvider) -> void
+Kantaiko.Controllers.Introspection.Context.ParameterTransformationContext.ServiceProvider.get -> System.IServiceProvider!
+Kantaiko.Controllers.Introspection.Contracts.IControllerFilter
+Kantaiko.Controllers.Introspection.Contracts.IControllerFilter.IsIncluded(Kantaiko.Controllers.Introspection.Context.ControllerTransformationContext context) -> bool
+Kantaiko.Controllers.Introspection.Contracts.IControllerPropertyProvider
+Kantaiko.Controllers.Introspection.Contracts.IControllerPropertyProvider.UpdateControllerProperties(Kantaiko.Controllers.Introspection.Context.ControllerTransformationContext context) -> Kantaiko.Properties.Immutable.IImmutablePropertyCollection!
+Kantaiko.Controllers.Introspection.Contracts.IEndpointFilter
+Kantaiko.Controllers.Introspection.Contracts.IEndpointFilter.IsIncluded(Kantaiko.Controllers.Introspection.Context.EndpointTransformationContext context) -> bool
+Kantaiko.Controllers.Introspection.Contracts.IEndpointPropertyProvider
+Kantaiko.Controllers.Introspection.Contracts.IEndpointPropertyProvider.UpdateEndpointProperties(Kantaiko.Controllers.Introspection.Context.EndpointTransformationContext context) -> Kantaiko.Properties.Immutable.IImmutablePropertyCollection!
+Kantaiko.Controllers.Introspection.Contracts.IParameterCustomizationProvider
+Kantaiko.Controllers.Introspection.Contracts.IParameterCustomizationProvider.GetParameterCustomization(Kantaiko.Controllers.Introspection.Context.ParameterTransformationContext context) -> Kantaiko.Controllers.Introspection.Contracts.ParameterCustomization
+Kantaiko.Controllers.Introspection.Contracts.IParameterPropertyProvider
+Kantaiko.Controllers.Introspection.Contracts.IParameterPropertyProvider.UpdateParameterProperties(Kantaiko.Controllers.Introspection.Context.ParameterTransformationContext context) -> Kantaiko.Properties.Immutable.IImmutablePropertyCollection!
+Kantaiko.Controllers.Introspection.Contracts.ParameterCustomization
+Kantaiko.Controllers.Introspection.Contracts.ParameterCustomization.DefaultValue.get -> object?
+Kantaiko.Controllers.Introspection.Contracts.ParameterCustomization.DefaultValue.init -> void
+Kantaiko.Controllers.Introspection.Contracts.ParameterCustomization.IsOptional.get -> bool?
+Kantaiko.Controllers.Introspection.Contracts.ParameterCustomization.IsOptional.init -> void
+Kantaiko.Controllers.Introspection.Contracts.ParameterCustomization.Name.get -> string?
+Kantaiko.Controllers.Introspection.Contracts.ParameterCustomization.Name.init -> void
+Kantaiko.Controllers.Introspection.Contracts.ParameterCustomization.ParameterCustomization() -> void
+Kantaiko.Controllers.Introspection.ControllerExecutorBuilderExtensions
+Kantaiko.Controllers.Introspection.ControllerInfo
+Kantaiko.Controllers.Introspection.ControllerInfo.Endpoints.get -> System.Collections.Generic.IReadOnlyList<Kantaiko.Controllers.Introspection.EndpointInfo!>!
+Kantaiko.Controllers.Introspection.ControllerInfo.Endpoints.init -> void
+Kantaiko.Controllers.Introspection.ControllerInfo.IntrospectionInfo.get -> Kantaiko.Controllers.Introspection.IntrospectionInfo!
+Kantaiko.Controllers.Introspection.ControllerInfo.Properties.get -> Kantaiko.Properties.Immutable.IImmutablePropertyCollection!
+Kantaiko.Controllers.Introspection.ControllerInfo.Properties.init -> void
+Kantaiko.Controllers.Introspection.ControllerInfo.Type.get -> System.Type!
+Kantaiko.Controllers.Introspection.ControllerInfo.Type.init -> void
+Kantaiko.Controllers.Introspection.Deconstruction.DefaultDeconstructionValidator
+Kantaiko.Controllers.Introspection.Deconstruction.DefaultDeconstructionValidator.CanDeconstruct(System.Type! type, System.Reflection.ICustomAttributeProvider! attributeProvider) -> bool
+Kantaiko.Controllers.Introspection.Deconstruction.DefaultDeconstructionValidator.DefaultDeconstructionValidator() -> void
+Kantaiko.Controllers.Introspection.Deconstruction.IDeconstructionValidator
+Kantaiko.Controllers.Introspection.Deconstruction.IDeconstructionValidator.CanDeconstruct(System.Type! type, System.Reflection.ICustomAttributeProvider! attributeProvider) -> bool
+Kantaiko.Controllers.Introspection.EndpointInfo
+Kantaiko.Controllers.Introspection.EndpointInfo.Controller.get -> Kantaiko.Controllers.Introspection.ControllerInfo!
+Kantaiko.Controllers.Introspection.EndpointInfo.MethodInfo.get -> System.Reflection.MethodInfo!
+Kantaiko.Controllers.Introspection.EndpointInfo.MethodInfo.init -> void
+Kantaiko.Controllers.Introspection.EndpointInfo.Parameters.get -> System.Collections.Generic.IReadOnlyList<Kantaiko.Controllers.Introspection.EndpointParameterInfo!>!
+Kantaiko.Controllers.Introspection.EndpointInfo.ParameterTree.get -> System.Collections.Generic.IReadOnlyList<Kantaiko.Controllers.Introspection.EndpointParameterInfo!>!
+Kantaiko.Controllers.Introspection.EndpointInfo.ParameterTree.init -> void
+Kantaiko.Controllers.Introspection.EndpointInfo.Properties.get -> Kantaiko.Properties.Immutable.IImmutablePropertyCollection!
+Kantaiko.Controllers.Introspection.EndpointInfo.Properties.init -> void
+Kantaiko.Controllers.Introspection.EndpointParameterInfo
+Kantaiko.Controllers.Introspection.EndpointParameterInfo.AttributeProvider.get -> System.Reflection.ICustomAttributeProvider!
+Kantaiko.Controllers.Introspection.EndpointParameterInfo.AttributeProvider.init -> void
+Kantaiko.Controllers.Introspection.EndpointParameterInfo.Children.get -> System.Collections.Generic.IReadOnlyList<Kantaiko.Controllers.Introspection.EndpointParameterInfo!>!
+Kantaiko.Controllers.Introspection.EndpointParameterInfo.Children.init -> void
+Kantaiko.Controllers.Introspection.EndpointParameterInfo.DefaultValue.get -> object?
+Kantaiko.Controllers.Introspection.EndpointParameterInfo.DefaultValue.init -> void
+Kantaiko.Controllers.Introspection.EndpointParameterInfo.Endpoint.get -> Kantaiko.Controllers.Introspection.EndpointInfo!
+Kantaiko.Controllers.Introspection.EndpointParameterInfo.HasChildren.get -> bool
+Kantaiko.Controllers.Introspection.EndpointParameterInfo.IsOptional.get -> bool
+Kantaiko.Controllers.Introspection.EndpointParameterInfo.IsOptional.init -> void
+Kantaiko.Controllers.Introspection.EndpointParameterInfo.Name.get -> string!
+Kantaiko.Controllers.Introspection.EndpointParameterInfo.Name.init -> void
+Kantaiko.Controllers.Introspection.EndpointParameterInfo.ParameterType.get -> System.Type!
+Kantaiko.Controllers.Introspection.EndpointParameterInfo.ParameterType.init -> void
+Kantaiko.Controllers.Introspection.EndpointParameterInfo.Parent.get -> Kantaiko.Controllers.Introspection.EndpointParameterInfo?
+Kantaiko.Controllers.Introspection.EndpointParameterInfo.Properties.get -> Kantaiko.Properties.Immutable.IImmutablePropertyCollection!
+Kantaiko.Controllers.Introspection.EndpointParameterInfo.Properties.init -> void
+Kantaiko.Controllers.Introspection.EndpointParameterInfo.RawParameterType.get -> System.Type!
+Kantaiko.Controllers.Introspection.EndpointParameterInfo.RawParameterType.init -> void
+Kantaiko.Controllers.Introspection.IntrospectionInfo
+Kantaiko.Controllers.Introspection.IntrospectionInfo.Controllers.get -> System.Collections.Generic.IReadOnlyList<Kantaiko.Controllers.Introspection.ControllerInfo!>!
+Kantaiko.Controllers.Introspection.IntrospectionInfo.Controllers.init -> void
+Kantaiko.Controllers.Introspection.IntrospectionInfo.Properties.get -> Kantaiko.Properties.Immutable.IImmutablePropertyCollection!
+Kantaiko.Controllers.Introspection.IntrospectionInfo.Properties.init -> void
+Kantaiko.Controllers.Introspection.IntrospectionInfoFactory
+Kantaiko.Controllers.Introspection.IntrospectionInfoFactory.CreateIntrospectionInfo<TController>(System.Collections.Generic.IEnumerable<System.Type!>! lookupTypes) -> Kantaiko.Controllers.Introspection.IntrospectionInfo!
+Kantaiko.Controllers.Introspection.IntrospectionInfoFactory.IntrospectionInfoFactory(System.Collections.Generic.IEnumerable<Kantaiko.Controllers.Introspection.Transformers.IIntrospectionInfoTransformer!>? transformers = null, Kantaiko.Controllers.Introspection.Deconstruction.IDeconstructionValidator? deconstructionValidator = null, System.IServiceProvider? serviceProvider = null) -> void
+Kantaiko.Controllers.Introspection.Transformers.AttributeFilteringTransformer
+Kantaiko.Controllers.Introspection.Transformers.AttributeFilteringTransformer.AttributeFilteringTransformer(bool requireControllerFilter = false, bool requireEndpointFilter = false) -> void
+Kantaiko.Controllers.Introspection.Transformers.IIntrospectionInfoTransformer
+Kantaiko.Controllers.Introspection.Transformers.IIntrospectionInfoTransformer.Transform(Kantaiko.Controllers.Introspection.IntrospectionInfo! introspectionInfo, System.IServiceProvider! serviceProvider) -> Kantaiko.Controllers.Introspection.IntrospectionInfo!
+Kantaiko.Controllers.Introspection.Transformers.IntrospectionInfoTransformer
+Kantaiko.Controllers.Introspection.Transformers.IntrospectionInfoTransformer.IntrospectionInfoTransformer() -> void
+Kantaiko.Controllers.Introspection.Transformers.IntrospectionInfoTransformer.Transform(Kantaiko.Controllers.Introspection.IntrospectionInfo! introspectionInfo, System.IServiceProvider! serviceProvider) -> Kantaiko.Controllers.Introspection.IntrospectionInfo!
+Kantaiko.Controllers.Introspection.Transformers.ParameterCustomizationTransformer
+Kantaiko.Controllers.Introspection.Transformers.ParameterCustomizationTransformer.ParameterCustomizationTransformer() -> void
+Kantaiko.Controllers.Introspection.Transformers.PropertyProviderTransformer
+Kantaiko.Controllers.Introspection.Transformers.PropertyProviderTransformer.PropertyProviderTransformer() -> void
+Kantaiko.Controllers.Introspection.Transformers.VisibilityFilteringTransformer
+Kantaiko.Controllers.Introspection.Transformers.VisibilityFilteringTransformer.VisibilityFilteringTransformer(bool requirePublic = true, bool allowInheritance = true) -> void
+Kantaiko.Controllers.Introspection.VisibilityParameterProperties
+Kantaiko.Controllers.Introspection.VisibilityParameterProperties.IsHidden.get -> bool
+Kantaiko.Controllers.Introspection.VisibilityParameterProperties.IsHidden.init -> void
+Kantaiko.Controllers.ParameterAttribute
+Kantaiko.Controllers.ParameterAttribute.Default.get -> object?
+Kantaiko.Controllers.ParameterAttribute.Default.init -> void
+Kantaiko.Controllers.ParameterAttribute.IsOptional.get -> bool
+Kantaiko.Controllers.ParameterAttribute.IsOptional.init -> void
+Kantaiko.Controllers.ParameterAttribute.Name.get -> string?
+Kantaiko.Controllers.ParameterAttribute.Name.init -> void
+Kantaiko.Controllers.ParameterAttribute.ParameterAttribute(string? name = null) -> void
+Kantaiko.Controllers.ParameterConversion.ControllerExecutorBuilderExtensions
+Kantaiko.Controllers.ParameterConversion.ConversionResult
+Kantaiko.Controllers.ParameterConversion.ConversionResult.ConversionResult() -> void
+Kantaiko.Controllers.ParameterConversion.ConversionResult.ConversionResult(bool success, object? value = null, Kantaiko.Controllers.Execution.ControllerError? error = null) -> void
+Kantaiko.Controllers.ParameterConversion.ConversionResult.ConversionResult(Kantaiko.Controllers.Execution.ControllerError? error) -> void
+Kantaiko.Controllers.ParameterConversion.ConversionResult.ConversionResult(object? value) -> void
+Kantaiko.Controllers.ParameterConversion.ConversionResult.Error.get -> Kantaiko.Controllers.Execution.ControllerError?
+Kantaiko.Controllers.ParameterConversion.ConversionResult.Success.get -> bool
+Kantaiko.Controllers.ParameterConversion.ConversionResult.Value.get -> object?
+Kantaiko.Controllers.ParameterConversion.ConversionResult<TValue>
+Kantaiko.Controllers.ParameterConversion.ConversionResult<TValue>.ConversionResult() -> void
+Kantaiko.Controllers.ParameterConversion.ConversionResult<TValue>.ConversionResult(bool success) -> void
+Kantaiko.Controllers.ParameterConversion.ConversionResult<TValue>.ConversionResult(Kantaiko.Controllers.Execution.ControllerError? error) -> void
+Kantaiko.Controllers.ParameterConversion.ConversionResult<TValue>.ConversionResult(TValue value) -> void
+Kantaiko.Controllers.ParameterConversion.ConversionResult<TValue>.Error.get -> Kantaiko.Controllers.Execution.ControllerError?
+Kantaiko.Controllers.ParameterConversion.ConversionResult<TValue>.Success.get -> bool
+Kantaiko.Controllers.ParameterConversion.ConversionResult<TValue>.Value.get -> TValue
+Kantaiko.Controllers.ParameterConversion.IParameterConverter
+Kantaiko.Controllers.ParameterConversion.IParameterConverter.ConvertAsync(Kantaiko.Controllers.ParameterConversion.ParameterConversionContext context) -> System.Threading.Tasks.ValueTask<Kantaiko.Controllers.ParameterConversion.ConversionResult>
+Kantaiko.Controllers.ParameterConversion.ITextParameterConverter
+Kantaiko.Controllers.ParameterConversion.ITextParameterConverter.ConvertAsync(string! value, Kantaiko.Controllers.ParameterConversion.ParameterConversionContext context) -> System.Threading.Tasks.ValueTask<Kantaiko.Controllers.ParameterConversion.ConversionResult>
+Kantaiko.Controllers.ParameterConversion.ITextParameterConverter<TValue>
+Kantaiko.Controllers.ParameterConversion.ITextParameterConverter<TValue>.Convert(string! value, Kantaiko.Controllers.ParameterConversion.ParameterConversionContext context) -> Kantaiko.Controllers.ParameterConversion.ConversionResult<TValue>
+Kantaiko.Controllers.ParameterConversion.ITextParameterConverter<TValue>.ConvertAsync(string! value, Kantaiko.Controllers.ParameterConversion.ParameterConversionContext context) -> System.Threading.Tasks.ValueTask<Kantaiko.Controllers.ParameterConversion.ConversionResult<TValue>>
+Kantaiko.Controllers.ParameterConversion.ParameterConversionContext
+Kantaiko.Controllers.ParameterConversion.ParameterConversionContext.CancellationToken.get -> System.Threading.CancellationToken
+Kantaiko.Controllers.ParameterConversion.ParameterConversionContext.ExecutionContext.get -> Kantaiko.Controllers.Execution.ControllerExecutionContext!
+Kantaiko.Controllers.ParameterConversion.ParameterConversionContext.MatchProperties.get -> Kantaiko.Properties.IReadOnlyPropertyCollection!
+Kantaiko.Controllers.ParameterConversion.ParameterConversionContext.Parameter.get -> Kantaiko.Controllers.Introspection.EndpointParameterInfo!
+Kantaiko.Controllers.ParameterConversion.ParameterConversionContext.ParameterConversionContext() -> void
+Kantaiko.Controllers.ParameterConversion.ParameterConversionContext.ParameterConversionContext(Kantaiko.Controllers.Introspection.EndpointParameterInfo! parameter, Kantaiko.Controllers.Execution.ControllerExecutionContext! executionContext) -> void
+Kantaiko.Controllers.ParameterConversion.ParameterConversionContext.RequestContext.get -> object!
+Kantaiko.Controllers.ParameterConversion.ParameterConversionContext.ServiceProvider.get -> System.IServiceProvider!
+Kantaiko.Controllers.ParameterConversion.ParameterConversionHandler
+Kantaiko.Controllers.ParameterConversion.ParameterConversionHandler.ParameterConversionHandler(System.Collections.Generic.IEnumerable<Kantaiko.Controllers.ParameterConversion.IParameterConverter!>! sharedConverters) -> void
+Kantaiko.Controllers.ParameterConversion.ParameterConversionProperties
+Kantaiko.Controllers.ParameterConversion.ParameterConversionProperties.Converters.get -> System.Collections.Generic.IReadOnlyList<Kantaiko.Controllers.ParameterConversion.IParameterConverter!>!
+Kantaiko.Controllers.ParameterConversion.ParameterConversionProperties.Converters.init -> void
+Kantaiko.Controllers.ParameterConversion.ParameterConversionProperties.ParameterConversionProperties(System.Collections.Generic.IReadOnlyList<Kantaiko.Controllers.ParameterConversion.IParameterConverter!>! Converters) -> void
+Kantaiko.Controllers.ParameterConversion.ParameterConversionTransformer
+Kantaiko.Controllers.ParameterConversion.ParameterConversionTransformer.ParameterConversionTransformer() -> void
+Kantaiko.Controllers.ParameterConversion.ParameterErrorCodes
+Kantaiko.Controllers.ParameterConversion.TextParameterConverterAdapter
+Kantaiko.Controllers.ParameterConversion.TextParameterConverterAdapter.TextParameterConverterAdapter(System.Collections.Generic.IReadOnlyDictionary<System.Type!, Kantaiko.Controllers.ParameterConversion.ITextParameterConverter!>! converters) -> void
+Kantaiko.Controllers.ParameterValidation.ControllerExecutorBuilderExtensions
+Kantaiko.Controllers.ParameterValidation.IParameterValidator
+Kantaiko.Controllers.ParameterValidation.IParameterValidator.Validate(Kantaiko.Controllers.ParameterValidation.ParameterValidationContext context) -> Kantaiko.Controllers.ParameterValidation.ValidationResult
+Kantaiko.Controllers.ParameterValidation.IParameterValidator<TValue>
+Kantaiko.Controllers.ParameterValidation.ParameterValidationContext
+Kantaiko.Controllers.ParameterValidation.ParameterValidationContext.Parameter.get -> Kantaiko.Controllers.Introspection.EndpointParameterInfo!
+Kantaiko.Controllers.ParameterValidation.ParameterValidationContext.ParameterValidationContext() -> void
+Kantaiko.Controllers.ParameterValidation.ParameterValidationContext.ParameterValidationContext(object? value, Kantaiko.Controllers.Introspection.EndpointParameterInfo! parameter, System.IServiceProvider! serviceProvider) -> void
+Kantaiko.Controllers.ParameterValidation.ParameterValidationContext.ServiceProvider.get -> System.IServiceProvider!
+Kantaiko.Controllers.ParameterValidation.ParameterValidationContext.Value.get -> object?
+Kantaiko.Controllers.ParameterValidation.ParameterValidationContext<TValue>
+Kantaiko.Controllers.ParameterValidation.ParameterValidationContext<TValue>.Parameter.get -> Kantaiko.Controllers.Introspection.EndpointParameterInfo!
+Kantaiko.Controllers.ParameterValidation.ParameterValidationContext<TValue>.ParameterValidationContext() -> void
+Kantaiko.Controllers.ParameterValidation.ParameterValidationContext<TValue>.ParameterValidationContext(TValue value, Kantaiko.Controllers.Introspection.EndpointParameterInfo! parameter, System.IServiceProvider! serviceProvider) -> void
+Kantaiko.Controllers.ParameterValidation.ParameterValidationContext<TValue>.ServiceProvider.get -> System.IServiceProvider!
+Kantaiko.Controllers.ParameterValidation.ParameterValidationContext<TValue>.Value.get -> TValue
+Kantaiko.Controllers.ParameterValidation.ParameterValidationHandler
+Kantaiko.Controllers.ParameterValidation.ParameterValidationHandler.ParameterValidationHandler() -> void
+Kantaiko.Controllers.ParameterValidation.ParameterValidationProperties
+Kantaiko.Controllers.ParameterValidation.ParameterValidationProperties.ParameterValidationProperties(System.Collections.Generic.IReadOnlyList<Kantaiko.Controllers.ParameterValidation.IParameterValidator!>! Validators, System.Collections.Generic.IReadOnlyList<System.ComponentModel.DataAnnotations.ValidationAttribute!>! ValidationAttributes) -> void
+Kantaiko.Controllers.ParameterValidation.ParameterValidationProperties.ValidationAttributes.get -> System.Collections.Generic.IReadOnlyList<System.ComponentModel.DataAnnotations.ValidationAttribute!>!
+Kantaiko.Controllers.ParameterValidation.ParameterValidationProperties.ValidationAttributes.init -> void
+Kantaiko.Controllers.ParameterValidation.ParameterValidationProperties.Validators.get -> System.Collections.Generic.IReadOnlyList<Kantaiko.Controllers.ParameterValidation.IParameterValidator!>!
+Kantaiko.Controllers.ParameterValidation.ParameterValidationProperties.Validators.init -> void
+Kantaiko.Controllers.ParameterValidation.ParameterValidationTransformer
+Kantaiko.Controllers.ParameterValidation.ParameterValidationTransformer.ParameterValidationTransformer() -> void
+Kantaiko.Controllers.ParameterValidation.ValidationErrorProperties
+Kantaiko.Controllers.ParameterValidation.ValidationErrorProperties.ValidationAttribute.get -> System.ComponentModel.DataAnnotations.ValidationAttribute?
+Kantaiko.Controllers.ParameterValidation.ValidationErrorProperties.ValidationAttribute.init -> void
+Kantaiko.Controllers.ParameterValidation.ValidationErrorProperties.ValidationErrorProperties() -> void
+Kantaiko.Controllers.ParameterValidation.ValidationResult
+Kantaiko.Controllers.ParameterValidation.ValidationResult.Error.get -> Kantaiko.Controllers.Execution.ControllerError?
+Kantaiko.Controllers.ParameterValidation.ValidationResult.Success.get -> bool
+Kantaiko.Controllers.ParameterValidation.ValidationResult.ValidationResult() -> void
+Kantaiko.Controllers.ParameterValidation.ValidationResult.ValidationResult(bool success, Kantaiko.Controllers.Execution.ControllerError? error) -> void
+static Kantaiko.Controllers.EndpointMatching.ControllerExecutorBuilderExtensions.AddEndpointMatching(this Kantaiko.Controllers.Execution.ControllerExecutorBuilder! builder) -> void
+static Kantaiko.Controllers.EndpointMatching.EndpointMatchingResult.implicit operator Kantaiko.Controllers.EndpointMatching.EndpointMatchingResult(bool matched) -> Kantaiko.Controllers.EndpointMatching.EndpointMatchingResult
+static Kantaiko.Controllers.EndpointMatching.EndpointMatchingResult.implicit operator Kantaiko.Controllers.EndpointMatching.EndpointMatchingResult(Kantaiko.Controllers.Execution.ControllerError! error) -> Kantaiko.Controllers.EndpointMatching.EndpointMatchingResult
+static Kantaiko.Controllers.Execution.ControllerExecutorBuilder.CreateDefault() -> Kantaiko.Controllers.Execution.ControllerExecutorBuilder!
+static Kantaiko.Controllers.Execution.ControllerExecutorBuilderExtensions.AddControllerInstantiation(this Kantaiko.Controllers.Execution.ControllerExecutorBuilder! builder) -> void
+static Kantaiko.Controllers.Execution.ControllerExecutorBuilderExtensions.AddDefaultHandlers(this Kantaiko.Controllers.Execution.ControllerExecutorBuilder! builder) -> void
+static Kantaiko.Controllers.Execution.ControllerExecutorBuilderExtensions.AddEndpointInvocation(this Kantaiko.Controllers.Execution.ControllerExecutorBuilder! builder) -> void
+static Kantaiko.Controllers.Execution.DefaultControllerFactory.Instance.get -> Kantaiko.Controllers.Execution.DefaultControllerFactory!
+static Kantaiko.Controllers.Execution.EmptyServiceProvider.Instance.get -> Kantaiko.Controllers.Execution.EmptyServiceProvider!
+static Kantaiko.Controllers.Introspection.ControllerExecutorBuilderExtensions.AddDefaultTransformers(this Kantaiko.Controllers.Execution.ControllerExecutorBuilder! builder) -> void
+static Kantaiko.Controllers.ParameterConversion.ControllerExecutorBuilderExtensions.AddConverter(this Kantaiko.Controllers.Execution.ControllerExecutorBuilder! builder, Kantaiko.Controllers.ParameterConversion.IParameterConverter! converter) -> void
+static Kantaiko.Controllers.ParameterConversion.ControllerExecutorBuilderExtensions.AddConverter<T>(this Kantaiko.Controllers.Execution.ControllerExecutorBuilder! builder, Kantaiko.Controllers.ParameterConversion.ITextParameterConverter<T>! converter) -> void
+static Kantaiko.Controllers.ParameterConversion.ControllerExecutorBuilderExtensions.AddParameterConversion(this Kantaiko.Controllers.Execution.ControllerExecutorBuilder! builder) -> void
+static Kantaiko.Controllers.ParameterConversion.ControllerExecutorBuilderExtensions.AddTextParameterConversion(this Kantaiko.Controllers.Execution.ControllerExecutorBuilder! builder) -> void
+static Kantaiko.Controllers.ParameterConversion.ConversionResult.implicit operator Kantaiko.Controllers.ParameterConversion.ConversionResult(bool success) -> Kantaiko.Controllers.ParameterConversion.ConversionResult
+static Kantaiko.Controllers.ParameterConversion.ConversionResult.implicit operator Kantaiko.Controllers.ParameterConversion.ConversionResult(Kantaiko.Controllers.Execution.ControllerError? error) -> Kantaiko.Controllers.ParameterConversion.ConversionResult
+static Kantaiko.Controllers.ParameterConversion.ConversionResult<TValue>.implicit operator Kantaiko.Controllers.ParameterConversion.ConversionResult<TValue>(bool success) -> Kantaiko.Controllers.ParameterConversion.ConversionResult<TValue>
+static Kantaiko.Controllers.ParameterConversion.ConversionResult<TValue>.implicit operator Kantaiko.Controllers.ParameterConversion.ConversionResult<TValue>(Kantaiko.Controllers.Execution.ControllerError? error) -> Kantaiko.Controllers.ParameterConversion.ConversionResult<TValue>
+static Kantaiko.Controllers.ParameterConversion.ConversionResult<TValue>.implicit operator Kantaiko.Controllers.ParameterConversion.ConversionResult<TValue>(TValue value) -> Kantaiko.Controllers.ParameterConversion.ConversionResult<TValue>
+static Kantaiko.Controllers.ParameterValidation.ControllerExecutorBuilderExtensions.AddParameterValidation(this Kantaiko.Controllers.Execution.ControllerExecutorBuilder! builder) -> void
+static Kantaiko.Controllers.ParameterValidation.ValidationResult.implicit operator Kantaiko.Controllers.ParameterValidation.ValidationResult(bool success) -> Kantaiko.Controllers.ParameterValidation.ValidationResult
+static Kantaiko.Controllers.ParameterValidation.ValidationResult.implicit operator Kantaiko.Controllers.ParameterValidation.ValidationResult(Kantaiko.Controllers.Execution.ControllerError! error) -> Kantaiko.Controllers.ParameterValidation.ValidationResult
+virtual Kantaiko.Controllers.Introspection.Transformers.IntrospectionInfoTransformer.Transform(Kantaiko.Controllers.Introspection.Context.IntrospectionTransformationContext context) -> Kantaiko.Controllers.Introspection.IntrospectionInfo!
+virtual Kantaiko.Controllers.Introspection.Transformers.IntrospectionInfoTransformer.TransformController(Kantaiko.Controllers.Introspection.Context.ControllerTransformationContext context) -> Kantaiko.Controllers.Introspection.ControllerInfo!
+virtual Kantaiko.Controllers.Introspection.Transformers.IntrospectionInfoTransformer.TransformControllerProperties(Kantaiko.Controllers.Introspection.Context.ControllerTransformationContext context) -> Kantaiko.Properties.Immutable.IImmutablePropertyCollection!
+virtual Kantaiko.Controllers.Introspection.Transformers.IntrospectionInfoTransformer.TransformControllers(Kantaiko.Controllers.Introspection.Context.IntrospectionTransformationContext context) -> System.Collections.Generic.IReadOnlyList<Kantaiko.Controllers.Introspection.ControllerInfo!>!
+virtual Kantaiko.Controllers.Introspection.Transformers.IntrospectionInfoTransformer.TransformEndpoint(Kantaiko.Controllers.Introspection.Context.EndpointTransformationContext context) -> Kantaiko.Controllers.Introspection.EndpointInfo!
+virtual Kantaiko.Controllers.Introspection.Transformers.IntrospectionInfoTransformer.TransformEndpointProperties(Kantaiko.Controllers.Introspection.Context.EndpointTransformationContext context) -> Kantaiko.Properties.Immutable.IImmutablePropertyCollection!
+virtual Kantaiko.Controllers.Introspection.Transformers.IntrospectionInfoTransformer.TransformEndpoints(Kantaiko.Controllers.Introspection.Context.ControllerTransformationContext context) -> System.Collections.Generic.IReadOnlyList<Kantaiko.Controllers.Introspection.EndpointInfo!>!
+virtual Kantaiko.Controllers.Introspection.Transformers.IntrospectionInfoTransformer.TransformParameter(Kantaiko.Controllers.Introspection.Context.ParameterTransformationContext context) -> Kantaiko.Controllers.Introspection.EndpointParameterInfo!
+virtual Kantaiko.Controllers.Introspection.Transformers.IntrospectionInfoTransformer.TransformParameterProperties(Kantaiko.Controllers.Introspection.Context.ParameterTransformationContext context) -> Kantaiko.Properties.Immutable.IImmutablePropertyCollection!
+virtual Kantaiko.Controllers.Introspection.Transformers.IntrospectionInfoTransformer.TransformParameters(System.Collections.Generic.IReadOnlyList<Kantaiko.Controllers.Introspection.EndpointParameterInfo!>! parameters, System.IServiceProvider! serviceProvider) -> System.Collections.Generic.IReadOnlyList<Kantaiko.Controllers.Introspection.EndpointParameterInfo!>!
+virtual Kantaiko.Controllers.Introspection.Transformers.IntrospectionInfoTransformer.TransformParameterTree(Kantaiko.Controllers.Introspection.Context.EndpointTransformationContext context) -> System.Collections.Generic.IReadOnlyList<Kantaiko.Controllers.Introspection.EndpointParameterInfo!>!

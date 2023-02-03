@@ -1,45 +1,25 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
+using DependencyInjection;
 using Kantaiko.Controllers;
 using Kantaiko.Controllers.Execution;
-using Kantaiko.Controllers.Handlers;
-using Kantaiko.Controllers.Introspection.Factory;
-using Kantaiko.Controllers.ParameterConversion;
-using Kantaiko.Controllers.ParameterConversion.Text;
 using Microsoft.Extensions.DependencyInjection;
 
 var serviceCollection = new ServiceCollection();
 
 serviceCollection.AddSingleton(provider =>
 {
+    var executorBuilder = new ControllerExecutorBuilder();
+    // configure controller executor here
+
     var lookupTypes = Assembly.GetExecutingAssembly().GetTypes();
-
-    var converterCollection = new TextParameterConverterCollection(lookupTypes);
-
-    var introspectionBuilder = new IntrospectionBuilder<TestContext>();
-
-    introspectionBuilder.SetServiceProvider(provider);
-    introspectionBuilder.AddEndpointMatching();
-    introspectionBuilder.AddTextParameterConversion(converterCollection);
-    introspectionBuilder.AddDefaultTransformation();
-
-    var introspectionInfo = introspectionBuilder.CreateIntrospectionInfo(lookupTypes);
-
-    var handlers = new HandlerCollection<TestContext>();
-    var handlerFactory = new ServiceHandlerFactory();
-
-    handlers.AddEndpointMatching();
-    handlers.AddParameterConversion(h => h.AddTextParameterConversion(handlerFactory));
-    handlers.AddDefaultControllerHandling(handlerFactory);
-
-    return ControllerHandlerFactory.CreateControllerHandler(introspectionInfo, handlers);
+    return executorBuilder.Build<TestController>(lookupTypes, provider);
 });
 
 // Build service provider
 var serviceProvider = serviceCollection.BuildServiceProvider();
 
 // Resolve controller handler
-var handler = serviceProvider.GetRequiredService<IControllerHandler<TestContext>>();
+var handler = serviceProvider.GetRequiredService<ControllerExecutor>();
 
 // Handle request
 using var scope = serviceProvider.CreateScope();
@@ -50,12 +30,17 @@ var context = new TestContext("Hello, world!", serviceProvider);
 // The same applies to the CancellationToken parameter
 var result = await handler.HandleAsync(context, serviceProvider);
 
-internal record TestContext(string Text, IServiceProvider ServiceProvider);
-
-internal class ServiceHandlerFactory : IHandlerFactory
+namespace DependencyInjection
 {
-    public object CreateHandler(Type handlerType, IServiceProvider serviceProvider)
+    internal class TestController : ControllerBase<TestContext> { }
+
+    internal record TestContext(string Text, IServiceProvider ServiceProvider);
+
+    internal class ServiceControllerFactory : IControllerFactory
     {
-        return ActivatorUtilities.CreateInstance(serviceProvider, handlerType);
+        public object CreateHandler(Type handlerType, IServiceProvider serviceProvider)
+        {
+            return ActivatorUtilities.CreateInstance(serviceProvider, handlerType);
+        }
     }
 }

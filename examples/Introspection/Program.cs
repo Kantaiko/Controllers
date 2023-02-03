@@ -1,25 +1,28 @@
-﻿using System;
-using System.Linq;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Text;
+using Introspection;
 using Kantaiko.Controllers;
-using Kantaiko.Controllers.Introspection.Factory;
-using Kantaiko.Controllers.Introspection.Factory.Attributes;
-using Kantaiko.Controllers.Introspection.Factory.Context;
-using Kantaiko.Controllers.Introspection.Factory.Deconstruction;
+using Kantaiko.Controllers.Introspection;
+using Kantaiko.Controllers.Introspection.Context;
+using Kantaiko.Controllers.Introspection.Contracts;
+using Kantaiko.Controllers.Introspection.Deconstruction;
+using Kantaiko.Controllers.Introspection.Transformers;
 using Kantaiko.Properties;
 using Kantaiko.Properties.Immutable;
 
-var deconstructionValidator = new TestDeconstructionValidator();
-
-var introspectionBuilder = new IntrospectionBuilder<TestContext>();
-
-introspectionBuilder.SetDeconstructionValidator(deconstructionValidator);
-introspectionBuilder.AddEndpointMatching();
-introspectionBuilder.AddDefaultTransformation();
-
 var lookupTypes = Assembly.GetExecutingAssembly().GetTypes();
-var introspectionInfo = introspectionBuilder.CreateIntrospectionInfo(lookupTypes);
+
+// Here we create IntrospectionInfo directly in order to demonstrate its independent usage
+var introspectionInfoFactory = new IntrospectionInfoFactory(
+    transformers: new IIntrospectionInfoTransformer[]
+    {
+        new PropertyProviderTransformer(),
+        new ParameterCustomizationTransformer()
+    },
+    deconstructionValidator: new DefaultDeconstructionValidator()
+);
+
+var introspectionInfo = introspectionInfoFactory.CreateIntrospectionInfo<TestController>(lookupTypes);
 
 // Get all endpoints
 var endpoints = introspectionInfo.Controllers.SelectMany(x => x.Endpoints);
@@ -50,54 +53,50 @@ foreach (var endpointInfo in endpoints)
 
 Console.WriteLine(helpMessage.ToString());
 
-internal class InstallPackageInput
+namespace Introspection
 {
-    [Parameter("package")]
-    public string PackageName { get; set; } = null!;
-
-    [Parameter("version", IsOptional = true)]
-    public string? PackageVersion { get; set; }
-}
-
-internal class TestController : ControllerBase<TestContext>
-{
-    [Command("sum")]
-    public int Sum(int a, int b) => a + b;
-
-    [Command("greet")]
-    public string Greet(string? name = null) => name is null ? "Hi!" : $"Hi, {name}!";
-
-    [Command("install")]
-    public void InstallPackage(InstallPackageInput input) { }
-}
-
-internal record CommandEndpointProperties : ReadOnlyPropertiesBase<CommandEndpointProperties>
-{
-    public string? CommandName { get; init; }
-}
-
-[AttributeUsage(AttributeTargets.Method)]
-internal class CommandAttribute : Attribute, IEndpointPropertyProvider
-{
-    private readonly string _name;
-
-    public CommandAttribute(string name)
+    [CompositeParameter]
+    internal class InstallPackageInput
     {
-        _name = name;
+        [Parameter("package")]
+        public string PackageName { get; set; } = null!;
+
+        [Parameter("version", IsOptional = true)]
+        public string PackageVersion { get; set; } = null!;
     }
 
-    public IImmutablePropertyCollection UpdateEndpointProperties(EndpointFactoryContext context)
+    internal class TestController : ControllerBase<TestContext>
     {
-        return context.Endpoint.Properties.Set(new CommandEndpointProperties { CommandName = _name });
-    }
-}
+        [Command("sum")]
+        public int Sum(int a, int b) => a + b;
 
-internal class TestDeconstructionValidator : IDeconstructionValidator
-{
-    public bool CanDeconstruct(Type type, ICustomAttributeProvider attributeProvider)
+        [Command("greet")]
+        public string Greet(string? name = null) => name is null ? "Hi!" : $"Hi, {name}!";
+
+        [Command("install")]
+        public void InstallPackage(InstallPackageInput input) { }
+    }
+
+    internal record CommandEndpointProperties : PropertyRecord<CommandEndpointProperties>
     {
-        return type == typeof(InstallPackageInput);
+        public string? CommandName { get; init; }
     }
-}
 
-internal class TestContext { }
+    [AttributeUsage(AttributeTargets.Method)]
+    internal class CommandAttribute : Attribute, IEndpointPropertyProvider
+    {
+        private readonly string _name;
+
+        public CommandAttribute(string name)
+        {
+            _name = name;
+        }
+
+        public IImmutablePropertyCollection UpdateEndpointProperties(EndpointTransformationContext context)
+        {
+            return context.Endpoint.Properties.Set(new CommandEndpointProperties { CommandName = _name });
+        }
+    }
+
+    internal class TestContext { }
+}

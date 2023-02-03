@@ -1,6 +1,6 @@
 ﻿namespace Kantaiko.Controllers.Utils;
 
-public static class NamingUtils
+internal static class NamingUtils
 {
     public static string ToCamelCase(string name)
     {

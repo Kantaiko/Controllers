@@ -1,22 +1,25 @@
-using System;
-using Kantaiko.Controllers.Introspection.Factory.Attributes;
-using Kantaiko.Controllers.Introspection.Factory.Context;
-using Kantaiko.Controllers.Matching;
+using Kantaiko.Controllers.EndpointMatching;
+using Kantaiko.Controllers.EndpointMatching.Text;
 
 namespace Kantaiko.Controllers.Tests.Shared;
 
 [AttributeUsage(AttributeTargets.Method)]
-public class PatternAttribute : Attribute, IEndpointMatcherFactory<TestContext>
+internal class PatternAttribute : Attribute, IEndpointMatcher
 {
-    private readonly string _pattern;
+    private readonly PatternTextMatcher _matcher;
 
     public PatternAttribute(string pattern)
     {
-        _pattern = pattern;
+        _matcher = new PatternTextMatcher(pattern);
     }
 
-    public IEndpointMatcher<TestContext> CreateEndpointMatcher(EndpointFactoryContext context)
+    public EndpointMatchingResult Match(EndpointMatchingContext context)
     {
-        return new PatternMatcher(_pattern);
+        if (context.RequestContext is not TestContext testContext)
+        {
+            throw new InvalidOperationException("Request context is not a test context.");
+        }
+
+        return _matcher.Match(testContext.Message);
     }
 }

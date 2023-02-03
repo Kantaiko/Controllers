@@ -1,17 +1,19 @@
-using System;
-using System.Collections.Generic;
-using System.Threading;
 using Kantaiko.Controllers.Introspection;
-using Kantaiko.Controllers.Result;
 using Kantaiko.Properties;
 using Kantaiko.Properties.Immutable;
 
 namespace Kantaiko.Controllers.Execution;
 
-public class ControllerExecutionContext<TContext> : IPropertyContainer
+/// <summary>
+/// The context that represents the execution of a controller request.
+/// <br/>
+/// From one side, it defines some kind of a contract between the controller execution stages.
+/// From the other side, it allows user code to customize the execution process.
+/// </summary>
+public sealed class ControllerExecutionContext : IPropertyContainer
 {
-    public ControllerExecutionContext(
-        TContext requestContext,
+    internal ControllerExecutionContext(
+        object requestContext,
         IntrospectionInfo introspectionInfo,
         IServiceProvider serviceProvider,
         CancellationToken cancellationToken)
@@ -23,24 +25,80 @@ public class ControllerExecutionContext<TContext> : IPropertyContainer
         CancellationToken = cancellationToken;
     }
 
-    public TContext RequestContext { get; }
+    /// <summary>
+    /// The request context that is processed by the controller.
+    /// </summary>
+    public object RequestContext { get; }
+
+    /// <summary>
+    /// The introspection info.
+    /// </summary>
     public IntrospectionInfo IntrospectionInfo { get; }
 
     private IPropertyCollection? _properties;
+
+    /// <summary>
+    /// The user-defined data that can be used between different execution stages.
+    /// </summary>
     public IPropertyCollection Properties => _properties ??= new PropertyCollection();
 
+    /// <summary>
+    /// The endpoint that was selected to process the request.
+    /// <br/>
+    /// Will be null if the endpoint is not selected yet.
+    /// </summary>
     public EndpointInfo? Endpoint { get; set; }
-    public IImmutablePropertyCollection? ParameterConversionProperties { get; set; }
 
+    /// <summary>
+    /// The property collection that contains the additional data provided by the endpoint matching stage.
+    /// </summary>
+    public IImmutablePropertyCollection MatchProperties { get; set; } = ImmutablePropertyCollection.Empty;
+
+    /// <summary>
+    /// The controller instance that will be used to process the request.
+    /// <br/>
+    /// Will be null if the controller is not created yet.
+    /// </summary>
     public object? ControllerInstance { get; set; }
 
-    public Dictionary<EndpointParameterInfo, object?>? ResolvedParameters { get; set; }
-    public object?[]? ConstructedParameters { get; set; }
+    /// <summary>
+    /// The array of parameter values that was created by the parameter conversion stage.
+    /// <br/>
+    /// The order of the values corresponds to the order of the <see cref="EndpointInfo.Parameters"/> list.
+    /// <br/>
+    /// An empty array by default.
+    /// </summary>
+    public object?[] ResolvedParameters { get; set; } = Array.Empty<object>();
 
-    public object? RawInvocationResult { get; set; }
+    /// <summary>
+    /// The result of the method call that was executed to process the request.
+    /// <list type="bullet">
+    /// <item>If the method return type is void, the value will be null.</item>
+    /// <item>If the method return type is <see cref="Task"/> or <see cref="ValueTask"/> the value will be null.</item>
+    /// <item>
+    /// If the method return type is <see cref="Task{TResult}"/> or <see cref="ValueTask{TResult}"/> the value will be
+    /// the result of the task.
+    /// </item>
+    /// <item>Otherwise, the value will be the result of the method call.</item>
+    /// </list>
+    /// This property will be used to produce the final result after the execution pipeline is finished.
+    /// </summary>
     public object? InvocationResult { get; set; }
-    public ControllerExecutionResult? ExecutionResult { get; set; }
 
+    /// <summary>
+    /// An error that occurred during the execution of the execution pipeline or controller method invocation.
+    /// <br/>
+    /// This property will be used to produce the final result after the execution pipeline is finished.
+    /// </summary>
+    public ControllerError? ExecutionError { get; set; }
+
+    /// <summary>
+    /// The service provider that can be used to resolve services.
+    /// </summary>
     public IServiceProvider ServiceProvider { get; }
+
+    /// <summary>
+    /// The cancellation token that can be used to listen for request cancellation.
+    /// </summary>
     public CancellationToken CancellationToken { get; }
 }
