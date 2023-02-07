@@ -115,8 +115,10 @@ Kantaiko.Controllers.Execution.ControllerExecutionResult.Success.get -> bool
 Kantaiko.Controllers.Execution.ControllerExecutor
 Kantaiko.Controllers.Execution.ControllerExecutor.ControllerExecutor(Kantaiko.Controllers.Introspection.IntrospectionInfo! introspectionInfo, System.Collections.Generic.IEnumerable<Kantaiko.Controllers.Execution.Handlers.IControllerExecutionHandler!>! pipelineHandlers) -> void
 Kantaiko.Controllers.Execution.ControllerExecutor.HandleAsync(object! context, System.IServiceProvider? serviceProvider = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<Kantaiko.Controllers.Execution.ControllerExecutionResult!>!
+Kantaiko.Controllers.Execution.ControllerExecutor.IntrospectionInfo.get -> Kantaiko.Controllers.Introspection.IntrospectionInfo!
 Kantaiko.Controllers.Execution.ControllerExecutorBuilder
 Kantaiko.Controllers.Execution.ControllerExecutorBuilder.Build<TController>(System.Collections.Generic.IEnumerable<System.Type!>! lookupTypes, System.IServiceProvider? serviceProvider = null) -> Kantaiko.Controllers.Execution.ControllerExecutor!
+Kantaiko.Controllers.Execution.ControllerExecutorBuilder.BuildIntrospectionInfo<TController>(System.Collections.Generic.IEnumerable<System.Type!>! lookupTypes, System.IServiceProvider? serviceProvider = null) -> Kantaiko.Controllers.Introspection.IntrospectionInfo!
 Kantaiko.Controllers.Execution.ControllerExecutorBuilder.ControllerExecutorBuilder() -> void
 Kantaiko.Controllers.Execution.ControllerExecutorBuilder.DeconstructionValidator.get -> Kantaiko.Controllers.Introspection.Deconstruction.IDeconstructionValidator?
 Kantaiko.Controllers.Execution.ControllerExecutorBuilder.DeconstructionValidator.set -> void

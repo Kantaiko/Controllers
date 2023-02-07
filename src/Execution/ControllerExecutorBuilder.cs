@@ -52,6 +52,22 @@ public class ControllerExecutorBuilder : IPropertyContainer
     }
 
     /// <summary>
+    /// Builds the <see cref="IntrospectionInfo"/> separately.
+    /// </summary>
+    /// <param name="lookupTypes">The list of types that will be used to lookup the controllers.</param>
+    /// <param name="serviceProvider">The service provider that will be used by introspection transformers.</param>
+    /// <typeparam name="TController">The base type of the controllers.</typeparam>
+    /// <returns>The <see cref="IntrospectionInfo" />.</returns>
+    public IntrospectionInfo BuildIntrospectionInfo<TController>(IEnumerable<Type> lookupTypes,
+        IServiceProvider? serviceProvider = null)
+    {
+        ArgumentNullException.ThrowIfNull(lookupTypes);
+
+        var introspectionFactory = new IntrospectionInfoFactory(Transformers, DeconstructionValidator, serviceProvider);
+        return introspectionFactory.CreateIntrospectionInfo<TController>(lookupTypes);
+    }
+
+    /// <summary>
     /// Creates a new instance of <see cref="ControllerExecutorBuilder" />
     /// with default introspection transformers configured.
     /// </summary>

@@ -9,8 +9,12 @@ namespace Kantaiko.Controllers.Execution;
 /// </summary>
 public sealed class ControllerExecutor
 {
-    private readonly IntrospectionInfo _introspectionInfo;
     private readonly IEnumerable<IControllerExecutionHandler> _pipelineHandlers;
+
+    /// <summary>
+    /// The introspection info used by the executor.
+    /// </summary>
+    public IntrospectionInfo IntrospectionInfo { get; }
 
     /// <summary>
     /// Creates a new instance of <see cref="ControllerExecutor"/>.
@@ -23,7 +27,7 @@ public sealed class ControllerExecutor
         ArgumentNullException.ThrowIfNull(introspectionInfo);
         ArgumentNullException.ThrowIfNull(pipelineHandlers);
 
-        _introspectionInfo = introspectionInfo;
+        IntrospectionInfo = introspectionInfo;
         _pipelineHandlers = pipelineHandlers;
     }
 
@@ -56,7 +60,7 @@ public sealed class ControllerExecutor
 
         var executionContext = new ControllerExecutionContext(
             context,
-            _introspectionInfo,
+            IntrospectionInfo,
             serviceProvider,
             cancellationToken
         );
