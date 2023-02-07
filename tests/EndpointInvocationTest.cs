@@ -3,6 +3,8 @@ using Kantaiko.Controllers.Execution;
 using Kantaiko.Controllers.Tests.Shared;
 using Xunit;
 
+#pragma warning disable CS4014
+
 namespace Kantaiko.Controllers.Tests;
 
 public class EndpointInvocationTest
@@ -35,6 +37,18 @@ public class EndpointInvocationTest
         Assert.Equal("hi", result.Error?.Exception?.Message);
     }
 
+    [Fact]
+    public async Task ShouldNotAwaitResultIfTheCorrespondingOptionIsDisabled()
+    {
+        var executor = CreateControllerExecutor(awaitResult: false);
+
+        var context = new TestContext("result-task");
+        var result = await executor.HandleAsync(context);
+
+        result.ThrowOnError();
+        Assert.IsType<Task<int>>(result.EndpointResult);
+    }
+
     private class TestController : Controller
     {
         [Pattern("result-task")]
@@ -63,12 +77,12 @@ public class EndpointInvocationTest
         }
     }
 
-    private static ControllerExecutor CreateControllerExecutor()
+    private static ControllerExecutor CreateControllerExecutor(bool awaitResult = true)
     {
         return TestUtils.CreateControllerExecutor<EndpointInvocationTest>(builder =>
         {
             builder.AddEndpointMatching();
-            builder.AddDefaultHandlers();
+            builder.AddDefaultHandlers(awaitResult: awaitResult);
         });
     }
 }

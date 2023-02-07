@@ -27,6 +27,16 @@ public sealed class EndpointInvocationHandler : IControllerExecutionHandler
     );
 
     private readonly ConcurrentDictionary<EndpointInfo, ParameterDelegateSet> _delegates = new();
+    private readonly bool _awaitResult;
+
+    /// <summary>
+    /// Creates a new instance of <see cref="EndpointInvocationHandler"/>.
+    /// </summary>
+    /// <param name="awaitResult">Whether to automatically await the result of the endpoint invocation.</param>
+    public EndpointInvocationHandler(bool awaitResult = true)
+    {
+        _awaitResult = awaitResult;
+    }
 
     async Task IControllerExecutionHandler.HandleAsync(ControllerExecutionContext context)
     {
@@ -66,7 +76,7 @@ public sealed class EndpointInvocationHandler : IControllerExecutionHandler
         context.InvocationResult = result;
     }
 
-    private static ParameterDelegateSet CreateDelegateSet(EndpointInfo endpoint)
+    private ParameterDelegateSet CreateDelegateSet(EndpointInfo endpoint)
     {
         var invocationDelegate = CreateInvocationDelegate(endpoint);
         var resultAccessor = CreateResultAccessor(endpoint);
@@ -236,8 +246,13 @@ public sealed class EndpointInvocationHandler : IControllerExecutionHandler
         return Expression.Block(new[] { instance }, block);
     }
 
-    private static ResultAccessor? CreateResultAccessor(EndpointInfo endpoint)
+    private ResultAccessor? CreateResultAccessor(EndpointInfo endpoint)
     {
+        if (!_awaitResult)
+        {
+            return null;
+        }
+
         if (!endpoint.MethodInfo.ReturnType.IsGenericType)
         {
             return null;

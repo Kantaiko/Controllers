@@ -131,7 +131,7 @@ Kantaiko.Controllers.Execution.EmptyServiceProvider.GetService(System.Type! serv
 Kantaiko.Controllers.Execution.Handlers.ControllerInstantiationHandler
 Kantaiko.Controllers.Execution.Handlers.ControllerInstantiationHandler.ControllerInstantiationHandler(Kantaiko.Controllers.Execution.IControllerFactory? controllerFactory = null) -> void
 Kantaiko.Controllers.Execution.Handlers.EndpointInvocationHandler
-Kantaiko.Controllers.Execution.Handlers.EndpointInvocationHandler.EndpointInvocationHandler() -> void
+Kantaiko.Controllers.Execution.Handlers.EndpointInvocationHandler.EndpointInvocationHandler(bool awaitResult = true) -> void
 Kantaiko.Controllers.Execution.Handlers.IControllerExecutionHandler
 Kantaiko.Controllers.Execution.Handlers.IControllerExecutionHandler.HandleAsync(Kantaiko.Controllers.Execution.ControllerExecutionContext! context) -> System.Threading.Tasks.Task!
 Kantaiko.Controllers.Execution.IControllerFactory
@@ -338,9 +338,9 @@ static Kantaiko.Controllers.EndpointMatching.ControllerExecutorBuilderExtensions
 static Kantaiko.Controllers.EndpointMatching.EndpointMatchingResult.implicit operator Kantaiko.Controllers.EndpointMatching.EndpointMatchingResult(bool matched) -> Kantaiko.Controllers.EndpointMatching.EndpointMatchingResult
 static Kantaiko.Controllers.EndpointMatching.EndpointMatchingResult.implicit operator Kantaiko.Controllers.EndpointMatching.EndpointMatchingResult(Kantaiko.Controllers.Execution.ControllerError! error) -> Kantaiko.Controllers.EndpointMatching.EndpointMatchingResult
 static Kantaiko.Controllers.Execution.ControllerExecutorBuilder.CreateDefault() -> Kantaiko.Controllers.Execution.ControllerExecutorBuilder!
-static Kantaiko.Controllers.Execution.ControllerExecutorBuilderExtensions.AddControllerInstantiation(this Kantaiko.Controllers.Execution.ControllerExecutorBuilder! builder) -> void
-static Kantaiko.Controllers.Execution.ControllerExecutorBuilderExtensions.AddDefaultHandlers(this Kantaiko.Controllers.Execution.ControllerExecutorBuilder! builder) -> void
-static Kantaiko.Controllers.Execution.ControllerExecutorBuilderExtensions.AddEndpointInvocation(this Kantaiko.Controllers.Execution.ControllerExecutorBuilder! builder) -> void
+static Kantaiko.Controllers.Execution.ControllerExecutorBuilderExtensions.AddControllerInstantiation(this Kantaiko.Controllers.Execution.ControllerExecutorBuilder! builder, Kantaiko.Controllers.Execution.IControllerFactory? controllerFactory = null) -> void
+static Kantaiko.Controllers.Execution.ControllerExecutorBuilderExtensions.AddDefaultHandlers(this Kantaiko.Controllers.Execution.ControllerExecutorBuilder! builder, Kantaiko.Controllers.Execution.IControllerFactory? controllerFactory = null, bool awaitResult = true) -> void
+static Kantaiko.Controllers.Execution.ControllerExecutorBuilderExtensions.AddEndpointInvocation(this Kantaiko.Controllers.Execution.ControllerExecutorBuilder! builder, bool awaitResult = true) -> void
 static Kantaiko.Controllers.Execution.DefaultControllerFactory.Instance.get -> Kantaiko.Controllers.Execution.DefaultControllerFactory!
 static Kantaiko.Controllers.Execution.EmptyServiceProvider.Instance.get -> Kantaiko.Controllers.Execution.EmptyServiceProvider!
 static Kantaiko.Controllers.Introspection.ControllerExecutorBuilderExtensions.AddDefaultTransformers(this Kantaiko.Controllers.Execution.ControllerExecutorBuilder! builder) -> void

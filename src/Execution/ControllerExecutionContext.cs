@@ -1,3 +1,4 @@
+using Kantaiko.Controllers.Execution.Handlers;
 using Kantaiko.Controllers.Introspection;
 using Kantaiko.Properties;
 using Kantaiko.Properties.Immutable;
@@ -71,7 +72,10 @@ public sealed class ControllerExecutionContext : IPropertyContainer
     public object?[] ResolvedParameters { get; set; } = Array.Empty<object>();
 
     /// <summary>
-    /// The result of the method call that was executed to process the request.
+    /// The normalized result of the method call that was executed to process the request.
+    /// <br/>
+    /// In most cases, this value will be set by the <see cref="EndpointInvocationHandler"/>.
+    /// This handler produces the following values:
     /// <list type="bullet">
     /// <item>If the method return type is void, the value will be null.</item>
     /// <item>If the method return type is <see cref="Task"/> or <see cref="ValueTask"/> the value will be null.</item>
@@ -80,6 +84,8 @@ public sealed class ControllerExecutionContext : IPropertyContainer
     /// the result of the task.
     /// </item>
     /// <item>Otherwise, the value will be the result of the method call.</item>
+    /// <item>The value will always be the result of the method call if the <c>awaitResult</c> parameter of the
+    /// handler is set to <c>false</c>.</item>
     /// </list>
     /// This property will be used to produce the final result after the execution pipeline is finished.
     /// </summary>
