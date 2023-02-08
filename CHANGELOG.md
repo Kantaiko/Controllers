@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/saintedlama/versionize) for commit guidelines.
 
+<a name="1.0.0-alpha.2"></a>
+## [1.0.0-alpha.2](https://www.github.com/Kantaiko/Controllers/releases/tag/v1.0.0-alpha.2) (2023-2-8)
+
+### Features
+
+* Add ability not to await result in EndpointInvocationHandler ([274477b](https://www.github.com/Kantaiko/Controllers/commit/274477bb0c5fd52b2a12a3458c11352ecf4bdff1))
+* Expose the IntrospectionInfo in ControllerExecutor ([88c6fcb](https://www.github.com/Kantaiko/Controllers/commit/88c6fcb8728d14b0d26d21ec42ca70c93342f92d))
+* Simplify text conversion system ([dbaa93f](https://www.github.com/Kantaiko/Controllers/commit/dbaa93ffd29c5f636a658d5a76049e0b3b2c349a))
+
 <a name="1.0.0-alpha.1"></a>
 ## [1.0.0-alpha.1](https://www.github.com/Kantaiko/Controllers/releases/tag/v1.0.0-alpha.1) (2023-2-3)
 
