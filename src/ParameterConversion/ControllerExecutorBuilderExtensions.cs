@@ -10,7 +10,7 @@ public static class ControllerExecutorBuilderExtensions
     private class ConfigurationProperties
     {
         public List<IParameterConverter> Converters { get; } = new();
-        public Dictionary<Type, ITextParameterConverter> TextParameterConverters { get; } = new();
+        public Dictionary<Type, TextParameterDelegate> TextParameterConverters { get; } = new();
     }
 
     /// <summary>
@@ -31,7 +31,7 @@ public static class ControllerExecutorBuilderExtensions
     /// Adds the text parameter conversion infrastructure to the controller executor.
     /// <br/>
     /// Does the same as <see cref="AddParameterConversion" /> but also adds <see cref="TextParameterConverterAdapter"/>
-    /// that supports <see cref="ITextParameterConverter" />s.
+    /// that supports text parameter converters.
     /// </summary>
     /// <param name="builder">The controller executor builder.</param>
     public static void AddTextParameterConversion(this ControllerExecutorBuilder builder)
@@ -63,6 +63,7 @@ public static class ControllerExecutorBuilderExtensions
 
     /// <summary>
     /// Adds a text parameter converter to the controller executor.
+    /// If the converter for the specified type already exists, it will be replaced.
     /// <br/>
     /// The <see cref="AddTextParameterConversion"/> method must be called.
     /// </summary>
@@ -75,6 +76,34 @@ public static class ControllerExecutorBuilderExtensions
         ArgumentNullException.ThrowIfNull(converter);
 
         var properties = builder.Properties.GetOrCreate<ConfigurationProperties>();
-        properties.TextParameterConverters[typeof(T)] = converter;
+
+        properties.TextParameterConverters[typeof(T)] = async (value, context) =>
+        {
+            var result = await converter.ConvertAsync(value, context);
+            return new ConversionResult(result.Success, result.Value, result.Error);
+        };
+    }
+
+    /// <summary>
+    /// Adds a text parameter converter to the controller executor.
+    /// If the converter for the specified type already exists, it will be replaced.
+    /// <br/>
+    /// The <see cref="AddTextParameterConversion"/> method must be called.
+    /// </summary>
+    /// <param name="builder">The controller executor builder.</param>
+    /// <param name="converter">The text parameter converter to add.</param>
+    /// <typeparam name="T">The type of the parameter.</typeparam>
+    public static void AddConverter<T>(this ControllerExecutorBuilder builder, TextParameterDelegate<T> converter)
+    {
+        ArgumentNullException.ThrowIfNull(builder);
+        ArgumentNullException.ThrowIfNull(converter);
+
+        var properties = builder.Properties.GetOrCreate<ConfigurationProperties>();
+
+        properties.TextParameterConverters[typeof(T)] = async (value, context) =>
+        {
+            var result = await converter(value, context);
+            return new ConversionResult(result.Success, result.Value, result.Error);
+        };
     }
 }

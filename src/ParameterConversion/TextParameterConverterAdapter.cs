@@ -10,13 +10,13 @@ namespace Kantaiko.Controllers.ParameterConversion;
 /// </summary>
 public sealed class TextParameterConverterAdapter : IParameterConverter
 {
-    private readonly IReadOnlyDictionary<Type, ITextParameterConverter> _converters;
+    private readonly IReadOnlyDictionary<Type, TextParameterDelegate> _converters;
 
     /// <summary>
     /// Creates a new instance of <see cref="TextParameterConverterAdapter"/>.
     /// </summary>
     /// <param name="converters">The dictionary of text parameter converters.</param>
-    public TextParameterConverterAdapter(IReadOnlyDictionary<Type, ITextParameterConverter> converters)
+    public TextParameterConverterAdapter(IReadOnlyDictionary<Type, TextParameterDelegate> converters)
     {
         _converters = converters;
     }
@@ -47,7 +47,7 @@ public sealed class TextParameterConverterAdapter : IParameterConverter
 
         if (_converters.TryGetValue(parameter.ParameterType, out var customConverter))
         {
-            return await customConverter.ConvertAsync(value, context);
+            return await customConverter.Invoke(value, context);
         }
 
         if (CommonTypeConverters.TryGetValue(parameter.ParameterType, out var commonTypeConverter))

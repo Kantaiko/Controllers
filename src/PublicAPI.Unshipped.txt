@@ -276,8 +276,6 @@ Kantaiko.Controllers.ParameterConversion.ConversionResult<TValue>.Success.get ->
 Kantaiko.Controllers.ParameterConversion.ConversionResult<TValue>.Value.get -> TValue
 Kantaiko.Controllers.ParameterConversion.IParameterConverter
 Kantaiko.Controllers.ParameterConversion.IParameterConverter.ConvertAsync(Kantaiko.Controllers.ParameterConversion.ParameterConversionContext context) -> System.Threading.Tasks.ValueTask<Kantaiko.Controllers.ParameterConversion.ConversionResult>
-Kantaiko.Controllers.ParameterConversion.ITextParameterConverter
-Kantaiko.Controllers.ParameterConversion.ITextParameterConverter.ConvertAsync(string! value, Kantaiko.Controllers.ParameterConversion.ParameterConversionContext context) -> System.Threading.Tasks.ValueTask<Kantaiko.Controllers.ParameterConversion.ConversionResult>
 Kantaiko.Controllers.ParameterConversion.ITextParameterConverter<TValue>
 Kantaiko.Controllers.ParameterConversion.ITextParameterConverter<TValue>.Convert(string! value, Kantaiko.Controllers.ParameterConversion.ParameterConversionContext context) -> Kantaiko.Controllers.ParameterConversion.ConversionResult<TValue>
 Kantaiko.Controllers.ParameterConversion.ITextParameterConverter<TValue>.ConvertAsync(string! value, Kantaiko.Controllers.ParameterConversion.ParameterConversionContext context) -> System.Threading.Tasks.ValueTask<Kantaiko.Controllers.ParameterConversion.ConversionResult<TValue>>
@@ -300,7 +298,9 @@ Kantaiko.Controllers.ParameterConversion.ParameterConversionTransformer
 Kantaiko.Controllers.ParameterConversion.ParameterConversionTransformer.ParameterConversionTransformer() -> void
 Kantaiko.Controllers.ParameterConversion.ParameterErrorCodes
 Kantaiko.Controllers.ParameterConversion.TextParameterConverterAdapter
-Kantaiko.Controllers.ParameterConversion.TextParameterConverterAdapter.TextParameterConverterAdapter(System.Collections.Generic.IReadOnlyDictionary<System.Type!, Kantaiko.Controllers.ParameterConversion.ITextParameterConverter!>! converters) -> void
+Kantaiko.Controllers.ParameterConversion.TextParameterConverterAdapter.TextParameterConverterAdapter(System.Collections.Generic.IReadOnlyDictionary<System.Type!, Kantaiko.Controllers.ParameterConversion.TextParameterDelegate!>! converters) -> void
+Kantaiko.Controllers.ParameterConversion.TextParameterDelegate
+Kantaiko.Controllers.ParameterConversion.TextParameterDelegate<TValue>
 Kantaiko.Controllers.ParameterValidation.ControllerExecutorBuilderExtensions
 Kantaiko.Controllers.ParameterValidation.IParameterValidator
 Kantaiko.Controllers.ParameterValidation.IParameterValidator.Validate(Kantaiko.Controllers.ParameterValidation.ParameterValidationContext context) -> Kantaiko.Controllers.ParameterValidation.ValidationResult
@@ -348,6 +348,7 @@ static Kantaiko.Controllers.Execution.EmptyServiceProvider.Instance.get -> Kanta
 static Kantaiko.Controllers.Introspection.ControllerExecutorBuilderExtensions.AddDefaultTransformers(this Kantaiko.Controllers.Execution.ControllerExecutorBuilder! builder) -> void
 static Kantaiko.Controllers.ParameterConversion.ControllerExecutorBuilderExtensions.AddConverter(this Kantaiko.Controllers.Execution.ControllerExecutorBuilder! builder, Kantaiko.Controllers.ParameterConversion.IParameterConverter! converter) -> void
 static Kantaiko.Controllers.ParameterConversion.ControllerExecutorBuilderExtensions.AddConverter<T>(this Kantaiko.Controllers.Execution.ControllerExecutorBuilder! builder, Kantaiko.Controllers.ParameterConversion.ITextParameterConverter<T>! converter) -> void
+static Kantaiko.Controllers.ParameterConversion.ControllerExecutorBuilderExtensions.AddConverter<T>(this Kantaiko.Controllers.Execution.ControllerExecutorBuilder! builder, Kantaiko.Controllers.ParameterConversion.TextParameterDelegate<T>! converter) -> void
 static Kantaiko.Controllers.ParameterConversion.ControllerExecutorBuilderExtensions.AddParameterConversion(this Kantaiko.Controllers.Execution.ControllerExecutorBuilder! builder) -> void
 static Kantaiko.Controllers.ParameterConversion.ControllerExecutorBuilderExtensions.AddTextParameterConversion(this Kantaiko.Controllers.Execution.ControllerExecutorBuilder! builder) -> void
 static Kantaiko.Controllers.ParameterConversion.ConversionResult.implicit operator Kantaiko.Controllers.ParameterConversion.ConversionResult(bool success) -> Kantaiko.Controllers.ParameterConversion.ConversionResult
