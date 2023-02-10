@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/saintedlama/versionize) for commit guidelines.
 
+<a name="1.0.0-alpha.4"></a>
+## [1.0.0-alpha.4](https://www.github.com/Kantaiko/Controllers/releases/tag/v1.0.0-alpha.4) (2023-2-10)
+
+### Bug Fixes
+
+* Add properties to typed EndpointMatchingContext ([0e1e92e](https://www.github.com/Kantaiko/Controllers/commit/0e1e92e6d15c2577917202463dd0209fcdd0c750))
+
 <a name="1.0.0-alpha.3"></a>
 ## [1.0.0-alpha.3](https://www.github.com/Kantaiko/Controllers/releases/tag/v1.0.0-alpha.3) (2023-2-10)
 

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Version>1.0.0-alpha.3</Version>
+    <Version>1.0.0-alpha.4</Version>
     <Description>Auxiliary library providing tools for implementing controller pattern.</Description>
   </PropertyGroup>
 
