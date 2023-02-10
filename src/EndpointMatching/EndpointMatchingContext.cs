@@ -44,11 +44,12 @@ public readonly ref struct EndpointMatchingContext
 /// <typeparam name="TContext">The type of the request context.</typeparam>
 public readonly ref struct EndpointMatchingContext<TContext>
 {
-    internal EndpointMatchingContext(TContext requestContext, EndpointInfo endpoint,
+    internal EndpointMatchingContext(TContext requestContext, EndpointInfo endpoint, IPropertyCollection properties,
         IServiceProvider serviceProvider)
     {
         RequestContext = requestContext;
         Endpoint = endpoint;
+        Properties = properties;
         ServiceProvider = serviceProvider;
     }
 
@@ -61,6 +62,11 @@ public readonly ref struct EndpointMatchingContext<TContext>
     /// The endpoint that is being matched.
     /// </summary>
     public EndpointInfo Endpoint { get; }
+
+    /// <summary>
+    /// The property collection of the execution context.
+    /// </summary>
+    public IPropertyCollection Properties { get; }
 
     /// <summary>
     /// The service provider.

@@ -31,6 +31,7 @@ public interface IEndpointMatcher<TContext> : IEndpointMatcher
                 context.RequestContext.GetType(), typeof(TContext)));
         }
 
-        return Match(new EndpointMatchingContext<TContext>(requestContext, context.Endpoint, context.ServiceProvider));
+        return Match(new EndpointMatchingContext<TContext>(requestContext, context.Endpoint, context.Properties,
+            context.ServiceProvider));
     }
 }

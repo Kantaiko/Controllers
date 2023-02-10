@@ -52,7 +52,7 @@ public sealed class EndpointInvocationHandler : IControllerExecutionHandler
         {
             result = delegateSet.InvocationDelegate(controller, resolvedParameters);
 
-            if (result is Task task)
+            if (_awaitResult && result is Task task)
             {
                 await task;
             }
