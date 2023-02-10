@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/saintedlama/versionize) for commit guidelines.
 
+<a name="1.0.0-alpha.3"></a>
+## [1.0.0-alpha.3](https://www.github.com/Kantaiko/Controllers/releases/tag/v1.0.0-alpha.3) (2023-2-10)
+
+### Features
+
+* Add sync text converters ([d43f0da](https://www.github.com/Kantaiko/Controllers/commit/d43f0da6bb8acb01b05967af8ad480f803e1b5dc))
+* Expose execution context properties in EndpointMatchingContext ([e5c0660](https://www.github.com/Kantaiko/Controllers/commit/e5c066064f78a974b4bda5efbb2dd78987fde984))
+
 <a name="1.0.0-alpha.2"></a>
 ## [1.0.0-alpha.2](https://www.github.com/Kantaiko/Controllers/releases/tag/v1.0.0-alpha.2) (2023-2-8)
 
