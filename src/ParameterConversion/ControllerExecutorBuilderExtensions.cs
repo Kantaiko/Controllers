@@ -106,4 +106,27 @@ public static class ControllerExecutorBuilderExtensions
             return new ConversionResult(result.Success, result.Value, result.Error);
         };
     }
+
+    /// <summary>
+    /// Adds a text parameter converter to the controller executor.
+    /// If the converter for the specified type already exists, it will be replaced.
+    /// <br/>
+    /// The <see cref="AddTextParameterConversion"/> method must be called.
+    /// </summary>
+    /// <param name="builder">The controller executor builder.</param>
+    /// <param name="converter">The text parameter converter to add.</param>
+    /// <typeparam name="T">The type of the parameter.</typeparam>
+    public static void AddConverter<T>(this ControllerExecutorBuilder builder, SyncTextParameterDelegate<T> converter)
+    {
+        ArgumentNullException.ThrowIfNull(builder);
+        ArgumentNullException.ThrowIfNull(converter);
+
+        var properties = builder.Properties.GetOrCreate<ConfigurationProperties>();
+
+        properties.TextParameterConverters[typeof(T)] = (value, context) =>
+        {
+            var result = converter(value, context);
+            return ValueTask.FromResult(new ConversionResult(result.Success, result.Value, result.Error));
+        };
+    }
 }

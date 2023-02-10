@@ -297,6 +297,7 @@ Kantaiko.Controllers.ParameterConversion.ParameterConversionProperties.Parameter
 Kantaiko.Controllers.ParameterConversion.ParameterConversionTransformer
 Kantaiko.Controllers.ParameterConversion.ParameterConversionTransformer.ParameterConversionTransformer() -> void
 Kantaiko.Controllers.ParameterConversion.ParameterErrorCodes
+Kantaiko.Controllers.ParameterConversion.SyncTextParameterDelegate<TValue>
 Kantaiko.Controllers.ParameterConversion.TextParameterConverterAdapter
 Kantaiko.Controllers.ParameterConversion.TextParameterConverterAdapter.TextParameterConverterAdapter(System.Collections.Generic.IReadOnlyDictionary<System.Type!, Kantaiko.Controllers.ParameterConversion.TextParameterDelegate!>! converters) -> void
 Kantaiko.Controllers.ParameterConversion.TextParameterDelegate
@@ -348,6 +349,7 @@ static Kantaiko.Controllers.Execution.EmptyServiceProvider.Instance.get -> Kanta
 static Kantaiko.Controllers.Introspection.ControllerExecutorBuilderExtensions.AddDefaultTransformers(this Kantaiko.Controllers.Execution.ControllerExecutorBuilder! builder) -> void
 static Kantaiko.Controllers.ParameterConversion.ControllerExecutorBuilderExtensions.AddConverter(this Kantaiko.Controllers.Execution.ControllerExecutorBuilder! builder, Kantaiko.Controllers.ParameterConversion.IParameterConverter! converter) -> void
 static Kantaiko.Controllers.ParameterConversion.ControllerExecutorBuilderExtensions.AddConverter<T>(this Kantaiko.Controllers.Execution.ControllerExecutorBuilder! builder, Kantaiko.Controllers.ParameterConversion.ITextParameterConverter<T>! converter) -> void
+static Kantaiko.Controllers.ParameterConversion.ControllerExecutorBuilderExtensions.AddConverter<T>(this Kantaiko.Controllers.Execution.ControllerExecutorBuilder! builder, Kantaiko.Controllers.ParameterConversion.SyncTextParameterDelegate<T>! converter) -> void
 static Kantaiko.Controllers.ParameterConversion.ControllerExecutorBuilderExtensions.AddConverter<T>(this Kantaiko.Controllers.Execution.ControllerExecutorBuilder! builder, Kantaiko.Controllers.ParameterConversion.TextParameterDelegate<T>! converter) -> void
 static Kantaiko.Controllers.ParameterConversion.ControllerExecutorBuilderExtensions.AddParameterConversion(this Kantaiko.Controllers.Execution.ControllerExecutorBuilder! builder) -> void
 static Kantaiko.Controllers.ParameterConversion.ControllerExecutorBuilderExtensions.AddTextParameterConversion(this Kantaiko.Controllers.Execution.ControllerExecutorBuilder! builder) -> void
