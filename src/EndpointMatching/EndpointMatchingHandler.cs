@@ -20,11 +20,7 @@ public sealed class EndpointMatchingHandler : IControllerExecutionHandler
                     continue;
                 }
 
-                var matchContext = new EndpointMatchingContext(
-                    context.RequestContext,
-                    endpoint,
-                    context.ServiceProvider
-                );
+                var matchContext = new EndpointMatchingContext(context, endpoint);
 
                 foreach (var matcher in matchers)
                 {

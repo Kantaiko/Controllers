@@ -29,6 +29,7 @@ Kantaiko.Controllers.EndpointMatching.ControllerExecutorBuilderExtensions
 Kantaiko.Controllers.EndpointMatching.EndpointMatchingContext
 Kantaiko.Controllers.EndpointMatching.EndpointMatchingContext.Endpoint.get -> Kantaiko.Controllers.Introspection.EndpointInfo!
 Kantaiko.Controllers.EndpointMatching.EndpointMatchingContext.EndpointMatchingContext() -> void
+Kantaiko.Controllers.EndpointMatching.EndpointMatchingContext.Properties.get -> Kantaiko.Properties.IPropertyCollection!
 Kantaiko.Controllers.EndpointMatching.EndpointMatchingContext.RequestContext.get -> object!
 Kantaiko.Controllers.EndpointMatching.EndpointMatchingContext.ServiceProvider.get -> System.IServiceProvider!
 Kantaiko.Controllers.EndpointMatching.EndpointMatchingContext<TContext>

@@ -1,4 +1,6 @@
-﻿using Kantaiko.Controllers.Introspection;
+﻿using Kantaiko.Controllers.Execution;
+using Kantaiko.Controllers.Introspection;
+using Kantaiko.Properties;
 
 namespace Kantaiko.Controllers.EndpointMatching;
 
@@ -7,17 +9,18 @@ namespace Kantaiko.Controllers.EndpointMatching;
 /// </summary>
 public readonly ref struct EndpointMatchingContext
 {
-    internal EndpointMatchingContext(object requestContext, EndpointInfo endpoint, IServiceProvider serviceProvider)
+    private readonly ControllerExecutionContext _executionContext;
+
+    internal EndpointMatchingContext(ControllerExecutionContext executionContext, EndpointInfo endpoint)
     {
-        RequestContext = requestContext;
+        _executionContext = executionContext;
         Endpoint = endpoint;
-        ServiceProvider = serviceProvider;
     }
 
     /// <summary>
     /// The current request context.
     /// </summary>
-    public object RequestContext { get; }
+    public object RequestContext => _executionContext.RequestContext;
 
     /// <summary>
     /// The endpoint that is being matched.
@@ -25,9 +28,14 @@ public readonly ref struct EndpointMatchingContext
     public EndpointInfo Endpoint { get; }
 
     /// <summary>
+    /// The property collection of the execution context.
+    /// </summary>
+    public IPropertyCollection Properties => _executionContext.Properties;
+
+    /// <summary>
     /// The service provider.
     /// </summary>
-    public IServiceProvider ServiceProvider { get; }
+    public IServiceProvider ServiceProvider => _executionContext.ServiceProvider;
 }
 
 /// <summary>
