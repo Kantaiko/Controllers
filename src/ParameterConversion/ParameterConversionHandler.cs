@@ -54,6 +54,7 @@ public sealed class ParameterConversionHandler : IControllerExecutionHandler
                         Message = Strings.ParameterConversationFailed,
                         InnerError = conversionResult.Error,
                         Parameter = parameter,
+                        Properties = context.MatchProperties
                     };
 
                     return;
@@ -65,7 +66,8 @@ public sealed class ParameterConversionHandler : IControllerExecutionHandler
                 {
                     Message = Strings.ParameterConversionException,
                     Exception = exception,
-                    Parameter = parameter
+                    Parameter = parameter,
+                    Properties = context.MatchProperties
                 };
 
                 return;
@@ -77,6 +79,7 @@ public sealed class ParameterConversionHandler : IControllerExecutionHandler
                 {
                     Message = string.Format(Strings.NoSuitableParameterConverter, parameter.ParameterType.FullName),
                     Parameter = parameter,
+                    Properties = context.MatchProperties
                 };
 
                 return;
