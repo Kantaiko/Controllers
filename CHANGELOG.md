@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/saintedlama/versionize) for commit guidelines.
 
+<a name="1.0.0-alpha.5"></a>
+## [1.0.0-alpha.5](https://www.github.com/Kantaiko/Controllers/releases/tag/v1.0.0-alpha.5) (2023-2-23)
+
+### Features
+
+* Add ability to not inherit endpoint matchers ([609c846](https://www.github.com/Kantaiko/Controllers/commit/609c846a2fcb4f65cd40cc76a2e2775f5f661d43))
+* Add MatchProperties to parameter conversion errors ([8719429](https://www.github.com/Kantaiko/Controllers/commit/8719429e07ce3f38c7b526840f674a0acb00aadd))
+
 <a name="1.0.0-alpha.4"></a>
 ## [1.0.0-alpha.4](https://www.github.com/Kantaiko/Controllers/releases/tag/v1.0.0-alpha.4) (2023-2-10)
 
