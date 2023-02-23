@@ -52,7 +52,7 @@ Kantaiko.Controllers.EndpointMatching.EndpointMatchingResult.Matched.get -> bool
 Kantaiko.Controllers.EndpointMatching.EndpointMatchingResult.MatchProperties.get -> Kantaiko.Properties.Immutable.IImmutablePropertyCollection!
 Kantaiko.Controllers.EndpointMatching.EndpointMatchingResult.MatchProperties.init -> void
 Kantaiko.Controllers.EndpointMatching.EndpointMatchingTransformer
-Kantaiko.Controllers.EndpointMatching.EndpointMatchingTransformer.EndpointMatchingTransformer() -> void
+Kantaiko.Controllers.EndpointMatching.EndpointMatchingTransformer.EndpointMatchingTransformer(bool inheritMatchers = false) -> void
 Kantaiko.Controllers.EndpointMatching.IEndpointMatcher
 Kantaiko.Controllers.EndpointMatching.IEndpointMatcher.Match(Kantaiko.Controllers.EndpointMatching.EndpointMatchingContext context) -> Kantaiko.Controllers.EndpointMatching.EndpointMatchingResult
 Kantaiko.Controllers.EndpointMatching.IEndpointMatcher<TContext>
