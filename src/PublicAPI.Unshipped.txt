@@ -108,6 +108,8 @@ Kantaiko.Controllers.Execution.ControllerExecutionContext.ResolvedParameters.get
 Kantaiko.Controllers.Execution.ControllerExecutionContext.ResolvedParameters.set -> void
 Kantaiko.Controllers.Execution.ControllerExecutionContext.ServiceProvider.get -> System.IServiceProvider!
 Kantaiko.Controllers.Execution.ControllerExecutionResult
+Kantaiko.Controllers.Execution.ControllerExecutionResult.Endpoint.get -> Kantaiko.Controllers.Introspection.EndpointInfo?
+Kantaiko.Controllers.Execution.ControllerExecutionResult.Endpoint.init -> void
 Kantaiko.Controllers.Execution.ControllerExecutionResult.EndpointResult.get -> object?
 Kantaiko.Controllers.Execution.ControllerExecutionResult.EndpointResult.init -> void
 Kantaiko.Controllers.Execution.ControllerExecutionResult.Error.get -> Kantaiko.Controllers.Execution.ControllerError?

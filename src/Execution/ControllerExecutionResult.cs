@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using Kantaiko.Controllers.Introspection;
 using Kantaiko.Properties;
 
 namespace Kantaiko.Controllers.Execution;
@@ -22,6 +23,11 @@ public sealed record ControllerExecutionResult : IReadOnlyPropertyContainer
     /// The optional value returned by an executed endpoint.
     /// </summary>
     public object? EndpointResult { get; init; }
+
+    /// <summary>
+    /// The endpoint that was executed (if it was executed).
+    /// </summary>
+    public EndpointInfo? Endpoint { get; init; }
 
     /// <summary>
     /// The error that occurred during the execution if it was unsuccessful.

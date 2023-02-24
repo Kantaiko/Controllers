@@ -89,6 +89,10 @@ public sealed class ControllerExecutor
             };
         }
 
-        return new ControllerExecutionResult { EndpointResult = executionContext.InvocationResult };
+        return new ControllerExecutionResult
+        {
+            Endpoint = executionContext.Endpoint,
+            EndpointResult = executionContext.InvocationResult
+        };
     }
 }
