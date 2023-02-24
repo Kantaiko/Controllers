@@ -20,12 +20,12 @@ public class ControllerExecutorBuilder : IPropertyContainer
     /// <summary>
     /// The list of introspection transformers that will be used to transform the introspection info.
     /// </summary>
-    public ICollection<IIntrospectionInfoTransformer> Transformers { get; } = new List<IIntrospectionInfoTransformer>();
+    public IList<IIntrospectionInfoTransformer> Transformers { get; } = new List<IIntrospectionInfoTransformer>();
 
     /// <summary>
     /// The list of execution handlers that will be used to execute the controller.
     /// </summary>
-    public ICollection<IControllerExecutionHandler> Handlers { get; } = new List<IControllerExecutionHandler>();
+    public IList<IControllerExecutionHandler> Handlers { get; } = new List<IControllerExecutionHandler>();
 
     /// <summary>
     /// The collection of user-defined properties that can be used to share data between different
