@@ -61,7 +61,6 @@ public sealed class EndpointMatchingHandler : IControllerExecutionHandler
 
                     if (matchingResult.Error is not null)
                     {
-                        context.Endpoint = endpoint;
                         context.MatchProperties = matchingResult.MatchProperties;
                         context.ExecutionError = new ControllerError(ControllerErrorCodes.MatchingFailed)
                         {
