@@ -29,7 +29,8 @@ public sealed class ParameterAttribute : Attribute, IParameterCustomizationProvi
         Name = name;
     }
 
-    ParameterCustomization IParameterCustomizationProvider.GetParameterCustomization(ParameterTransformationContext context)
+    ParameterCustomization IParameterCustomizationProvider.GetParameterCustomization(
+        ParameterTransformationContext context)
     {
         return new ParameterCustomization
         {

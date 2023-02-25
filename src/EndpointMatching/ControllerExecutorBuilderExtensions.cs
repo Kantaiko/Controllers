@@ -11,11 +11,18 @@ public static class ControllerExecutorBuilderExtensions
     /// Adds the endpoint matching transformers and handlers to the executor builder.
     /// </summary>
     /// <param name="builder">The executor builder.</param>
-    public static void AddEndpointMatching(this ControllerExecutorBuilder builder)
+    /// <param name="immediatelyReturnError">
+    /// Whether to immediately return an error returned by the endpoint matcher.
+    /// Otherwise, the error will be returned only if no other endpoint matches the request.
+    /// If there are multiple endpoints returning errors, the last error will be returned.
+    /// <br/>
+    /// By default, the error is returned immediately.
+    /// </param>
+    public static void AddEndpointMatching(this ControllerExecutorBuilder builder, bool immediatelyReturnError = true)
     {
         ArgumentNullException.ThrowIfNull(builder);
 
         builder.Transformers.Add(new EndpointMatchingTransformer());
-        builder.Handlers.Add(new EndpointMatchingHandler());
+        builder.Handlers.Add(new EndpointMatchingHandler(immediatelyReturnError));
     }
 }

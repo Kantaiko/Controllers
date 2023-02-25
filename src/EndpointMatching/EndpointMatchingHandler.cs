@@ -9,6 +9,23 @@ namespace Kantaiko.Controllers.EndpointMatching;
 /// </summary>
 public sealed class EndpointMatchingHandler : IControllerExecutionHandler
 {
+    private readonly bool _immediatelyReturnError;
+
+    /// <summary>
+    /// Creates a new instance of the <see cref="EndpointMatchingHandler"/> class.
+    /// </summary>
+    /// <param name="immediatelyReturnError">
+    /// Whether to immediately return an error returned by the endpoint matcher. Otherwise, the error will be returned
+    /// only if no other endpoint matches the request.
+    /// If there are multiple endpoints returning errors, the last error will be returned.
+    /// <br/>
+    /// By default, the error is returned immediately.
+    /// </param>
+    public EndpointMatchingHandler(bool immediatelyReturnError = true)
+    {
+        _immediatelyReturnError = immediatelyReturnError;
+    }
+
     Task IControllerExecutionHandler.HandleAsync(ControllerExecutionContext context)
     {
         foreach (var controller in context.IntrospectionInfo.Controllers)
@@ -51,13 +68,17 @@ public sealed class EndpointMatchingHandler : IControllerExecutionHandler
                             Endpoint = endpoint
                         };
 
-                        return Task.CompletedTask;
+                        if (_immediatelyReturnError)
+                        {
+                            return Task.CompletedTask;
+                        }
                     }
 
                     if (matchingResult.Matched)
                     {
                         context.Endpoint = endpoint;
                         context.MatchProperties = matchingResult.MatchProperties;
+                        context.ExecutionError = null;
 
                         return Task.CompletedTask;
                     }

@@ -39,7 +39,7 @@ Kantaiko.Controllers.EndpointMatching.EndpointMatchingContext<TContext>.Properti
 Kantaiko.Controllers.EndpointMatching.EndpointMatchingContext<TContext>.RequestContext.get -> TContext
 Kantaiko.Controllers.EndpointMatching.EndpointMatchingContext<TContext>.ServiceProvider.get -> System.IServiceProvider!
 Kantaiko.Controllers.EndpointMatching.EndpointMatchingHandler
-Kantaiko.Controllers.EndpointMatching.EndpointMatchingHandler.EndpointMatchingHandler() -> void
+Kantaiko.Controllers.EndpointMatching.EndpointMatchingHandler.EndpointMatchingHandler(bool immediatelyReturnError = true) -> void
 Kantaiko.Controllers.EndpointMatching.EndpointMatchingProperties
 Kantaiko.Controllers.EndpointMatching.EndpointMatchingProperties.EndpointMatchingProperties(System.Collections.Generic.IReadOnlyList<Kantaiko.Controllers.EndpointMatching.IEndpointMatcher!>! Matchers) -> void
 Kantaiko.Controllers.EndpointMatching.EndpointMatchingProperties.Matchers.get -> System.Collections.Generic.IReadOnlyList<Kantaiko.Controllers.EndpointMatching.IEndpointMatcher!>!
@@ -341,7 +341,7 @@ Kantaiko.Controllers.ParameterValidation.ValidationResult.Error.get -> Kantaiko.
 Kantaiko.Controllers.ParameterValidation.ValidationResult.Success.get -> bool
 Kantaiko.Controllers.ParameterValidation.ValidationResult.ValidationResult() -> void
 Kantaiko.Controllers.ParameterValidation.ValidationResult.ValidationResult(bool success, Kantaiko.Controllers.Execution.ControllerError? error) -> void
-static Kantaiko.Controllers.EndpointMatching.ControllerExecutorBuilderExtensions.AddEndpointMatching(this Kantaiko.Controllers.Execution.ControllerExecutorBuilder! builder) -> void
+static Kantaiko.Controllers.EndpointMatching.ControllerExecutorBuilderExtensions.AddEndpointMatching(this Kantaiko.Controllers.Execution.ControllerExecutorBuilder! builder, bool immediatelyReturnError = true) -> void
 static Kantaiko.Controllers.EndpointMatching.EndpointMatchingResult.implicit operator Kantaiko.Controllers.EndpointMatching.EndpointMatchingResult(bool matched) -> Kantaiko.Controllers.EndpointMatching.EndpointMatchingResult
 static Kantaiko.Controllers.EndpointMatching.EndpointMatchingResult.implicit operator Kantaiko.Controllers.EndpointMatching.EndpointMatchingResult(Kantaiko.Controllers.Execution.ControllerError! error) -> Kantaiko.Controllers.EndpointMatching.EndpointMatchingResult
 static Kantaiko.Controllers.Execution.ControllerExecutorBuilder.CreateDefault() -> Kantaiko.Controllers.Execution.ControllerExecutorBuilder!
