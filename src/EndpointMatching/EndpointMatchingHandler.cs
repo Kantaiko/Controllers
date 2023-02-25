@@ -86,7 +86,7 @@ public sealed class EndpointMatchingHandler : IControllerExecutionHandler
             }
         }
 
-        context.ExecutionError = new ControllerError(ControllerErrorCodes.NotMatched)
+        context.ExecutionError ??= new ControllerError(ControllerErrorCodes.NotMatched)
         {
             Message = Strings.NotMatched
         };
