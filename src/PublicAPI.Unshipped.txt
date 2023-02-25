@@ -126,9 +126,9 @@ Kantaiko.Controllers.Execution.ControllerExecutorBuilder.BuildIntrospectionInfo<
 Kantaiko.Controllers.Execution.ControllerExecutorBuilder.ControllerExecutorBuilder() -> void
 Kantaiko.Controllers.Execution.ControllerExecutorBuilder.DeconstructionValidator.get -> Kantaiko.Controllers.Introspection.Deconstruction.IDeconstructionValidator?
 Kantaiko.Controllers.Execution.ControllerExecutorBuilder.DeconstructionValidator.set -> void
-Kantaiko.Controllers.Execution.ControllerExecutorBuilder.Handlers.get -> System.Collections.Generic.ICollection<Kantaiko.Controllers.Execution.Handlers.IControllerExecutionHandler!>!
+Kantaiko.Controllers.Execution.ControllerExecutorBuilder.Handlers.get -> System.Collections.Generic.IList<Kantaiko.Controllers.Execution.Handlers.IControllerExecutionHandler!>!
 Kantaiko.Controllers.Execution.ControllerExecutorBuilder.Properties.get -> Kantaiko.Properties.IPropertyCollection!
-Kantaiko.Controllers.Execution.ControllerExecutorBuilder.Transformers.get -> System.Collections.Generic.ICollection<Kantaiko.Controllers.Introspection.Transformers.IIntrospectionInfoTransformer!>!
+Kantaiko.Controllers.Execution.ControllerExecutorBuilder.Transformers.get -> System.Collections.Generic.IList<Kantaiko.Controllers.Introspection.Transformers.IIntrospectionInfoTransformer!>!
 Kantaiko.Controllers.Execution.ControllerExecutorBuilderExtensions
 Kantaiko.Controllers.Execution.DefaultControllerFactory
 Kantaiko.Controllers.Execution.DefaultControllerFactory.CreateHandler(System.Type! handlerType, System.IServiceProvider! serviceProvider) -> object!
