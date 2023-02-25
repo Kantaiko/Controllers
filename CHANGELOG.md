@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/saintedlama/versionize) for commit guidelines.
 
+<a name="1.0.0-alpha.6"></a>
+## [1.0.0-alpha.6](https://www.github.com/Kantaiko/Controllers/releases/tag/v1.0.0-alpha.6) (2023-2-25)
+
+### Features
+
+* Add endpoint to ControllerExecutionResult ([5cefd6f](https://www.github.com/Kantaiko/Controllers/commit/5cefd6fc83e8e9fe2fb8c0be3fc9586f2391292f))
+* Add the ability to not return an endpoint matching error immediately ([797610e](https://www.github.com/Kantaiko/Controllers/commit/797610e4ef10b6cc21bc10a4f12d1c6497505c0e))
+
+### Bug Fixes
+
+* Add missing symbols to the public api ([ad6634d](https://www.github.com/Kantaiko/Controllers/commit/ad6634d5f59c83d080ea9948a9bef45fd88c1319))
+* Enable documentation generation ([8ff4716](https://www.github.com/Kantaiko/Controllers/commit/8ff4716bc6d4d9bbaca98aa0ee2adc23dee5a38c))
+* Make Handlers and Transformers type the IList in ControllerExecutorBuilder ([1f22e6c](https://www.github.com/Kantaiko/Controllers/commit/1f22e6cbca163cbf01e9c722c131c1a899dbeffc))
+
 <a name="1.0.0-alpha.5"></a>
 ## [1.0.0-alpha.5](https://www.github.com/Kantaiko/Controllers/releases/tag/v1.0.0-alpha.5) (2023-2-23)
 
