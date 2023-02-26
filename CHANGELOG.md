@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/saintedlama/versionize) for commit guidelines.
 
+<a name="1.0.0-alpha.7"></a>
+## [1.0.0-alpha.7](https://www.github.com/Kantaiko/Controllers/releases/tag/v1.0.0-alpha.7) (2023-2-26)
+
+### Bug Fixes
+
+* Don't assign NotMatched error if another error is already assigned ([0a02a09](https://www.github.com/Kantaiko/Controllers/commit/0a02a096fd85df5a0bec62932a023ef7232f3a70))
+* Provide match properties from matching result even on error ([edba5c6](https://www.github.com/Kantaiko/Controllers/commit/edba5c6675a2467ec03a879cfa3a0237833bde7e))
+* Set endpoint on matching error ([47df5b3](https://www.github.com/Kantaiko/Controllers/commit/47df5b3832225057b66259bd92b6e0fd9bbcabb8))
+
 <a name="1.0.0-alpha.6"></a>
 ## [1.0.0-alpha.6](https://www.github.com/Kantaiko/Controllers/releases/tag/v1.0.0-alpha.6) (2023-2-25)
 
